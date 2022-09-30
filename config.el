@@ -149,7 +149,8 @@
     (global-set-key (kbd "M-b") 'bookmark-jump)
     (global-set-key (kbd "C-d") 'bookmark-delete)
 
-    (global-set-key (kbd "s-t") 'vterm)
+    (global-set-key (kbd "s-t") '+vterm/toggle)
+    (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
 
     ;; Map previous and next buffer to C-s-
