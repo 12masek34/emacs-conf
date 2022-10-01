@@ -90,6 +90,12 @@
 ;; (setenv "DJANGO_SETTINGS_MODULE" "core.settings")
 ;; =======================================================
 ;;=======================================================
+;;;; Delete selection
+(delete-selection-mode t)
+;;=======================================================
+;;;; Disable backup
+(setq make-backup-files nil)
+;;=======================================================
 ;;column indicator
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 ;;=======================================================
