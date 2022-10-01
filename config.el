@@ -151,7 +151,7 @@
     (global-set-key (kbd "s-<up>") 'beginning-of-buffer)
     ;;bookmarks
     (global-set-key (kbd "<f1>") 'bookmark-bmenu-list)
-    (global-set-key (kbd "<f3>") 'bookmark-set)
+    (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
     (global-set-key (kbd "C-d") 'bookmark-delete)
 
@@ -285,7 +285,7 @@
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
-                                    ;
+
 (use-package! lsp-mode
   :diminish (lsp-mode . "lsp")
   :config
@@ -293,6 +293,35 @@
   (setq lsp-completion-provider :capf)
   (setq lsp-idle-delay 0.25)
   (setq gc-cons-threshold 100000000))
+
+
+
+
+
+(defun debugging-mode ()
+  (interactive)
+  (dap-mode t)
+  (dap-ui-mode t)
+  (dap-tooltip-mode)
+  (dap-ui-controls-mode 1)
+  ;; (dap-ui-sessions)
+  (dap-ui-locals)
+  ;; (dap-ui-breakpoints)
+  (dap-ui-repl)
+  )
+
+
+(defun stop-debugging-mode ()
+  (interactive)
+  (dap-delete-all-sessions)
+  (dap-mode 0)
+  (dap-ui-mode 0)
+  (dap-ui-controls-mode 0)
+  (delete-other-windows) ;; hide all the dap UI. I might want to delete the buffers as well.
+  (kill-buffer "*dap-ui-repl*")
+  )
+
+
 
 (use-package! dap-mode
   :diminish dap-mode
@@ -302,8 +331,6 @@
   :config
   (require 'dap-python)
   (require 'dap-ui)
-  (dap-mode t)
-  (dap-ui-mode t)
   (setq dap-python-debugger 'debugpy)
   (setq dap-auto-configure-features '(locals controls tooltip))
 
@@ -313,7 +340,20 @@
          ("M-<f5>" . dap-hydra))
   :hook ((dap-mode . dap-ui-mode)
     (dap-session-created . (lambda (&_rest) (dap-hydra)))
-    (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
+    (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+    (dap-session-created . (lambda (&_rest) (debugging-mode)))
+    (dap-terminated . (lambda (&_rest) (stop-debugging-mode)))))
+
+(map! :leader
+        (:prefix "l"
+                :desc "find definition" "f" #'lsp-find-definition
+                :desc "find declaration" "F" #'lsp-find-declaration
+                :desc "dap breakpoint toggle" "b" #'dap-breakpoint-toggle
+                :desc "dap breakpoint delete" "B" #'dap-breakpoint-delete
+                :desc "dap repl" "r" #'dap-ui-repl
+                :desc "dap debug hydra" "u" #'dap-hydra))
+
+
 
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)
@@ -327,10 +367,6 @@
   :after (lsp-mode))
 
 ;; (load "~/.doom.d/clangd_lspCfg.el")
-
-(use-package! dap-mode
-  :custom
-  (dap-auto-configure-features '(locals)))
 ;;=======================================================
 (use-package! semantic
   :init
@@ -339,5 +375,15 @@
     (require 'stickyfunc-enhance))
 ;; =======================================================
 ;;=======================================================
-
-
+;;template django
+;;
+(dap-register-debug-template "debug app"
+ (list :type "python"
+       :args "runserver --noreload"
+       :cwd "/Users/dmitrijmartys/PYTHON/test/core"
+       :module nil
+       :console "integratedTerminal"
+       :program "/Users/dmitrijmartys/PYTHON/test/core/manage.py"
+       :request "launch"
+       :name "Python: Django"
+       :django t))
