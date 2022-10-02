@@ -32,8 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-spacegrey)
-(setq doom-theme 'doom-zenburn)
+(setq doom-theme 'doom-spacegrey)
+;; (setq doom-theme 'doom-zenburn)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -274,12 +274,37 @@
 (setq python-shell-completion-native-disabled-interpreters '("python3"))
 ;;=======================================================
 ;; =======================================================
-;; debuger
+
+( after! lsp-python-ms
+   ( set-lsp-priority!  ' pyright  1 ) )
+
+(setq read-process-output-max (* 1024 1024))
+
+( after! lsp-mode
+   ( setq lsp-restart ' игнорировать ) )
+
+(after! ess
+  (setq ess-eval-visibly 'nowait))
+
+(after! ess
+  (setq ess-R-font-lock-keywords '((ess-R-fl-keyword:keywords . t)
+                                   (ess-R-fl-keyword:constants . t)
+                                   (ess-R-fl-keyword:modifiers . t)
+                                   (ess-R-fl-keyword:fun-defs . t)
+                                   (ess-R-fl-keyword:assign-ops . t)
+                                   (ess-R-fl-keyword:%op% . t)
+                                   (ess-fl-keyword:fun-calls . t)
+                                   (ess-fl-keyword:numbers . t)
+                                   (ess-fl-keyword:operators . t)
+                                   (ess-fl-keyword:delimiters . t)
+                                   (ess-fl-keyword:= . t)
+                                   (ess-R-fl-keyword:F&T . t))))
 
 (use-package! lsp-pyright
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
+
 
 (use-package! lsp-mode
   :diminish (lsp-mode . "lsp")
@@ -290,8 +315,8 @@
   (setq gc-cons-threshold 100000000))
 
 
-
-
+;;=======================================================
+;; debuger
 
 (defun debugging-mode ()
   (interactive)

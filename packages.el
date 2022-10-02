@@ -15,6 +15,7 @@
 
 
 (package! lsp-python-ms)
+(package! ess)
 (package! lsp-ui)
 (package! pyimport)
 (package! py-isort)
