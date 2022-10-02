@@ -276,12 +276,12 @@
 ;; =======================================================
 
 ( after! lsp-python-ms
-   ( set-lsp-priority!  ' pyright  1 ) )
+   ( set-lsp-priority!  'pyright 1))
 
 (setq read-process-output-max (* 1024 1024))
 
 ( after! lsp-mode
-   ( setq lsp-restart ' игнорировать ) )
+   ( setq lsp-restart 'ignore))
 
 (after! ess
   (setq ess-eval-visibly 'nowait))
