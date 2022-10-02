@@ -32,7 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-spacegrey)
+;; (setq doom-theme 'doom-spacegrey)
+(setq doom-theme 'doom-zenburn)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -77,18 +78,12 @@
 ;;
 ;; =======================================================
 ;; =======================================================
-;;variables eniron
-(setenv "LANG" "en_US.UTF-8")
-(setenv "LC_ALL" "en_US.UTF-8")
-(setenv "LC_CTYPE" "en_US.UTF-8")
-
-;; (setenv "PYTHONUNBUFFERED" "1")
-;; (setenv "ZAKUPKI_CONFIG" "/Users/dmitrijmartys/SRC/zakupki/configs/project.conf")
-;; (setenv "PYTHONPATH" "/Users/dmitrijmartys/SRC/zakupki/zakupki/src")
-;; (setenv "DJANGO_SETTINGS_MODULE" "settings")
-;;
-;; (setenv "DJANGO_SETTINGS_MODULE" "core.settings")
+;; load environment
+(load! "~/.doom.d/env.el")
 ;; =======================================================
+;;=======================================================
+;;cursor
+(setq-default cursor-type 'bar)
 ;;=======================================================
 ;;;; Delete selection
 (delete-selection-mode t)
@@ -322,7 +317,6 @@
   )
 
 
-
 (use-package! dap-mode
   :diminish dap-mode
   :after(lsp-mode)
@@ -345,7 +339,7 @@
     (dap-terminated . (lambda (&_rest) (stop-debugging-mode)))))
 
 (map! :leader
-        (:prefix "l"
+        (:prefix "b"
                 :desc "find definition" "f" #'lsp-find-definition
                 :desc "find declaration" "F" #'lsp-find-declaration
                 :desc "dap breakpoint toggle" "b" #'dap-breakpoint-toggle
@@ -366,7 +360,6 @@
   :commands (treemacs)
   :after (lsp-mode))
 
-;; (load "~/.doom.d/clangd_lspCfg.el")
 ;;=======================================================
 (use-package! semantic
   :init
@@ -374,16 +367,6 @@
     (semantic-mode 1)
     (require 'stickyfunc-enhance))
 ;; =======================================================
+;; load debug templates
+(load! "~/.doom.d/debug-templates.el")
 ;;=======================================================
-;;template django
-;;
-(dap-register-debug-template "debug app"
- (list :type "python"
-       :args "runserver --noreload"
-       :cwd "/Users/dmitrijmartys/PYTHON/test/core"
-       :module nil
-       :console "integratedTerminal"
-       :program "/Users/dmitrijmartys/PYTHON/test/core/manage.py"
-       :request "launch"
-       :name "Python: Django"
-       :django t))
