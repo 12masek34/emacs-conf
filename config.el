@@ -396,6 +396,14 @@
 (load! "~/.doom.d/debug-templates.el")
 ;;=======================================================
 ;; winum
-(use-package! winum
-  :init (winum-mode))
+(after! winum
+    (map! (:when (featurep! :ui window-select)
+            :leader
+            :n "1" #'winum-select-window-1
+            :n "2" #'winum-select-window-2
+            :n "3" #'winum-select-window-3
+        )))
 ;;=======================================================
+;; Extra ligatures
+(setq +ligatures-extras-in-modes
+      '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
