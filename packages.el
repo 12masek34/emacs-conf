@@ -11,9 +11,7 @@
 (package! lsp-mode)
 (package! with-venv)
 (package! realgud)
-
-
-
+(package! centered-cursor-mode)
 (package! lsp-python-ms)
 (package! ess)
 (package! winum)

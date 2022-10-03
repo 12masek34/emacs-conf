@@ -269,6 +269,15 @@
     (tsc-goto-first-child-for-position cursor (point))
     (if (eq 'function_definition (tsc-node-type (tsc-current-node cursor))) (tsc-current-node cursor) nil)))
 
+( use-package tree-sitter
+   :after python-mode
+   :defer t
+   :config
+  ( require  ' tree-sitter )
+  ( require  ' tree-sitter-langs )
+  ( require  ' tree-sitter-hl )
+  ( add-hook  ' python-mode -hook  #' Tree-sitter-hl-mode )
+  )
 ;;=======================================================
 ;;set interpritatior
 (setq python-shell-completion-native-disabled-interpreters '("python3"))
@@ -399,3 +408,8 @@
 (setq +ligatures-extras-in-modes
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
 ;;=======================================================
+;;Toggle centered cursor
+(use-package! centered-cursor-mode
+  :demand
+  :config
+  (global-centered-cursor-mode))
