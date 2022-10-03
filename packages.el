@@ -16,6 +16,7 @@
 
 (package! lsp-python-ms)
 (package! ess)
+(package! winum)
 (package! lsp-ui)
 (package! pyimport)
 (package! py-isort)
