@@ -206,12 +206,6 @@
         (:prefix "f"
                 :desc "find file" "f" #'consult-find
                 ))
-(map! :leader
-        (:prefix "g"
-                :desc "find ripgrep" "f" #'consult-ripgrep
-                ))
-
-
 
 ;;=======================================================
 (define-minor-mode my-keys-mode
@@ -220,7 +214,7 @@
   :init-value t
   :keymap my-keys-mode-map)
 ;; grep
-(global-set-key (kbd "s-g") 'projectile-grep)
+(global-set-key (kbd "s-g") 'consult-ripgrep)
 ;;=======================================================
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
