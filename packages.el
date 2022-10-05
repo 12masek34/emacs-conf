@@ -7,8 +7,6 @@
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
- (package! dap-mode)
-(package! lsp-mode)
 (package! with-venv)
 (package! realgud)
 (package! centered-cursor-mode)
@@ -25,7 +23,7 @@
 (package! semantic)
 (package! tree-sitter)
 (package! stickyfunc-enhance)
-(package! dap-mode)
+
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

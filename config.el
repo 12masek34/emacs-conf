@@ -130,6 +130,27 @@
   ;; put the point in the lowest line and return
   (next-line arg))
 
+
+;;-------------------------------------------------------
+;; Shift the selected region right if distance is positive, left if
+;; negative
+(defun shift-region (distance)
+  (let ((mark (mark)))
+    (save-excursion
+      (indent-rigidly (region-beginning) (region-end) distance)
+      (push-mark mark t t)
+      ;; Tell the command loop not to deactivate the mark
+      ;; for transient mark mode
+      (setq deactivate-mark nil))))
+
+(defun shift-right ()
+  (interactive)
+  (shift-region 4))
+
+(defun shift-left ()
+  (interactive)
+  (shift-region -4))
+;;-------------------------------------------------------
 ;;=======================================================
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
@@ -163,7 +184,32 @@
     (global-set-key (kbd "s-x") 'kill-region)
 
     (global-set-key (kbd "s-/") 'comment-line)
+
+    (global-set-key (kbd "C-S-<right>") 'shift-right)
+    (global-set-key (kbd "C-S-<left>") 'shift-left)
     map))
+
+
+(map! :leader
+        (:prefix "b"
+                :desc "find definition" "f" #'lsp-find-definition
+                :desc "find declaration" "F" #'lsp-find-declaration
+                :desc "dap breakpoint toggle" "b" #'dap-breakpoint-toggle
+                :desc "dap breakpoint delete" "B" #'dap-breakpoint-delete
+                :desc "dap repl" "r" #'dap-ui-repl
+                :desc "dap debug hydra" "u" #'dap-hydra))
+
+(map! :leader
+        (:prefix "f"
+                :desc "find file" "f" #'consult-find
+                ))
+(map! :leader
+        (:prefix "g"
+                :desc "find ripgrep" "f" #'consult-ripgrep
+                ))
+
+
+
 ;;=======================================================
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
@@ -372,16 +418,6 @@
     (dap-session-created . (lambda (&_rest) (debugging-mode)))
     (dap-terminated . (lambda (&_rest) (stop-debugging-mode)))))
 
-(map! :leader
-        (:prefix "b"
-                :desc "find definition" "f" #'lsp-find-definition
-                :desc "find declaration" "F" #'lsp-find-declaration
-                :desc "dap breakpoint toggle" "b" #'dap-breakpoint-toggle
-                :desc "dap breakpoint delete" "B" #'dap-breakpoint-delete
-                :desc "dap repl" "r" #'dap-ui-repl
-                :desc "dap debug hydra" "u" #'dap-hydra))
-
-
 
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)
@@ -413,3 +449,5 @@
   :demand
   :config
   (global-centered-cursor-mode))
+;;=======================================================
+;;=======================================================
