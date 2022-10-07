@@ -173,6 +173,10 @@
       "M-s" nil
       )
 
+(with-eval-after-load 'rjsx-mode
+  (define-key rjsx-mode-map (kbd "C-d") nil)
+  )
+
 
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
