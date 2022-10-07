@@ -167,8 +167,9 @@
       "M-C-a" nil
       )
 
-(map! :after ido
-      :map ido-mode-map
+
+(map! :after vertico
+      :map vertico-map
       "M-s" nil
       )
 
