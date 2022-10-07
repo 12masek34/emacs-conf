@@ -158,6 +158,21 @@
 ;;=======================================================
 ;;keymap
 ;;
+
+(map! :after smartparens
+      :map smartparens-mode-map
+      "C-d" nil
+      "C-a" nil
+      "M-C-d" nil
+      "M-C-a" nil
+      )
+
+(map! :after ido
+      :map ido-mode-map
+      "M-s" nil
+      )
+
+
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
     (global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -10)))
@@ -165,8 +180,7 @@
     (global-set-key (kbd "M-<right>") 'forward-word)
     (global-set-key (kbd "M-<left>") 'backward-word)
 
-    ;;
-     (global-unset-key (kbd "M-w"))
+    (global-unset-key (kbd "M-w"))
     (global-set-key (kbd "M-w") 'previous-line)
 
     (global-unset-key (kbd "M-s"))
@@ -202,6 +216,14 @@
     (global-unset-key (kbd "M-s-a"))
     (global-set-key (kbd "M-s-a") 'beginning-of-line)
 
+    (global-unset-key (kbd "C-d"))
+    (global-set-key (kbd "C-d") 'sp-delete-word)
+
+    (global-unset-key (kbd "C-a"))
+    (global-set-key (kbd "C-a") 'sp-backward-delete-word)
+
+    (global-unset-key (kbd "C-s"))
+    (global-set-key (kbd "C-s") 'kill-whole-line)
 
     ;; switch window
     (global-set-key (kbd "C-x <up>") 'windmove-up)
@@ -214,7 +236,6 @@
     (global-set-key (kbd "<f1>") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
-    (global-set-key (kbd "C-d") 'bookmark-delete)
 
     (global-set-key (kbd "s-t") '+vterm/toggle)
     (global-set-key (kbd "s-T") 'vterm-other-window)
