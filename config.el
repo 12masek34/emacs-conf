@@ -225,6 +225,9 @@
     (global-unset-key (kbd "C-s"))
     (global-set-key (kbd "C-s") 'kill-whole-line)
 
+    (global-unset-key (kbd "s-["))
+    (global-set-key (kbd "s-[") 'pop-global-mark)
+
     ;; switch window
     (global-set-key (kbd "C-x <up>") 'windmove-up)
     (global-set-key (kbd "C-x <down>") 'windmove-down)
