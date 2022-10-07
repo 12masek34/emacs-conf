@@ -196,6 +196,13 @@
     (global-unset-key (kbd "M-C-w"))
     (global-set-key (kbd "M-C-w") 'beginning-of-buffer)
 
+    (global-unset-key (kbd "M-s-d"))
+    (global-set-key (kbd "M-s-d") 'end-of-line)
+
+    (global-unset-key (kbd "M-s-a"))
+    (global-set-key (kbd "M-s-a") 'beginning-of-line)
+
+
     ;; switch window
     (global-set-key (kbd "C-x <up>") 'windmove-up)
     (global-set-key (kbd "C-x <down>") 'windmove-down)
