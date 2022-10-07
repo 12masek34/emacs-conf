@@ -88,6 +88,7 @@
 ;;cursor
 ;; (setq-default cursor-type 'bar)
 ;;=======================================================
+;;=======================================================
 ;;;; Delete selection
 (delete-selection-mode t)
 ;;=======================================================
@@ -155,12 +156,46 @@
   (shift-region -4))
 ;;-------------------------------------------------------
 ;;=======================================================
+;;keymap
+;;
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
     (global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -10)))
     (global-set-key (kbd "M-<down>") (lambda () (interactive) (forward-line  10)))
     (global-set-key (kbd "M-<right>") 'forward-word)
-    (global-set-key (kbd "M-<right>") 'forward-word)
+    (global-set-key (kbd "M-<left>") 'backward-word)
+
+    ;;
+     (global-unset-key (kbd "M-w"))
+    (global-set-key (kbd "M-w") 'previous-line)
+
+    (global-unset-key (kbd "M-s"))
+    (global-set-key (kbd "M-s") 'next-line)
+
+    (global-unset-key (kbd "M-a"))
+    (global-set-key (kbd "M-a") 'backward-char)
+
+    (global-unset-key (kbd "M-d"))
+    (global-set-key (kbd "M-d") 'forward-char)
+
+    (global-unset-key (kbd "M-q"))
+    (global-set-key (kbd "M-q") 'backward-word)
+
+    (global-unset-key (kbd "M-e"))
+    (global-set-key (kbd "M-e") 'forward-word)
+
+    (global-unset-key (kbd "M-s-w"))
+    (global-set-key (kbd "M-s-w") (lambda () (interactive) (forward-line -10)))
+
+    (global-unset-key (kbd "M-s-s"))
+    (global-set-key (kbd "M-s-s") (lambda () (interactive) (forward-line  10)))
+
+    (global-unset-key (kbd "M-C-s"))
+    (global-set-key (kbd "M-C-s") 'end-of-buffer)
+
+    (global-unset-key (kbd "M-C-w"))
+    (global-set-key (kbd "M-C-w") 'beginning-of-buffer)
+
     ;; switch window
     (global-set-key (kbd "C-x <up>") 'windmove-up)
     (global-set-key (kbd "C-x <down>") 'windmove-down)
@@ -190,6 +225,7 @@
 
     (global-set-key (kbd "C-S-<right>") 'shift-right)
     (global-set-key (kbd "C-S-<left>") 'shift-left)
+
     map))
 
 
