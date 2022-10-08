@@ -234,10 +234,11 @@
     (global-set-key (kbd "s-[") 'pop-global-mark)
 
     ;; switch window
-    (global-set-key (kbd "C-x <up>") 'windmove-up)
-    (global-set-key (kbd "C-x <down>") 'windmove-down)
-    (global-set-key (kbd "C-x <left>") 'windmove-left)
-    (global-set-key (kbd "C-x <right>") 'windmove-right)
+    (global-set-key (kbd "C-x M-w") 'windmove-up)
+    (global-set-key (kbd "C-x M-s") 'windmove-down)
+    (global-set-key (kbd "C-x M-a") 'windmove-left)
+    (global-set-key (kbd "C-x M-d") 'windmove-right)
+
     (global-set-key (kbd "s-<down>") 'end-of-buffer)
     (global-set-key (kbd "s-<up>") 'beginning-of-buffer)
     ;;bookmarks
