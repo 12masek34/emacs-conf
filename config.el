@@ -173,6 +173,11 @@
       "M-s" nil
       )
 
+(map! :after dired
+      :map dired-mode-map
+      "M-s" nil
+      )
+
 (with-eval-after-load 'rjsx-mode
   (define-key rjsx-mode-map (kbd "C-d") nil)
   )
