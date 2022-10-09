@@ -268,7 +268,7 @@
     (global-set-key (kbd "C-S-<right>") 'shift-right)
     (global-set-key (kbd "C-S-<left>") 'shift-left)
 
-    (global-set-key (kbd "C-SPC") 'newline-and-indent)
+    (global-set-key (kbd "M-SPC") 'newline-and-indent)
 
     map))
 
