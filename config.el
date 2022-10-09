@@ -256,8 +256,8 @@
     (global-set-key (kbd "s-d") 'duplicate-line)
 
     ;; Map previous and next buffer to C-s-
-    (global-set-key (kbd "C-s-<left>") 'previous-buffer)
-    (global-set-key (kbd "C-s-<right>") 'next-buffer)
+    (global-set-key (kbd "s-1") 'previous-buffer)
+    (global-set-key (kbd "s-2") 'next-buffer)
 
     (global-set-key (kbd "s-v") 'yank)
     (global-set-key (kbd "s-c") 'kill-ring-save)
@@ -267,6 +267,8 @@
 
     (global-set-key (kbd "C-S-<right>") 'shift-right)
     (global-set-key (kbd "C-S-<left>") 'shift-left)
+
+    (global-set-key (kbd "C-SPC") 'newline-and-indent)
 
     map))
 
