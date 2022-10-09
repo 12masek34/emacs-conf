@@ -98,6 +98,19 @@
 ;;column indicator
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 ;;=======================================================
+(use-package! tooltip
+  :defer t
+  :custom
+  (tooltip-mode -1))
+
+;;time
+(use-package time
+  :defer t
+  :custom
+  (display-time-default-load-average nil)
+  (display-time-24hr-format t)
+  (display-time-mode t))
+;;=======================================================
 ;; font
 (setq doom-font (font-spec :family "Monaco" :size 13 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Monaco" :size 12)
@@ -177,6 +190,17 @@
       :map dired-mode-map
       "M-s" nil
       )
+
+(map! :after ibuffer-vc
+      :map ibuffer-mode-map
+      "M-s" nil
+      )
+
+(map! :after magit
+      :map magit-mode-map
+      "M-w" nil
+      )
+
 
 (with-eval-after-load 'rjsx-mode
   (define-key rjsx-mode-map (kbd "C-d") nil)
@@ -269,6 +293,10 @@
     (global-set-key (kbd "C-S-<left>") 'shift-left)
 
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
+
+    (global-set-key (kbd "M--") 'set-mark-command)
+
+    (global-set-key (kbd "s-3") 'ibuffer)
 
     map))
 
@@ -527,4 +555,31 @@
   :config
   (global-centered-cursor-mode))
 ;;=======================================================
+;;
+(use-package! ibuffer-vc
+  :defer t
+  :ensure t
+  :config
+  (define-ibuffer-column icon
+    (:name "Icon" :inline t)
+    (all-the-icons-ivy--icon-for-mode major-mode))
+  :custom
+  (ibuffer-formats
+   '((mark modified read-only vc-status-mini " "
+           (name 18 18 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " "
+           filename-and-process)) "include vc status info")
+  :hook
+  (ibuffer . (lambda ()
+               (ibuffer-vc-set-filter-groups-by-vc-root)
+               (unless (eq ibuffer-sorting-mode 'alphabetic)
+                 (ibuffer-do-sort-by-alphabetic)))))
+;;=======================================================
+(use-package hippie-expand
+  :bind
+  ([remap dabbrev-expand] . hippie-expand))
 ;;=======================================================
