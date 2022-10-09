@@ -171,7 +171,6 @@
 ;;=======================================================
 ;;keymap
 ;;
-
 (map! :after smartparens
       :map smartparens-mode-map
       "C-d" nil
@@ -279,7 +278,6 @@
     (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
 
-    ;; Map previous and next buffer to C-s-
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
 
@@ -477,7 +475,6 @@
 ;;=======================================================
 ;;=======================================================
 ;; debuger
-
 (defun debugging-mode ()
   (interactive)
   (dap-mode t)
@@ -555,7 +552,7 @@
   :config
   (global-centered-cursor-mode))
 ;;=======================================================
-;;
+;;ibuffer
 (use-package! ibuffer-vc
   :defer t
   :ensure t
@@ -579,6 +576,7 @@
                (unless (eq ibuffer-sorting-mode 'alphabetic)
                  (ibuffer-do-sort-by-alphabetic)))))
 ;;=======================================================
+;; autocmplite
 (use-package hippie-expand
   :bind
   ([remap dabbrev-expand] . hippie-expand))
