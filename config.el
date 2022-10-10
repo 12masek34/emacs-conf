@@ -270,7 +270,7 @@
     (global-set-key (kbd "s-<down>") 'end-of-buffer)
     (global-set-key (kbd "s-<up>") 'beginning-of-buffer)
     ;;bookmarks
-    (global-set-key (kbd "<f1>") 'bookmark-bmenu-list)
+    (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
 
@@ -287,8 +287,8 @@
 
     (global-set-key (kbd "s-/") 'comment-line)
 
-    (global-set-key (kbd "C-S-<right>") 'shift-right)
-    (global-set-key (kbd "C-S-<left>") 'shift-left)
+    (global-set-key (kbd "M-<tab>") 'shift-right)
+    (global-set-key (kbd "M-S-<tab>") 'shift-left)
 
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
 
@@ -312,6 +312,11 @@
         (:prefix "f"
                 :desc "find file" "f" #'consult-find
                 ))
+(map! :leader
+        (:prefix "s"
+         :desc "sort lines" "s" #'sort-lines
+                ))
+
 
 ;;=======================================================
 (define-minor-mode my-keys-mode
