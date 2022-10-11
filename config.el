@@ -296,6 +296,10 @@
 
     (global-set-key (kbd "s-3") 'ibuffer)
 
+    (global-set-key (kbd "M-]") 'goto-last-change-reverse)
+    (global-set-key (kbd "M-[") 'goto-last-change)
+
+
     map))
 
 
@@ -585,4 +589,6 @@
 (use-package hippie-expand
   :bind
   ([remap dabbrev-expand] . hippie-expand))
+;;=======================================================
+(use-package! goto-chg)
 ;;=======================================================
