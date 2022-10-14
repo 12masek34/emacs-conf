@@ -168,6 +168,8 @@
   (interactive)
   (shift-region -4))
 ;;-------------------------------------------------------
+(add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{80\\}" 'hi-salmon)))
+(add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp "import ipdb; ipdb.set_trace();" 'hi-aquamarine)))
 ;;=======================================================
 ;;keymap
 ;;
@@ -321,7 +323,15 @@
          :desc "sort lines" "s" #'sort-lines
                 ))
 
-
+(map! :leader
+        (:prefix "d"
+         :desc "set breakpoint" "s" #'add-py-debug
+         :desc "remove breakpoint" "r" #'remove-py-debug
+         :desc "jump to breakpoint" "j" #'(lambda ()
+                                 (interactive)
+                                 (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
+                                 (move-beginning-of-line 1))
+                ))
 ;;=======================================================
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
@@ -482,6 +492,25 @@
   (setq gc-cons-threshold 100000000))
 
 ;;=======================================================
+;;=======================================================
+(defun add-py-debug ()
+      "add debug code and move line down"
+    (interactive)
+    (move-beginning-of-line 1)
+    (insert "import ipdb; ipdb.set_trace();\n"))
+
+(defun remove-py-debug ()
+  "remove py debug code, if found"
+  (interactive)
+  (let ((x (line-number-at-pos))
+    (cur (point)))
+    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
+    (if (= x (line-number-at-pos))
+    (let ()
+      (move-beginning-of-line 1)
+      (kill-line 1)
+      (move-beginning-of-line 1))
+      (goto-char cur))))
 ;;=======================================================
 ;; debuger
 (defun debugging-mode ()
