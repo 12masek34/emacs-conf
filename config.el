@@ -169,8 +169,11 @@
 (defun shift-left ()
   (interactive)
   (shift-region -4))
-;;-------------------------------------------------------
-(add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{80\\}" 'hi-salmon)))
+;;=======================================================
+;;light long line
+;; (add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{80\\}" 'hi-salmon)))
+;;=======================================================
+;;light import pdb
 (add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp "import ipdb; ipdb.set_trace();" 'hi-aquamarine)))
 ;;=======================================================
 ;;keymap
