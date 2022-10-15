@@ -493,6 +493,9 @@
   (setq lsp-idle-delay 0.25)
   (setq gc-cons-threshold 100000000))
 
+
+(setq lsp-enable-file-watchers nil)
+(setq company-idle-delay 0)
 ;;=======================================================
 ;;=======================================================
 (defun add-py-debug ()
