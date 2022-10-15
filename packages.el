@@ -24,6 +24,7 @@
 (package! tree-sitter)
 (package! stickyfunc-enhance)
 (package! goto-chg)
+(package! whole-line-or-region)
 
 
 ;; To install a package directly from a remote git repo, you must specify a

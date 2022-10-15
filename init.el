@@ -163,7 +163,8 @@
         +anaconda
         +pyenv
         +pyright
-        +lsp)
+        +lsp
+        +peek)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6

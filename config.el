@@ -117,6 +117,8 @@
       doom-unicode-font (font-spec :family "Monaco")
       doom-big-font (font-spec :family "Monaco" :size 24))
 ;;=======================================================
+(whole-line-or-region-global-mode)
+;;=======================================================
 ;;key map
 (defun duplicate-line (arg)
   "Duplicate current line, leaving point in lower line."
