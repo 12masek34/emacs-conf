@@ -32,8 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-spacegrey)
-;; (setq doom-theme 'doom-zenburn)
+;; (setq doom-theme 'doom-spacegrey)
+(setq doom-theme 'doom-zenburn)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -337,6 +337,15 @@
                                  (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
                                  (move-beginning-of-line 1))
                 ))
+;;=======================================================
+;; russian key to eng
+(loop
+  for from across "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖ\ЭЯЧСМИТЬБЮ№"
+  for to   across "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>#"
+  do
+  (eval `(define-key key-translation-map (kbd ,(concat "C-" (string from))) (kbd ,(concat "C-" (string to)))))
+  (eval `(define-key key-translation-map (kbd ,(concat "s-" (string from))) (kbd ,(concat "s-" (string to)))))
+  (eval `(define-key key-translation-map (kbd ,(concat "M-" (string from))) (kbd ,(concat "M-" (string to))))))
 ;;=======================================================
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
