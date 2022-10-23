@@ -32,8 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-spacegrey)
-(setq doom-theme 'doom-zenburn)
+(setq doom-theme 'doom-spacegrey)
+;; (setq doom-theme 'doom-zenburn)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -112,8 +112,8 @@
   (display-time-mode t))
 ;;=======================================================
 ;; font
-(setq doom-font (font-spec :family "Monaco" :size 13 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Monaco" :size 12)
+(setq doom-font (font-spec :family "Monaco" :size 14 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Monaco" :size 13)
       doom-unicode-font (font-spec :family "Monaco")
       doom-big-font (font-spec :family "Monaco" :size 24))
 ;;=======================================================
@@ -503,7 +503,12 @@
   (lsp-treemacs-sync-mode 1)
   (setq lsp-completion-provider :capf)
   (setq lsp-idle-delay 0.25)
-  (setq gc-cons-threshold 100000000))
+  (setq gc-cons-threshold 100000000)
+
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-completion-show-label-description t)
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-completion-show-label-description t))
 
 
 (setq lsp-enable-file-watchers nil)
