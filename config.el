@@ -176,6 +176,10 @@
 ;;light import pdb
 (add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp "import ipdb; ipdb.set_trace();" 'hi-aquamarine)))
 ;;=======================================================
+;;limit
+(setq undo-limit 80000000)
+(setq scroll-margin 2)
+;;=======================================================
 ;;keymap
 ;;
 (map! :after smartparens
