@@ -306,6 +306,8 @@
     (global-set-key (kbd "M-]") 'goto-last-change-reverse)
     (global-set-key (kbd "M-[") 'goto-last-change)
 
+    (global-set-key (kbd "M-s-e") 'forward-paragraph)
+    (global-set-key (kbd "M-s-q") 'backward-paragraph)
 
     map))
 
@@ -505,10 +507,11 @@
   (setq lsp-idle-delay 0.25)
   (setq gc-cons-threshold 100000000)
 
-  (setq lsp-ui-doc-enable t)
-  (setq lsp-completion-show-label-description t)
-  (setq lsp-ui-doc-show-with-cursor t)
-  (setq lsp-completion-show-label-description t))
+  ;; (setq lsp-ui-doc-enable t)
+  ;; (setq lsp-completion-show-label-description t)
+  ;; (setq lsp-ui-doc-show-with-cursor t)
+  ;; (setq lsp-completion-show-label-description t)
+)
 
 
 (setq lsp-enable-file-watchers nil)
