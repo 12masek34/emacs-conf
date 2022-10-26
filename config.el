@@ -88,6 +88,29 @@
 ;;cursor
 ;; (setq-default cursor-type 'bar)
 ;;=======================================================
+;;  relative number line
+(setq display-line-numbers-type 'relative)
+;;=======================================================
+;;replace name buffer
+(setq doom-fallback-buffer-name "► Doom"
+      +doom-dashboard-name "► Doom")
+;;=======================================================
+;; rename buffer title
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+;;=======================================================
+;; delay buffer hint
+(setq which-key-idle-delay 0.5)
 ;;=======================================================
 ;;;; Delete selection
 (delete-selection-mode t)
@@ -148,7 +171,6 @@
     ) ; end-of-let
   ;; put the point in the lowest line and return
   (next-line arg))
-
 
 ;;-------------------------------------------------------
 ;; Shift the selected region right if distance is positive, left if
@@ -298,9 +320,6 @@
 
     (global-set-key (kbd "s-/") 'comment-line)
 
-    (global-set-key (kbd "M-<tab>") 'shift-right)
-    (global-set-key (kbd "M-S-<tab>") 'shift-left)
-
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
 
     (global-set-key (kbd "M--") 'set-mark-command)
@@ -312,6 +331,9 @@
 
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
+
+    (global-set-key (kbd "C-w") 'move-text-up)
+    (global-set-key (kbd "C-s") 'move-text-down)
 
     map))
 
@@ -519,7 +541,30 @@
 
 
 (setq lsp-enable-file-watchers nil)
+;;=======================================================
+;;company
 (setq company-idle-delay 0)
+(setq company-show-numbers t)
+
+(setq-default history-length 1000)
+(setq-default prescient-history-length 1000)
+;;=======================================================
+;;ispell
+(set-company-backend!
+  '(text-mode
+    markdown-mode
+    gfm-mode)
+  '( :seperate
+    company-ispell
+    company-files
+    company-yasnippet))
+
+;;=======================================================
+;;aas
+( use-package! aas
+   :commands aas-mode)
+;;=======================================================
+(setq yas-triggers-in-field t)
 ;;=======================================================
 ;;=======================================================
 (defun add-py-debug ()
@@ -650,3 +695,51 @@
 ;;=======================================================
 (use-package! goto-chg)
 ;;=======================================================
+;;consult
+(after! consult
+  (set-face-attribute 'consult-file nil :inherit 'consult-buffer)
+  (setf (plist-get (alist-get 'perl consult-async-split-styles-alist) :initial) ";"))
+;;=======================================================
+;;marginalia
+(after! marginalia
+  (setq marginalia-censor-variables nil)
+
+  (defadvice! +marginalia--anotate-local-file-colorful (cand)
+    "Just a more colourful version of `marginalia--anotate-local-file'."
+    :override #'marginalia--annotate-local-file
+    (when-let (attrs (file-attributes (substitute-in-file-name
+                                       (marginalia--full-candidate cand))
+                                      'integer))
+      (marginalia--fields
+       ((marginalia--file-owner attrs)
+        :width 12 :face 'marginalia-file-owner)
+       ((marginalia--file-modes attrs))
+       ((+marginalia-file-size-colorful (file-attribute-size attrs))
+        :width 7)
+       ((+marginalia--time-colorful (file-attribute-modification-time attrs))
+        :width 12))))
+
+  (defun +marginalia--time-colorful (time)
+    (let* ((seconds (float-time (time-subtract (current-time) time)))
+           (color (doom-blend
+                   (face-attribute 'marginalia-date :foreground nil t)
+                   (face-attribute 'marginalia-documentation :foreground nil t)
+                   (/ 1.0 (log (+ 3 (/ (+ 1 seconds) 345600.0)))))))
+      ;; 1 - log(3 + 1/(days + 1)) % grey
+      (propertize (marginalia--time time) 'face (list :foreground color))))
+
+  (defun +marginalia-file-size-colorful (size)
+    (let* ((size-index (/ (log10 (+ 1 size)) 7.0))
+           (color (if (< size-index 10000000) ; 10m
+                      (doom-blend 'orange 'green size-index)
+                    (doom-blend 'red 'orange (- size-index 1)))))
+      (propertize (file-size-human-readable size) 'face (list :foreground color)))))
+;;=======================================================
+(defadvice! doom-modeline--buffer-file-name-roam-aware-a (orig-fun)
+  :around #'doom-modeline-buffer-file-name ; takes no args
+  (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+      (replace-regexp-in-string
+       "\\(?:^\\|.*/\\)\\([0-9]\\{4\\}\\)\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)[0-9]*-"
+       "🢔(\\1-\\2-\\3) "
+       (subst-char-in-sring ?_ ?  buffer-file-name))
+    (funcall orig-fun)))
