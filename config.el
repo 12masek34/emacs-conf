@@ -332,8 +332,8 @@
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
 
-    (global-set-key (kbd "M-<tab>") 'shift-right)
-    (global-set-key (kbd "M-s-<tab>") 'shift-left)
+    (global-set-key (kbd "M-<tab>") 'whole-line-or-region-indent-rigidly-right-to-tab-stop)
+    (global-set-key (kbd "M-s-<tab>") 'whole-line-or-region-indent-rigidly-left-to-tab-stop)
 
     (global-set-key (kbd "C-w") 'move-text-up)
     (global-set-key (kbd "C-s") 'move-text-down)
