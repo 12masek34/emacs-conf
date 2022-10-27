@@ -121,6 +121,14 @@
 ;;column indicator
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 ;;=======================================================
+;;=======================================================
+;;disable dialog window
+(setq use-dialog-box nil)
+;;=======================================================
+;; auto read on disc file
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+;;=======================================================
 (use-package! tooltip
   :defer t
   :custom
