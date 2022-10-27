@@ -75,7 +75,14 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-;;
+;;=======================================================
+;;localize
+(use-package mule
+  :defer 0.1
+  :config
+  (prefer-coding-system 'utf-8)
+  (set-language-environment "UTF-8")
+  (set-terminal-coding-system 'utf-8))
 ;; =======================================================
 ;; =======================================================
 ;; load environment
@@ -783,4 +790,15 @@
 (setq counsel-yank-pop-separator "
 -%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<
 ")
+;;=======================================================
+(use-package autorevert
+  :defer 0.1)
+;;=======================================================
+(use-package recentf
+  :defer 0.1
+  :custom
+  (recentf-auto-cleanup 30)
+  :config
+  (recentf-mode)
+  (run-with-idle-timer 30 t 'recentf-save-list))
 ;;=======================================================
