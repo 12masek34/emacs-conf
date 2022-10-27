@@ -101,26 +101,25 @@
 ;; makes the column number show up
 (column-number-mode 1)
 ;;=======================================================
-
 ;;=======================================================
 ;;replace name buffer
 (setq doom-fallback-buffer-name "► Doom"
       +doom-dashboard-name "► Doom")
 ;;=======================================================
-;; rename buffer title
-(setq frame-title-format
-      '(""
-        (:eval
-         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
-             (replace-regexp-in-string
-              ".*/[0-9]*-?" "☰ "
-              (subst-char-in-string ?_ ?  buffer-file-name))
-           "%b"))
-        (:eval
-         (let ((project-name (projectile-project-name)))
-           (unless (string= "-" project-name)
-             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
-;;=======================================================
+;; ;; rename buffer title
+;; (setq frame-title-format
+;;       '(""
+;;         (:eval
+;;          (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+;;              (replace-regexp-in-string
+;;               ".*/[0-9]*-?" "☰ "
+;;               (subst-char-in-string ?_ ?  buffer-file-name))
+;;            "%b"))
+;;         (:eval
+;;          (let ((project-name (projectile-project-name)))
+;;            (unless (string= "-" project-name)
+;;              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+;; ;;=======================================================
 ;; delay buffer hint
 (setq which-key-idle-delay 0.5)
 ;;=======================================================
@@ -766,15 +765,6 @@
                     (doom-blend 'red 'orange (- size-index 1)))))
       (propertize (file-size-human-readable size) 'face (list :foreground color)))))
 ;;=======================================================
-(defadvice! doom-modeline--buffer-file-name-roam-aware-a (orig-fun)
-  :around #'doom-modeline-buffer-file-name ; takes no args
-  (if (s-contains-p org-roam-directory (or buffer-file-name ""))
-      (replace-regexp-in-string
-       "\\(?:^\\|.*/\\)\\([0-9]\\{4\\}\\)\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)[0-9]*-"
-       "🢔(\\1-\\2-\\3) "
-       (subst-char-in-sring ?_ ?  buffer-file-name))
-    (funcall orig-fun)))
-;;=======================================================
 ;; enable on-the-fly spell checking
 (setq flyspell-use-meta-tab nil)
 (add-hook 'text-mode-hook
@@ -785,9 +775,4 @@
           (lambda ()
             ;; `ispell-comments-and-strings'
             (flyspell-prog-mode)))
-;;=======================================================
-;; more obvious separator for yank-pop
-(setq counsel-yank-pop-separator "
--%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<
-")
 ;;=======================================================
