@@ -725,11 +725,6 @@
 ;;=======================================================
 (use-package! goto-chg)
 ;;=======================================================
-;;consult
-(after! consult
-  (set-face-attribute 'consult-file nil :inherit 'consult-buffer)
-  (setf (plist-get (alist-get 'perl consult-async-split-styles-alist) :initial) ";"))
-;;=======================================================
 ;;marginalia
 (after! marginalia
   (setq marginalia-censor-variables nil)
