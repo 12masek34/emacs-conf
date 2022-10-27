@@ -791,14 +791,3 @@
 -%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<
 ")
 ;;=======================================================
-(use-package autorevert
-  :defer 0.1)
-;;=======================================================
-(use-package recentf
-  :defer 0.1
-  :custom
-  (recentf-auto-cleanup 30)
-  :config
-  (recentf-mode)
-  (run-with-idle-timer 30 t 'recentf-save-list))
-;;=======================================================
