@@ -91,6 +91,11 @@
 ;;  relative number line
 (setq display-line-numbers-type 'relative)
 ;;=======================================================
+;; makes the column number show up
+(column-number-mode 1)
+;;=======================================================
+
+;;=======================================================
 ;;replace name buffer
 (setq doom-fallback-buffer-name "► Doom"
       +doom-dashboard-name "► Doom")
@@ -121,6 +126,7 @@
 ;;column indicator
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 ;;=======================================================
+(winner-mode 1)
 ;;=======================================================
 ;;disable dialog window
 (setq use-dialog-box nil)
@@ -345,6 +351,13 @@
 
     (global-set-key (kbd "C-w") 'move-text-up)
     (global-set-key (kbd "C-s") 'move-text-down)
+
+    (global-set-key (kbd "s-Z") 'undo-fu-only-redo)
+
+    (global-unset-key (kbd "s-="))
+    (global-unset-key (kbd "s--"))
+    (global-set-key (kbd "s-=") 'text-scale-increase)
+    (global-set-key (kbd "s--") 'text-scale-decrease)
 
     map))
 
@@ -754,3 +767,20 @@
        "🢔(\\1-\\2-\\3) "
        (subst-char-in-sring ?_ ?  buffer-file-name))
     (funcall orig-fun)))
+;;=======================================================
+;; enable on-the-fly spell checking
+(setq flyspell-use-meta-tab nil)
+(add-hook 'text-mode-hook
+          (lambda ()
+            (flyspell-mode 1)))
+;; prevent flyspell from finding misspellings in code
+(add-hook 'prog-mode-hook
+          (lambda ()
+            ;; `ispell-comments-and-strings'
+            (flyspell-prog-mode)))
+;;=======================================================
+;; more obvious separator for yank-pop
+(setq counsel-yank-pop-separator "
+-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<-%<
+")
+;;=======================================================
