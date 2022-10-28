@@ -397,6 +397,12 @@
                                  (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
                                  (move-beginning-of-line 1))
                 ))
+
+(map! :leader
+        (:prefix "f"
+         :desc "history" "h" #'recentf-open-files
+                ))
+
 ;;=======================================================
 ;; russian key to eng
 (loop
