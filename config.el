@@ -780,3 +780,10 @@
             ;; `ispell-comments-and-strings'
             (flyspell-prog-mode)))
 ;;=======================================================
+;; replace text
+(use-package! iedit
+  :defer
+  :config
+  (set-face-background 'iedit-occurrence "Magenta")
+  :bind
+  ("s-r" . iedit-mode))
