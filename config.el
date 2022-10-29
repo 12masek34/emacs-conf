@@ -470,6 +470,8 @@
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;;=======================================================
+;;autoforma js
+;; ( add-hook 'js2-mode-hook #'format-all-mode)
 ;; =======================================================
 (use-package! tree-sitter
   :config
