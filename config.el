@@ -398,6 +398,57 @@
          :desc "history" "h" #'recentf-open-files
                 ))
 
+;; jump to next bracket (->  )
+(after! smartparens
+  (defun zz/goto-match-paren (arg)
+    "Go to the matching paren/bracket, otherwise (or if ARG is not
+    nil) insert %.  vi style of % jumping to matching brace."
+    (interactive "p")
+    (if (not (memq last-command '(set-mark
+                                  cua-set-mark
+                                  zz/goto-match-paren
+                                  down-list
+                                  up-list
+                                  end-of-defun
+                                  beginning-of-defun
+                                  backward-sexp
+                                  forward-sexp
+                                  backward-up-list
+                                  forward-paragraph
+                                  backward-paragraph
+                                  end-of-buffer
+                                  beginning-of-buffer
+                                  backward-word
+                                  forward-word
+                                  mwheel-scroll
+                                  backward-word
+                                  forward-word
+                                  mouse-start-secondary
+                                  mouse-yank-secondary
+                                  mouse-secondary-save-then-kill
+                                  move-end-of-line
+                                  move-beginning-of-line
+                                  backward-char
+                                  forward-char
+                                  scroll-up
+                                  scroll-down
+                                  scroll-left
+                                  scroll-right
+                                  mouse-set-point
+                                  next-buffer
+                                  previous-buffer
+                                  previous-line
+                                  next-line
+                                  back-to-indentation
+                                  doom/backward-to-bol-or-indent
+                                  doom/forward-to-last-non-comment-or-eol
+                                  )))
+        (self-insert-command (or arg 1))
+      (cond ((looking-at "\\s\(") (sp-forward-sexp) (backward-char 1))
+            ((looking-at "\\s\)") (forward-char 1) (sp-backward-sexp))
+            (t (self-insert-command (or arg 1))))))
+  (map! "M-0" 'zz/goto-match-paren))
+
 ;;=======================================================
 ;; russian key to eng
 (loop
