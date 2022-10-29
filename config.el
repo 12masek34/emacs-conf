@@ -618,6 +618,7 @@
   (lsp-treemacs-sync-mode 1)
   (setq lsp-completion-provider :capf)
   (setq lsp-idle-delay 0.25)
+  (setq lsp-signature-doc-lines 5)
   (setq gc-cons-threshold 100000000)
 )
 
