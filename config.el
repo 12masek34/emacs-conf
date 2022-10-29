@@ -249,6 +249,9 @@
       "M-w" nil
       )
 
+(with-eval-after-load 'lsp-mode
+  (define-key lsp-signature-mode-map (kbd "M-a") nil)
+  )
 
 (with-eval-after-load 'rjsx-mode
   (define-key rjsx-mode-map (kbd "C-d") nil)
