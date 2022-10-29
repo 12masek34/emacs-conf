@@ -29,6 +29,7 @@
 (package! modus-themes)
 (package! move-text)
 (package! flycheck)
+(package! reverse-im)
 
 
 ;; To install a package directly from a remote git repo, you must specify a

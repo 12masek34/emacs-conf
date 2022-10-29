@@ -450,14 +450,14 @@
   (map! "M-0" 'zz/goto-match-paren))
 
 ;;=======================================================
-;; russian key to eng
-(loop
-  for from across "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖ\ЭЯЧСМИТЬБЮ№"
-  for to   across "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>#"
-  do
-  (eval `(define-key key-translation-map (kbd ,(concat "C-" (string from))) (kbd ,(concat "C-" (string to)))))
-  (eval `(define-key key-translation-map (kbd ,(concat "s-" (string from))) (kbd ,(concat "s-" (string to)))))
-  (eval `(define-key key-translation-map (kbd ,(concat "M-" (string from))) (kbd ,(concat "M-" (string to))))))
+;; russian key to eng binding
+
+(use-package! reverse-im
+  :ensure t
+  :custom
+  (reverse-im-input-methods '("russian-computer"))
+  :config
+  (reverse-im-mode t))
 ;;=======================================================
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
@@ -541,9 +541,6 @@
                         (setq currentFunc (format methodFStr ifSym_funcRetType ifSym_funcName ifSym_args))
                         (setq fullStr (concat fullStr currentFunc))
                         ))
-                        ;; (yas-expand-snippet ifSnip nil nil '((ifSym_funcRetType)
-                        ;;                                      (ifSym_funcName)
-                        ;;                                      (ifSym_args))))
                         ((assoc-string "ifType" func)
                         ;; TODO make this more robust
                         (setq ifName (tsc-node-text (cdr (assoc-string "ifType" func))))
@@ -561,7 +558,6 @@
   (when-let*
       ((cursor (tsc-make-cursor tree-sitter-tree))
        (root (tsc-root-node tree-sitter-tree)))
-    ;; (tsc-reset-cursor cursor (tree-sitter-node-at-pos))
     (tsc-goto-first-child-for-position cursor (point))
     (if (eq 'function_definition (tsc-node-type (tsc-current-node cursor))) (tsc-current-node cursor) nil)))
 
@@ -577,7 +573,6 @@
 ;;=======================================================
 ;;set interpritatior
 (setq python-shell-completion-native-disabled-interpreters '("python3"))
-;;=======================================================
 ;; =======================================================
 
 (after! lsp-python-ms
@@ -618,11 +613,6 @@
   (setq lsp-completion-provider :capf)
   (setq lsp-idle-delay 0.25)
   (setq gc-cons-threshold 100000000)
-
-  ;; (setq lsp-ui-doc-enable t)
-  ;; (setq lsp-completion-show-label-description t)
-  ;; (setq lsp-ui-doc-show-with-cursor t)
-  ;; (setq lsp-completion-show-label-description t)
 )
 
 
@@ -644,14 +634,12 @@
     company-ispell
     company-files
     company-yasnippet))
-
 ;;=======================================================
 ;;aas
 ( use-package! aas
    :commands aas-mode)
 ;;=======================================================
 (setq yas-triggers-in-field t)
-;;=======================================================
 ;;=======================================================
 (defun add-py-debug ()
       "add debug code and move line down"
@@ -684,7 +672,6 @@
   ;; (dap-ui-breakpoints)
   (dap-ui-repl)
   )
-
 
 (defun stop-debugging-mode ()
   (interactive)
@@ -779,42 +766,8 @@
   :bind
   ([remap dabbrev-expand] . hippie-expand))
 ;;=======================================================
+;;go to last change buffer
 (use-package! goto-chg)
-;;=======================================================
-;;marginalia
-(after! marginalia
-  (setq marginalia-censor-variables nil)
-
-  (defadvice! +marginalia--anotate-local-file-colorful (cand)
-    "Just a more colourful version of `marginalia--anotate-local-file'."
-    :override #'marginalia--annotate-local-file
-    (when-let (attrs (file-attributes (substitute-in-file-name
-                                       (marginalia--full-candidate cand))
-                                      'integer))
-      (marginalia--fields
-       ((marginalia--file-owner attrs)
-        :width 12 :face 'marginalia-file-owner)
-       ((marginalia--file-modes attrs))
-       ((+marginalia-file-size-colorful (file-attribute-size attrs))
-        :width 7)
-       ((+marginalia--time-colorful (file-attribute-modification-time attrs))
-        :width 12))))
-
-  (defun +marginalia--time-colorful (time)
-    (let* ((seconds (float-time (time-subtract (current-time) time)))
-           (color (doom-blend
-                   (face-attribute 'marginalia-date :foreground nil t)
-                   (face-attribute 'marginalia-documentation :foreground nil t)
-                   (/ 1.0 (log (+ 3 (/ (+ 1 seconds) 345600.0)))))))
-      ;; 1 - log(3 + 1/(days + 1)) % grey
-      (propertize (marginalia--time time) 'face (list :foreground color))))
-
-  (defun +marginalia-file-size-colorful (size)
-    (let* ((size-index (/ (log10 (+ 1 size)) 7.0))
-           (color (if (< size-index 10000000) ; 10m
-                      (doom-blend 'orange 'green size-index)
-                    (doom-blend 'red 'orange (- size-index 1)))))
-      (propertize (file-size-human-readable size) 'face (list :foreground color)))))
 ;;=======================================================
 ;; enable on-the-fly spell checking
 (setq flyspell-use-meta-tab nil)
@@ -826,5 +779,4 @@
           (lambda ()
             ;; `ispell-comments-and-strings'
             (flyspell-prog-mode)))
-;;=======================================================
 ;;=======================================================
