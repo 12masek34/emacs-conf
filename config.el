@@ -263,6 +263,11 @@
       "M-w" nil
       )
 
+(map! :after magit-blame
+      :map magit-blame-read-only-mode-map
+      "M-w" nil
+      )
+
 (with-eval-after-load 'lsp-mode
   (define-key lsp-signature-mode-map (kbd "M-a") nil)
   )
