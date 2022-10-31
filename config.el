@@ -208,11 +208,25 @@
   (interactive)
   (shift-region -4))
 ;;=======================================================
+(defun delete-word (arg)
+;; "Delete characters forward until encountering the end of a word.
+;; With argument, do this that many times."
+  (interactive "p")
+  (if (use-region-p)
+      (delete-region (region-beginning) (region-end))
+    (delete-region (point) (progn (forward-word arg) (point)))))
+
+(defun backward-delete-word (arg)
+;; "Delete characters backward until encountering the end of a word.
+;; With argument, do this that many times."
+  (interactive "p")
+  (delete-word (- arg)))
+;;=======================================================
 ;;light long line
 ;; (add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{80\\}" 'hi-salmon)))
 ;;=======================================================
 ;;light import pdb
-(add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp "import ipdb; ipdb.set_trace();" 'hi-aquamarine)))
+(add-hook 'python-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
 ;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
@@ -302,10 +316,10 @@
     (global-set-key (kbd "M-s-a") 'beginning-of-line)
 
     (global-unset-key (kbd "C-d"))
-    (global-set-key (kbd "C-d") 'sp-delete-word)
+    (global-set-key (kbd "C-d") 'delete-word)
 
     (global-unset-key (kbd "C-a"))
-    (global-set-key (kbd "C-a") 'sp-backward-delete-word)
+    (global-set-key (kbd "C-a") 'backward-delete-word)
 
     (global-unset-key (kbd "C-s"))
     (global-set-key (kbd "C-s") 'kill-whole-line)
@@ -652,7 +666,7 @@
       "add debug code and move line down"
     (interactive)
     (move-beginning-of-line 1)
-    (insert "import ipdb; ipdb.set_trace();\n"))
+    (insert "import ipdb; ipdb.set_trace();"))
 
 (defun remove-py-debug ()
   "remove py debug code, if found"
@@ -798,4 +812,3 @@
 ;;kill-ring history
 (use-package! browse-kill-ring)
 ;;=======================================================
-;;
