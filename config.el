@@ -233,18 +233,14 @@
 (whole-line-or-region-indent-rigidly-left-to-tab-stop 1)
 (setq deactivate-mark nil))
 ;;=======================================================
-;;light long line
-;; (add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{80\\}" 'hi-salmon)))
-;;=======================================================
 ;;light import pdb
-(add-hook 'lsp-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
+(add-hook 'python-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
 ;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
 (setq scroll-margin 2)
 ;;=======================================================
 ;;keymap
-;;
 (map! :after smartparens
       :map smartparens-mode-map
       "C-d" nil
@@ -252,7 +248,6 @@
       "M-C-d" nil
       "M-C-a" nil
       )
-
 
 (map! :after vertico
       :map vertico-map
@@ -401,7 +396,6 @@
     (global-set-key (kbd "M-o") 'ace-window)
 
     map))
-
 
 (map! :leader
         (:prefix "b"
@@ -586,9 +580,7 @@
                 interface)
                 ;; Puts the result in the kill ring
                 (kill-new (concat currentImpl fullStr (format ifFStr ifName funcNamesStr)))
-                )
-  )
-
+                ))
 
 (defun my/tree-sitter-get-function-node ()
   (interactive)
@@ -625,7 +617,6 @@
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 
-
 (use-package! lsp-mode
   :diminish (lsp-mode . "lsp")
   :config
@@ -635,7 +626,6 @@
   (setq lsp-signature-doc-lines 5)
   (setq gc-cons-threshold 100000000)
 )
-
 
 (setq lsp-enable-file-watchers nil)
 ;;=======================================================
@@ -708,7 +698,6 @@
   (kill-buffer "*dap-ui-repl*")
   )
 
-
 (use-package! dap-mode
   :diminish dap-mode
   :after(lsp-mode)
@@ -729,7 +718,6 @@
     (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
     (dap-session-created . (lambda (&_rest) (debugging-mode)))
     (dap-terminated . (lambda (&_rest) (stop-debugging-mode)))))
-
 
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)
