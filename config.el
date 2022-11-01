@@ -476,7 +476,6 @@
 
 ;;=======================================================
 ;; russian key to eng binding
-
 (use-package! reverse-im
   :ensure t
   :custom
@@ -599,7 +598,7 @@
 ;;set interpritatior
 (setq python-shell-completion-native-disabled-interpreters '("python3"))
 ;; =======================================================
-
+;; lsp
 (after! lsp-python-ms
    (set-lsp-priority!  'pyright 1))
 
@@ -607,23 +606,6 @@
 
 ( after! lsp-mode
    ( setq lsp-restart 'ignore))
-
-(after! ess
-  (setq ess-eval-visibly 'nowait))
-
-(after! ess
-  (setq ess-R-font-lock-keywords '((ess-R-fl-keyword:keywords . t)
-                                   (ess-R-fl-keyword:constants . t)
-                                   (ess-R-fl-keyword:modifiers . t)
-                                   (ess-R-fl-keyword:fun-defs . t)
-                                   (ess-R-fl-keyword:assign-ops . t)
-                                   (ess-R-fl-keyword:%op% . t)
-                                   (ess-fl-keyword:fun-calls . t)
-                                   (ess-fl-keyword:numbers . t)
-                                   (ess-fl-keyword:operators . t)
-                                   (ess-fl-keyword:delimiters . t)
-                                   (ess-fl-keyword:= . t)
-                                   (ess-R-fl-keyword:F&T . t))))
 
 (use-package! lsp-pyright
   :hook (python-mode . (lambda ()
@@ -650,6 +632,9 @@
 
 (setq-default history-length 1000)
 (setq-default prescient-history-length 1000)
+;;=======================================================
+;;consult
+(setq consult-locate-args "mdfind")
 ;;=======================================================
 ;;ispell
 (set-company-backend!
