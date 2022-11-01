@@ -222,11 +222,22 @@
   (interactive "p")
   (delete-word (- arg)))
 ;;=======================================================
+;;move text and return region
+(defun move-line-or-region-right ()
+  (interactive)
+(whole-line-or-region-indent-rigidly-right-to-tab-stop 1)
+(setq deactivate-mark nil))
+
+(defun move-line-or-region-left ()
+  (interactive)
+(whole-line-or-region-indent-rigidly-left-to-tab-stop 1)
+(setq deactivate-mark nil))
+;;=======================================================
 ;;light long line
 ;; (add-hook 'python-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{80\\}" 'hi-salmon)))
 ;;=======================================================
 ;;light import pdb
-(add-hook 'python-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
+(add-hook 'lsp-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
 ;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
@@ -370,8 +381,8 @@
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
 
-    (global-set-key (kbd "M-<tab>") 'whole-line-or-region-indent-rigidly-right-to-tab-stop)
-    (global-set-key (kbd "M-s-<tab>") 'whole-line-or-region-indent-rigidly-left-to-tab-stop)
+    (global-set-key (kbd "M-<tab>") 'move-line-or-region-right)
+    (global-set-key (kbd "M-s-<tab>") 'move-line-or-region-left)
 
     (global-set-key (kbd "C-w") 'move-text-up)
     (global-set-key (kbd "C-s") 'move-text-down)
@@ -589,10 +600,10 @@
    :after python-mode
    :defer t
    :config
-  ( require  ' tree-sitter )
-  ( require  ' tree-sitter-langs )
-  ( require  ' tree-sitter-hl )
-  ( add-hook  ' python-mode -hook  #' Tree-sitter-hl-mode )
+  (require  ' tree-sitter )
+  (require  ' tree-sitter-langs )
+  (require  ' tree-sitter-hl )
+  (add-hook  ' python-mode-hook  #' Tree-sitter-hl-mode )
   )
 ;;=======================================================
 ;;set interpritatior
