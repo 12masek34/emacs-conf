@@ -668,8 +668,9 @@
 (defun add-py-debug ()
       "add debug code and move line down"
     (interactive)
-    (move-beginning-of-line 1)
-    (insert "import ipdb; ipdb.set_trace();"))
+    ;; (move-beginning-of-line 1)
+    ;; (insert "import ipdb; ipdb.set_trace();"))
+    (save-excursion (insert "import ipdb; ipdb.set_trace();")))
 
 (defun remove-py-debug ()
   "remove py debug code, if found"
