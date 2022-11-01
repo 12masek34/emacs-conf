@@ -398,6 +398,8 @@
 
     (global-set-key (kbd "s-V") 'browse-kill-ring)
 
+    (global-set-key (kbd "M-o") 'ace-window)
+
     map))
 
 
