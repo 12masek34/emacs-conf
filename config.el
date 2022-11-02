@@ -234,7 +234,7 @@
 (setq deactivate-mark nil))
 ;;=======================================================
 ;;light import pdb
-(add-hook 'python-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
+(add-hook 'lsp-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
 ;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
@@ -337,6 +337,7 @@
 
     (global-unset-key (kbd "s-["))
     (global-set-key (kbd "s-[") 'pop-global-mark)
+    (global-set-key (kbd "s-]") 'consult-global-mark)
 
     ;; switch window
     (global-set-key (kbd "C-x M-w") 'windmove-up)
@@ -803,4 +804,7 @@
 ;;=======================================================
 ;;kill-ring history
 (use-package! browse-kill-ring)
+;;=======================================================
+;;cache projectile enable
+(setq projectile-enable-caching t)
 ;;=======================================================
