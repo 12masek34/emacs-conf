@@ -234,7 +234,7 @@
 (setq deactivate-mark nil))
 ;;=======================================================
 ;;light import pdb
-(add-hook 'lsp-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
+(add-hook 'python-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
 ;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
@@ -396,6 +396,7 @@
 
     (global-set-key (kbd "M-o") 'ace-window)
 
+    (global-set-key (kbd "<f5>") 'revert-buffer)
     map))
 
 (map! :leader
@@ -621,7 +622,7 @@
 (use-package! lsp-mode
   :diminish (lsp-mode . "lsp")
   :config
-  (lsp-treemacs-sync-mode 1)
+  ;; (lsp-treemacs-sync-mode 1)
   (setq lsp-completion-provider :capf)
   (setq lsp-idle-delay 0.25)
   (setq lsp-signature-doc-lines 5)
@@ -670,8 +671,6 @@
 (defun add-py-debug ()
       "add debug code and move line down"
     (interactive)
-    ;; (move-beginning-of-line 1)
-    ;; (insert "import ipdb; ipdb.set_trace();"))
     (save-excursion (insert "import ipdb; ipdb.set_trace();")))
 
 (defun remove-py-debug ()
@@ -694,9 +693,7 @@
   (dap-ui-mode t)
   (dap-tooltip-mode)
   (dap-ui-controls-mode 1)
-  ;; (dap-ui-sessions)
   (dap-ui-locals)
-  ;; (dap-ui-breakpoints)
   (dap-ui-repl)
   )
 
@@ -723,25 +720,13 @@
 
   :functions dap-hydra/nil
   :bind (:map lsp-mode-map
-         ("<f5>" . dap-debug)
-         ("M-<f5>" . dap-hydra))
+         ("<f6>" . dap-debug)
+         ("M-<f6>" . dap-hydra))
   :hook ((dap-mode . dap-ui-mode)
     (dap-session-created . (lambda (&_rest) (dap-hydra)))
     (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
     (dap-session-created . (lambda (&_rest) (debugging-mode)))
     (dap-terminated . (lambda (&_rest) (stop-debugging-mode)))))
-
-(use-package! lsp-treemacs
-  :after (lsp-mode treemacs)
-  :commands lsp-treemacs-errors-list
-  :bind (:map lsp-mode-map
-         ("M-9" . lsp-treemacs-errors-list)))
-
-(use-package! treemacs
-  :config (treemacs-git-mode 'deferred)
-  :commands (treemacs)
-  :after (lsp-mode))
-
 ;;=======================================================
 (use-package! semantic
   :init
