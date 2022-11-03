@@ -626,9 +626,20 @@
   (setq lsp-idle-delay 0.25)
   (setq lsp-signature-doc-lines 5)
   (setq gc-cons-threshold 100000000)
+  :custom
+  (lsp-keep-workspace-alive nil)
+  (lsp-auto-guess-root nil)
+  (lsp-eldoc-enable-hover nil)
+  ;; (lsp-signature-auto-activate nil)
+  (lsp-completion-enable t)
 )
 
-(setq lsp-enable-file-watchers nil)
+  (use-package lsp-pyright
+    :ensure t
+    :init
+    (setq lsp-pyright-multi-root nil)
+    (setq lsp-enable-file-watchers nil)
+    )
 ;;=======================================================
 ;;company
 (setq company-idle-delay 0)
