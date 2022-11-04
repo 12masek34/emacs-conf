@@ -233,9 +233,6 @@
 (whole-line-or-region-indent-rigidly-left-to-tab-stop 1)
 (setq deactivate-mark nil))
 ;;=======================================================
-;;light import pdb
-(add-hook 'python-mode-hook '(lambda () (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)))
-;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
 (setq scroll-margin 2)
@@ -397,6 +394,9 @@
     (global-set-key (kbd "M-o") 'ace-window)
 
     (global-set-key (kbd "<f5>") 'revert-buffer)
+
+    (global-set-key (kbd "C-k") 'kill-this-buffer)
+
     map))
 
 (map! :leader
@@ -671,6 +671,7 @@
 (defun add-py-debug ()
       "add debug code and move line down"
     (interactive)
+    (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)
     (save-excursion (insert "import ipdb; ipdb.set_trace();")))
 
 (defun remove-py-debug ()
