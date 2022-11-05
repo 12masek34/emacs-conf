@@ -348,54 +348,38 @@
     (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
-
     (global-set-key (kbd "s-t") '+vterm/toggle)
     (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
-
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
-
     (global-set-key (kbd "s-v") 'yank)
     (global-set-key (kbd "s-c") 'kill-ring-save)
     (global-set-key (kbd "s-x") 'kill-region)
-
     (global-set-key (kbd "s-/") 'comment-line)
-
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
-
     (global-set-key (kbd "M--") 'set-mark-command)
-
     (global-set-key (kbd "s-3") 'ibuffer)
-
     (global-set-key (kbd "M-]") 'goto-last-change-reverse)
     (global-set-key (kbd "M-[") 'goto-last-change)
-
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
-
     (global-set-key (kbd "M-<tab>") 'move-line-or-region-right)
     (global-set-key (kbd "M-s-<tab>") 'move-line-or-region-left)
-
     (global-set-key (kbd "C-w") 'move-text-up)
     (global-set-key (kbd "C-s") 'move-text-down)
-
     (global-set-key (kbd "s-Z") 'undo-fu-only-redo)
-
     (global-unset-key (kbd "s-="))
     (global-unset-key (kbd "s--"))
     (global-set-key (kbd "s-=") 'text-scale-increase)
     (global-set-key (kbd "s--") 'text-scale-decrease)
-
     (global-set-key (kbd "M-j") 'avy-goto-char-timer)
-
     (global-set-key (kbd "s-V") 'browse-kill-ring)
-
     (global-set-key (kbd "M-o") 'ace-window)
-
     (global-set-key (kbd "<f5>") 'revert-buffer)
-
     (global-set-key (kbd "C-k") 'kill-this-buffer)
+    (global-set-key (kbd "C-M-d") 'kill-line)
+    (global-set-key (kbd "C-M-a") '(lambda () (interactive) (kill-line 0)))
 
     map))
 
