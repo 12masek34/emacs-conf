@@ -388,7 +388,7 @@
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
     (global-set-key (kbd "s-v") 'yank)
-    (global-set-key (kbd "C-s-v") 'm-replace-yank)
+    (global-set-key (kbd "C-s-v") 'my-replace-yank)
 
     (global-set-key (kbd "s-c") 'kill-ring-save)
     (global-set-key (kbd "s-x") 'kill-region)
