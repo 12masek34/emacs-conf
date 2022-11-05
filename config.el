@@ -233,6 +233,40 @@
 (whole-line-or-region-indent-rigidly-left-to-tab-stop 1)
 (setq deactivate-mark nil))
 ;;=======================================================
+;;delete line and dont add kill ring
+(defun my-delete-line-this-line ()
+  (interactive)
+  (delete-region (line-beginning-position) (line-end-position)))
+;;=======================================================
+;;replace yank
+(defun my-replace-yank ()
+  (interactive)
+  (my-delete-line-this-line)
+  (yank)
+)
+;;=======================================================
+;; yank and dont move cursor to new line
+(defun custom-yank ()
+  (interactive)
+  (yank)
+  (beginning-of-line)
+  (backward-delete-char 1)
+  )
+;;=======================================================
+;; replace region
+(defun repl-yank(beg end)
+  (interactive "r")
+  (delete-region beg end)
+  (yank 1))
+;;=======================================================
+;; if region replace, or yank and dont add new line
+(defun crazy-yank ()
+  (interactive)
+  (if (region-active-p)
+      (call-interactively #'repl-yank))
+        (call-interactively #'custom-yank)
+  )
+;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
 (setq scroll-margin 2)
@@ -354,6 +388,8 @@
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
     (global-set-key (kbd "s-v") 'yank)
+    (global-set-key (kbd "C-s-v") 'm-replace-yank)
+
     (global-set-key (kbd "s-c") 'kill-ring-save)
     (global-set-key (kbd "s-x") 'kill-region)
     (global-set-key (kbd "s-/") 'comment-line)
@@ -415,6 +451,21 @@
         (:prefix "f"
          :desc "history" "h" #'recentf-open-files
                 ))
+
+(map! :leader
+        (:prefix "v"
+         :desc "replace region or yank" "v" #'(lambda  ()
+                                                (interactive)
+                                                (if (region-active-p)
+                                                    (call-interactively #'repl-yank))
+                                                (call-interactively #'custom-yank)
+                                                )
+         :desc "replace line and yank" "r" #'(lambda ()
+                                              (interactive)
+                                              (my-delete-line-this-line)
+                                              (yank)
+                                              ))
+         )
 
 ;; jump to next bracket (->  )
 (after! smartparens
