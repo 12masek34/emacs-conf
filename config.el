@@ -93,22 +93,26 @@
 ;; dont add end allow line
  (setq mode-require-final-newline nil)
 ;;=======================================================
-
-(defun write-cursor ()
-(setq-default cursor-type 'bar)
-(set-cursor-color "#33FF00"))
-
-(defun move-cursor ()
-(setq-default cursor-type 'box)
-(set-cursor-color "White"))
-
 ;; Change cursor in insert text
-(defun check-char ()
-  (if (eq this-command 'self-insert-command)
-      (write-cursor)
-      (move-cursor)))
+(defun my/change-cursor()
+  (if (eq cursor-type 'bar)
+      (cancel-timer my/timer))
 
-(add-hook 'post-command-hook #'check-char)
+  (setq-default cursor-type 'bar)
+  (set-cursor-color "#33FF00")
+  (setq my/timer (run-with-timer 3 nil
+    (lambda ()
+      (setq-default cursor-type 'box)
+      (set-cursor-color "White")))))
+
+(defun modify-cursor ()
+  (if (eq this-command 'self-insert-command)
+        (my/change-cursor))
+  (if (eq this-command 'yank)
+        (my/change-cursor))
+  )
+
+(add-hook 'post-command-hook #'modify-cursor)
 ;;=======================================================
 ;;  relative number line
 (setq display-line-numbers-type 'relative)
@@ -648,10 +652,10 @@
    :after python-mode
    :defer t
    :config
-  (require  ' tree-sitter )
-  (require  ' tree-sitter-langs )
-  (require  ' tree-sitter-hl )
-  (add-hook  ' python-mode-hook  #' Tree-sitter-hl-mode )
+  (require  ' tree-sitter)
+  (require  ' tree-sitter-langs)
+  (require  ' tree-sitter-hl)
+  (add-hook  ' python-mode-hook  #'tree-sitter-hl-mode)
   )
 ;;=======================================================
 ;;set interpritatior
