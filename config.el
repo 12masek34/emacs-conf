@@ -454,13 +454,7 @@
 
 (map! :leader
         (:prefix "v"
-         :desc "replace region or yank" "v" #'(lambda  ()
-                                                (interactive)
-                                                (if (region-active-p)
-                                                    (call-interactively #'repl-yank))
-                                                (call-interactively #'custom-yank)
-                                                )
-         :desc "replace line and yank" "r" #'(lambda ()
+         :desc "replace line and yank" "v" #'(lambda ()
                                               (interactive)
                                               (my-delete-line-this-line)
                                               (yank)
