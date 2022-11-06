@@ -221,6 +221,14 @@
 ;; With argument, do this that many times."
   (interactive "p")
   (delete-word (- arg)))
+
+(defun last-half-delete-line ()
+  (interactive)
+  (delete-region (point) (line-end-position)))
+
+(defun first-half-delete-line ()
+  (interactive)
+  (delete-region (point) (line-beginning-position)))
 ;;=======================================================
 ;;move text and return region
 (defun move-line-or-region-right ()
@@ -414,8 +422,8 @@
     (global-set-key (kbd "M-o") 'ace-window)
     (global-set-key (kbd "<f5>") 'revert-buffer)
     (global-set-key (kbd "C-k") 'kill-this-buffer)
-    (global-set-key (kbd "C-M-d") 'kill-line)
-    (global-set-key (kbd "C-M-a") '(lambda () (interactive) (kill-line 0)))
+    (global-set-key (kbd "C-M-d") 'last-half-delete-line)
+    (global-set-key (kbd "C-M-a") 'first-half-delete-line)
 
     map))
 
@@ -834,3 +842,6 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
+(require 'cursor-chg)             ; Load the library
+(toggle-cursor-type-when-idle 1)  ; Turn on cursor change when Emacs is idle
+(change-cursor-mode 1)            ; Turn on change for overwrite, read-only, and input mode
