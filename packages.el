@@ -32,7 +32,6 @@
 (package! reverse-im)
 (package! iedit)
 (package! browse-kill-ring)
-(package! cursor-chg)
 
 
 ;; To install a package directly from a remote git repo, you must specify a

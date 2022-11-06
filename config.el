@@ -93,8 +93,22 @@
 ;; dont add end allow line
  (setq mode-require-final-newline nil)
 ;;=======================================================
-;;cursor
-;; (setq-default cursor-type 'bar)
+
+(defun write-cursor ()
+(setq-default cursor-type 'bar)
+(set-cursor-color "#33FF00"))
+
+(defun move-cursor ()
+(setq-default cursor-type 'box)
+(set-cursor-color "White"))
+
+;; Change cursor in insert text
+(defun check-char ()
+  (if (eq this-command 'self-insert-command)
+      (write-cursor)
+      (move-cursor)))
+
+(add-hook 'post-command-hook #'check-char)
 ;;=======================================================
 ;;  relative number line
 (setq display-line-numbers-type 'relative)
@@ -842,6 +856,3 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
-(require 'cursor-chg)             ; Load the library
-(toggle-cursor-type-when-idle 1)  ; Turn on cursor change when Emacs is idle
-(change-cursor-mode 1)            ; Turn on change for overwrite, read-only, and input mode
