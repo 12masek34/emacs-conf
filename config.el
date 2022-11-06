@@ -438,6 +438,7 @@
     (global-set-key (kbd "C-k") 'kill-this-buffer)
     (global-set-key (kbd "C-M-d") 'last-half-delete-line)
     (global-set-key (kbd "C-M-a") 'first-half-delete-line)
+    (global-set-key (kbd "M-i") 'overwrite-mode)
 
     map))
 
