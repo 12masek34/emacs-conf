@@ -100,7 +100,7 @@
 
   (setq-default cursor-type 'bar)
   (set-cursor-color "#33FF00")
-  (setq my/timer (run-with-timer 3 nil
+  (setq my/timer (run-with-timer 5 nil
     (lambda ()
       (setq-default cursor-type 'box)
       (set-cursor-color "White")))))
@@ -120,6 +120,8 @@
         (my/change-cursor))
   (if (eq this-command 'last-half-delete-line)
         (my/change-cursor))
+  (if (eq this-command 'delete-backward-char)
+        (my/change-cursor))
   )
 
 (add-hook 'post-command-hook #'modify-cursor)
@@ -130,6 +132,13 @@
 ;; makes the column number show up
 (column-number-mode 1)
 ;;=======================================================
+;;=======================================================
+;;set interpritatior
+(setq python-shell-completion-native-disabled-interpreters '("python3"))
+;; =======================================================
+(setq read-process-output-max (* 1024 1024))
+(setq-default history-length 1000)
+(setq-default prescient-history-length 1000)
 ;;=======================================================
 ;;replace name buffer
 (setq doom-fallback-buffer-name "► Doom"
@@ -668,52 +677,69 @@
   (add-hook  ' python-mode-hook  #'tree-sitter-hl-mode)
   )
 ;;=======================================================
-;;set interpritatior
-(setq python-shell-completion-native-disabled-interpreters '("python3"))
-;; =======================================================
 ;; lsp
-(after! lsp-python-ms
-   (set-lsp-priority!  'pyright 1))
+;; (after! lsp-python-ms
+   ;; (set-lsp-priority!  'pyright 1))
 
-(setq read-process-output-max (* 1024 1024))
+;; ( after! lsp-mode
+;;    ( setq lsp-restart 'ignore))
 
-( after! lsp-mode
-   ( setq lsp-restart 'ignore))
+;; (use-package! lsp-pyright
+;;   :ensure t
+;;   :init
+;;     (setq lsp-pyright-multi-root nil)
+;;     (setq lsp-enable-file-watchers nil)
+;;   :hook (python-mode . (lambda ()
+;;                           (require 'lsp-pyright)
+;;                           (lsp))))  ; or lsp-deferred
 
-(use-package! lsp-pyright
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
-
-(use-package! lsp-mode
-  :diminish (lsp-mode . "lsp")
-  :config
-  ;; (lsp-treemacs-sync-mode 1)
-  (setq lsp-completion-provider :capf)
-  (setq lsp-idle-delay 0.25)
-  (setq lsp-signature-doc-lines 5)
-  (setq gc-cons-threshold 100000000)
-  :custom
-  (lsp-keep-workspace-alive nil)
-  (lsp-auto-guess-root nil)
-  (lsp-eldoc-enable-hover nil)
-  ;; (lsp-signature-auto-activate nil)
-  (lsp-completion-enable t)
-)
-
-  (use-package lsp-pyright
-    :ensure t
-    :init
-    (setq lsp-pyright-multi-root nil)
-    (setq lsp-enable-file-watchers nil)
-    )
+;; (use-package! lsp-mode
+;;   :diminish (lsp-mode . "lsp")
+;;   :config
+;;   ;; (lsp-treemacs-sync-mode 1)
+;;   (setq lsp-completion-provider :capf)
+;;   (setq lsp-idle-delay 0.25)
+;;   (setq lsp-signature-doc-lines 5)
+;;   (setq gc-cons-threshold 100000000)
+;;   :custom
+;;   (lsp-keep-workspace-alive nil)
+;;   (lsp-auto-guess-root nil)
+;;   (lsp-eldoc-enable-hover nil)
+;;   ;; (lsp-signature-auto-activate nil)
+;;   (lsp-completion-enable t)
+;; )
+;;=======================================================
+;;eglot
+(use-package eglot
+  :ensure t
+  :defer t
+  :hook (python-mode . eglot-ensure))
 ;;=======================================================
 ;;company
-(setq company-idle-delay 0)
-(setq company-show-numbers t)
-
-(setq-default history-length 1000)
-(setq-default prescient-history-length 1000)
+(use-package company
+  :ensure t
+  :defer t
+  :custom
+  ;; Search other buffers with the same modes for completion instead of
+  ;; searching all other buffers.
+  (company-dabbrev-other-buffers t)
+  (company-dabbrev-code-other-buffers t)
+  ;; M-<num> to select an option according to its number.
+  (company-show-numbers t)
+  ;; Only 2 letters required for completion to activate.
+  (company-minimum-prefix-length 2)
+  ;; Do not downcase completions by default.
+  (company-dabbrev-downcase nil)
+  ;; Even if I write something with the wrong case,
+  ;; provide the correct casing.
+  (company-dabbrev-ignore-case t)
+  ;; company completion wait
+  (company-idle-delay 0)
+  ;; No company-mode in shell & eshell
+  (company-global-modes '(not eshell-mode shell-mode))
+  ;; Use company with text and programming modes.
+    :hook ((text-mode . company-mode)
+           (prog-mode . company-mode)))
 ;;=======================================================
 ;;consult
 (setq consult-locate-args "mdfind")
@@ -753,57 +779,12 @@
       (move-beginning-of-line 1))
       (goto-char cur))))
 ;;=======================================================
-;; debuger
-(defun debugging-mode ()
-  (interactive)
-  (dap-mode t)
-  (dap-ui-mode t)
-  (dap-tooltip-mode)
-  (dap-ui-controls-mode 1)
-  (dap-ui-locals)
-  (dap-ui-repl)
-  )
-
-(defun stop-debugging-mode ()
-  (interactive)
-  (dap-delete-all-sessions)
-  (dap-mode 0)
-  (dap-ui-mode 0)
-  (dap-ui-controls-mode 0)
-  (delete-other-windows) ;; hide all the dap UI. I might want to delete the buffers as well.
-  (kill-buffer "*dap-ui-repl*")
-  )
-
-(use-package! dap-mode
-  :diminish dap-mode
-  :after(lsp-mode)
-
-  :ensure t
-  :config
-  (require 'dap-python)
-  (require 'dap-ui)
-  (setq dap-python-debugger 'debugpy)
-  (setq dap-auto-configure-features '(locals controls tooltip))
-
-  :functions dap-hydra/nil
-  :bind (:map lsp-mode-map
-         ("<f6>" . dap-debug)
-         ("M-<f6>" . dap-hydra))
-  :hook ((dap-mode . dap-ui-mode)
-    (dap-session-created . (lambda (&_rest) (dap-hydra)))
-    (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-    (dap-session-created . (lambda (&_rest) (debugging-mode)))
-    (dap-terminated . (lambda (&_rest) (stop-debugging-mode)))))
-;;=======================================================
 (use-package! semantic
   :init
     (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
     (semantic-mode 1)
     (require 'stickyfunc-enhance))
 ;; =======================================================
-;; load debug templates
-(load! "~/.doom.d/debug-templates.el")
-;;=======================================================
 ;; Extra ligatures
 (setq +ligatures-extras-in-modes
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
