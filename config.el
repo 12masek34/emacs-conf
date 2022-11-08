@@ -678,9 +678,6 @@
   )
 ;;=======================================================
 ;; lsp
-;; (after! lsp-python-ms
-   ;; (set-lsp-priority!  'pyright 1))
-
 ( after! lsp-mode
    ( setq lsp-restart 'ignore))
 
@@ -693,27 +690,46 @@
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 
-;; (use-package! lsp-mode
-;;   :diminish (lsp-mode . "lsp")
-;;   :config
-;;   ;; (lsp-treemacs-sync-mode 1)
-;;   (setq lsp-completion-provider :capf)
-;;   (setq lsp-idle-delay 0.25)
-;;   (setq lsp-signature-doc-lines 5)
-;;   (setq gc-cons-threshold 100000000)
-;;   :custom
-;;   (lsp-keep-workspace-alive nil)
-;;   (lsp-auto-guess-root nil)
-;;   (lsp-eldoc-enable-hover nil)
-;;   ;; (lsp-signature-auto-activate nil)
-;;   (lsp-completion-enable t)
-;; )
-;;=======================================================
-;;eglot
-(use-package eglot
+(use-package! lsp-mode
+  :commands (lsp)
+  :diminish (lsp-mode . "lsp")
+  :config
+  (setq lsp-completion-provider :capf)
+  (setq lsp-idle-delay 0.25)
+  (setq lsp-signature-doc-lines 5)
+  (setq gc-cons-threshold 100000000)
+  :custom
+  (lsp-keep-workspace-alive nil)
+  (lsp-auto-guess-root nil)
+  (lsp-eldoc-enable-hover nil)
+  ;; (lsp-signature-auto-activate nil)
+  (lsp-completion-enable t)
+)
+
+(use-package lsp-python-ms
+  :init
+  (setq lsp-python-ms-auto-install-server t)
+   (set-lsp-priority!  'pyright 1)
+  :hook
+  ((python-mode . (lambda ()
+                    (require 'lsp-python-ms)
+                    (lsp-deferred)))
+   ;; This hack is necessary to make additional flycheck checkers work in lsp-mode
+   (flycheck-mode . (lambda ()
+                      (flycheck-add-next-checker 'lsp 'python-flake8)
+                      (flycheck-add-next-checker 'python-flake8 'python-mypy)
+                      (message "Added flycheck checkers.")))))
+
+
+(use-package! flycheck
   :ensure t
-  :defer t
-  :hook (python-mode . eglot-ensure))
+  :config
+  (setq flycheck-enabled-checkers '(python-flake8 python-mypy))
+  (setq flycheck-disabled-checkers '(python-pylint))
+  (setq flycheck-select-checker 'python-flake8)
+  (setq lsp-diagnostics-provider :auto)
+  :init (global-flycheck-mode))
+;;=======================================================
 ;;=======================================================
 ;;company
 (use-package company
@@ -852,11 +868,3 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
-(use-package flymake-diagnostic-at-point
-  :after flymake
-  :config
-  (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode)
-  :custom
-  (flymake-diagnostic-at-point-error-prefix "➤ ")
-  (flymake-diagnostic-at-point-timer-delay 0)
-  )
