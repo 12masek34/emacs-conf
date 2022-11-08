@@ -681,17 +681,17 @@
 ;; (after! lsp-python-ms
    ;; (set-lsp-priority!  'pyright 1))
 
-;; ( after! lsp-mode
-;;    ( setq lsp-restart 'ignore))
+( after! lsp-mode
+   ( setq lsp-restart 'ignore))
 
-;; (use-package! lsp-pyright
-;;   :ensure t
-;;   :init
-;;     (setq lsp-pyright-multi-root nil)
-;;     (setq lsp-enable-file-watchers nil)
-;;   :hook (python-mode . (lambda ()
-;;                           (require 'lsp-pyright)
-;;                           (lsp))))  ; or lsp-deferred
+(use-package! lsp-pyright
+  :ensure t
+  :init
+    (setq lsp-pyright-multi-root nil)
+    (setq lsp-enable-file-watchers nil)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
 
 ;; (use-package! lsp-mode
 ;;   :diminish (lsp-mode . "lsp")
@@ -852,3 +852,11 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
+(use-package flymake-diagnostic-at-point
+  :after flymake
+  :config
+  (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode)
+  :custom
+  (flymake-diagnostic-at-point-error-prefix "➤ ")
+  (flymake-diagnostic-at-point-timer-delay 0)
+  )

@@ -33,6 +33,7 @@
 (package! iedit)
 (package! browse-kill-ring)
 (package! eglot)
+(package! flymake-diagnostic-at-point)
 
 
 ;; To install a package directly from a remote git repo, you must specify a
