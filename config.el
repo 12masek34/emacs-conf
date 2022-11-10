@@ -467,12 +467,10 @@
 
 (map! :leader
         (:prefix "b"
-                :desc "find definition" "f" #'lsp-find-definition
-                :desc "find declaration" "F" #'lsp-find-declaration
-                :desc "dap breakpoint toggle" "b" #'dap-breakpoint-toggle
-                :desc "dap breakpoint delete" "B" #'dap-breakpoint-delete
-                :desc "dap repl" "r" #'dap-ui-repl
-                :desc "dap debug hydra" "u" #'dap-hydra))
+                :desc "black region" "r" #'python-black-region
+                :desc "black buffer" "b" #'python-black-buffer
+                :desc "black partial" "f" #'python-black-partial-dwim
+                ))
 
 (map! :leader
         (:prefix "f"
@@ -681,6 +679,18 @@
 ( after! lsp-mode
    ( setq lsp-restart 'ignore))
 
+;;eglot
+(after! eglot
+  :init
+  (setq eldoc-echo-area-use-multiline-p nil)
+  :config
+  (set-eglot-client! 'python-mode '("pyright")))
+
+(setq-default eglot-workspace-configuration
+    '((:pyright .
+        ((useLibraryCodeForTypes . t)))))
+
+
 (use-package! lsp-pyright
   :ensure t
   :init
@@ -689,6 +699,7 @@
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
+
 
 (use-package! lsp-mode
   :commands (lsp)
@@ -868,3 +879,4 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
+;;black
