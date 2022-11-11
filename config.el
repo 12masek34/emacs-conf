@@ -440,6 +440,7 @@
     (global-set-key (kbd "s-/") 'comment-line)
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
     (global-set-key (kbd "M--") 'set-mark-command)
+    (global-set-key (kbd "M-=") 'rectangle-mark-mode)
     (global-set-key (kbd "s-3") 'ibuffer)
     (global-set-key (kbd "M-]") 'goto-last-change-reverse)
     (global-set-key (kbd "M-[") 'goto-last-change)
