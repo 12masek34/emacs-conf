@@ -100,7 +100,7 @@
 
   (setq-default cursor-type 'bar)
   (set-cursor-color "#33FF00")
-  (setq my/timer (run-with-timer 5 nil
+  (setq my/timer (run-with-timer 8 nil
     (lambda ()
       (setq-default cursor-type 'box)
       (set-cursor-color "White")))))
@@ -483,8 +483,8 @@
 
 (map! :leader
         (:prefix "d"
-         :desc "set breakpoint" "s" #'add-py-debug
-         :desc "remove breakpoint" "r" #'remove-py-debug
+         :desc "set py breakpoint" "s" #'add-py-debug
+         :desc "set js breakpoint" "d" #'add-js-debug
          :desc "jump to breakpoint" "j" #'(lambda ()
                                  (interactive)
                                  (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
@@ -792,6 +792,12 @@
     (interactive)
     (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)
     (save-excursion (insert "import ipdb; ipdb.set_trace();")))
+
+(defun add-js-debug ()
+      "add debug code and move line down"
+    (interactive)
+    (highlight-regexp "debugger;" 'company-echo-common)
+    (save-excursion (insert "debugger;")))
 
 (defun remove-py-debug ()
   "remove py debug code, if found"
