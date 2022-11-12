@@ -312,6 +312,39 @@
         (call-interactively #'custom-yank)
   )
 ;;=======================================================
+;; set breack point hith majore mode
+(defun my/set-breackpoint ()
+  (interactive)
+  (when (equal major-mode 'python-mode)
+    (add-py-debug))
+  (when (equal major-mode 'js-mode)
+    (add-js-debug))
+  (when (equal major-mode 'rjsx-mode)
+    (add-js-debug))
+  )
+
+(defun my/jump-breackpoint ()
+  (interactive)
+    (when (equal major-mode 'python-mode)
+    (my/jump-python-breackpoint))
+  (when (equal major-mode 'js-mode)
+    (my/jump-js-breackpoint))
+  (when (equal major-mode 'rjsx-mode)
+    (my/jump-js-breackpoint))
+
+;; jump python breckpoint
+(defun my/jump-python-breackpoint ()
+    (interactive)
+    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
+    (move-beginning-of-line 1))
+  )
+
+;; jump js breckpoint
+(defun my/jump-js-breackpoint ()
+    (interactive)
+    (search-forward-regexp "^[ ]*debugger;")
+    (move-beginning-of-line 1))
+;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
 (setq scroll-margin 2)
@@ -484,12 +517,9 @@
 
 (map! :leader
         (:prefix "d"
-         :desc "set py breakpoint" "s" #'add-py-debug
-         :desc "jump to breakpoint" "j" #'(lambda ()
-                                 (interactive)
-                                 (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
-                                 (move-beginning-of-line 1))
-                ))
+         :desc "set debug breakpoint" "s" #'my/set-breackpoint
+         :desc "jump to breakpoint" "j" #'my/jump-breackpoint
+         ))
 
 (map! :leader
         (:prefix "f"
