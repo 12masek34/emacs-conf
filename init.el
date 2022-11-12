@@ -100,7 +100,6 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        (lsp
-        ;; +eglot
         +pyright)               ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
@@ -169,9 +168,7 @@
         +pyenv
         +pyright
         +lsp
-        +peek
-        ;; +eglot
-        )
+        +peek)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6

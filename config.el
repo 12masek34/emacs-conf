@@ -485,7 +485,6 @@
 (map! :leader
         (:prefix "d"
          :desc "set py breakpoint" "s" #'add-py-debug
-         :desc "set js breakpoint" "d" #'add-js-debug
          :desc "jump to breakpoint" "j" #'(lambda ()
                                  (interactive)
                                  (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
@@ -679,18 +678,6 @@
 ;; lsp
 ( after! lsp-mode
    ( setq lsp-restart 'ignore))
-
-;;eglot
-(after! eglot
-  :init
-  (setq eldoc-echo-area-use-multiline-p nil)
-  :config
-  (set-eglot-client! 'python-mode '("pyright")))
-
-(setq-default eglot-workspace-configuration
-    '((:pyright .
-        ((useLibraryCodeForTypes . t)))))
-
 
 (use-package! lsp-pyright
   :ensure t
