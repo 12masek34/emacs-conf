@@ -352,6 +352,7 @@
     (+shell/toggle)
     (insert! "python manage.py runserver --noreload")
     (comint-send-input)
+    (realgud:track-set-debugger "ipdb")
     (realgud-track-mode)
     )
 ;;=======================================================
