@@ -346,15 +346,14 @@
     (move-beginning-of-line 1))
 ;;=======================================================
 ;;run ipdb debugg and realgud track
-(defun my/django-run-ipdb ()
-    (interactive)
-    (cd "/Users/dmitrijmartys/SRC/zakupki/zakupki/src/zakupki")
-    (+shell/toggle)
-    (insert! "python manage.py runserver --noreload")
-    (comint-send-input)
-    (realgud:track-set-debugger "ipdb")
-    (realgud-track-mode)
-    )
+(defun my/django-runserver ()
+  (cd "/Users/dmitrijmartys/SRC/zakupki/zakupki/src/zakupki")
+  (interactive)
+  (if (boundp 'buf)
+      (pop-to-buffer buf)
+    (setq buf (+vterm/toggle nil)))
+  (vterm-send-string "python manage.py runserver --noreload")
+  (vterm-send-return))
 ;;=======================================================
 ;;=======================================================
 ;;limit
@@ -402,7 +401,6 @@
 (with-eval-after-load 'rjsx-mode
   (define-key rjsx-mode-map (kbd "C-d") nil)
   )
-
 
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
@@ -472,8 +470,8 @@
     (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
-    (global-set-key (kbd "s-t") '+shell/toggle)
-    (global-set-key (kbd "s-T") 'shell)
+    (global-set-key (kbd "s-t") '+vterm/toggle)
+    (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
@@ -533,7 +531,7 @@
         (:prefix "d"
          :desc "set debug breakpoint" "s" #'my/set-breackpoint
          :desc "jump to breakpoint" "j" #'my/jump-breackpoint
-         :desc "run debugger server" "d" #'my/django-run-ipdb
+         :desc "run django server" "d" #'my/django-runserver
          ))
 
 (map! :leader
@@ -920,4 +918,3 @@
 ;;=======================================================
 ;;realgud ipdb
 (use-package! realgud-ipdb)
-;;=======================================================

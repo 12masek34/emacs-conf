@@ -34,8 +34,6 @@
 (package! browse-kill-ring)
 (package! lsp-pyright)
 (package! python-black)
-(package! realgud-ipdb)
-(package! realgud)
 
 
 ;; To install a package directly from a remote git repo, you must specify a
