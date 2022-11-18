@@ -105,26 +105,27 @@
       (setq-default cursor-type 'box)
       (set-cursor-color "White")))))
 
-(defun modify-cursor ()
-  (if (eq this-command 'self-insert-command)
-        (my/change-cursor))
-  (if (eq this-command 'yank)
-        (my/change-cursor))
-  (if (eq this-command 'backward-delete-char-untabify)
-        (my/change-cursor))
-  (if (eq this-command 'backward-delete-word)
-        (my/change-cursor))
-  (if (eq this-command 'delete-word)
-        (my/change-cursor))
-  (if (eq this-command 'first-half-delete-line)
-        (my/change-cursor))
-  (if (eq this-command 'last-half-delete-line)
-        (my/change-cursor))
-  (if (eq this-command 'delete-backward-char)
-        (my/change-cursor))
-  )
+;; (defun modify-cursor ()
+;;   (if (eq this-command 'self-insert-command)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'yank)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'backward-delete-char-untabify)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'backward-delete-word)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'delete-word)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'first-half-delete-line)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'last-half-delete-line)
+;;         (my/change-cursor))
+;;   (if (eq this-command 'delete-backward-char)
+;;         (my/change-cursor))
+;;   )
 
-(add-hook 'post-command-hook #'modify-cursor)
+;; (add-hook 'post-command-hook #'modify-cursor)
+;;=======================================================
 ;;=======================================================
 ;;  relative number line
 (setq display-line-numbers-type 'relative)
@@ -508,6 +509,8 @@
     (global-set-key (kbd "M-i") 'overwrite-mode)
     (global-set-key (kbd "<up>") 'comint-previous-input)
     (global-set-key (kbd "<down>") 'comint-next-input)
+    (global-set-key (kbd "s-w") 'mark-lines-previous-line)
+    (global-set-key (kbd "s-s") 'mark-lines-next-line)
 
     map))
 
@@ -916,5 +919,3 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
-;;realgud ipdb
-(use-package! realgud-ipdb)
