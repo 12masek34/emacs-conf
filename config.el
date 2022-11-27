@@ -356,6 +356,10 @@
   (vterm-send-string "python manage.py runserver --noreload")
   (vterm-send-return))
 ;;=======================================================
+(defun my/ls-activete-region()
+  (interactive)
+  (activate-mark)
+  )
 ;;=======================================================
 ;;limit
 (setq undo-limit 80000000)
@@ -456,8 +460,8 @@
     (global-set-key (kbd "C-s") 'kill-whole-line)
 
     (global-unset-key (kbd "s-["))
-    (global-set-key (kbd "s-[") 'pop-global-mark)
-    (global-set-key (kbd "s-]") 'consult-global-mark)
+    (global-set-key (kbd "M-[") 'pop-global-mark)
+    (global-set-key (kbd "M-]") 'consult-global-mark)
 
     ;; switch window
     (global-set-key (kbd "C-x M-w") 'windmove-up)
@@ -486,8 +490,8 @@
     (global-set-key (kbd "M--") 'set-mark-command)
     (global-set-key (kbd "M-=") 'rectangle-mark-mode)
     (global-set-key (kbd "s-3") 'ibuffer)
-    (global-set-key (kbd "M-]") 'goto-last-change-reverse)
-    (global-set-key (kbd "M-[") 'goto-last-change)
+    (global-set-key (kbd "s-]") 'goto-last-change-reverse)
+    (global-set-key (kbd "s-[") 'goto-last-change)
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
     (global-set-key (kbd "M-<tab>") 'move-line-or-region-right)
@@ -511,6 +515,9 @@
     (global-set-key (kbd "<down>") 'comint-next-input)
     (global-set-key (kbd "s-w") 'mark-lines-previous-line)
     (global-set-key (kbd "s-s") 'mark-lines-next-line)
+    (global-set-key (kbd "M-s-z") 'my/ls-activete-region)
+    (global-set-key (kbd "M-p") 'back-to-indentation)
+    (global-set-key (kbd "M-s-p") 'delete-horizontal-space)
 
     map))
 
