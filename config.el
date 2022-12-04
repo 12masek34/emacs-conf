@@ -106,6 +106,29 @@
       (setq-default cursor-type 'box)
       (set-cursor-color "White")))))
 
+;;=======================================================
+;; fix me
+(defun my/shell-pop (arg)
+  (interactive "P")
+  (if (string= (buffer-name) shell-pop-last-shell-buffer-name)
+      (if (null arg)
+          (shell-pop-out)
+        (shell-pop--switch-to-shell-buffer (prefix-numeric-value arg)))
+    (shell-pop-up (or arg shell-pop-last-shell-buffer-index)))
+
+  (if (string= (buffer-name) shell-pop-last-shell-buffer-name)
+      (if (null arg)
+          (shell-pop-out)
+        (shell-pop--switch-to-shell-buffer (prefix-numeric-value arg)))
+    (shell-pop-up (or arg shell-pop-last-shell-buffer-index)))
+
+  (if (string= (buffer-name) shell-pop-last-shell-buffer-name)
+      (if (null arg)
+          (shell-pop-out)
+        (shell-pop--switch-to-shell-buffer (prefix-numeric-value arg)))
+    (shell-pop-up (or arg shell-pop-last-shell-buffer-index)))
+  )
+
 ;; (defun modify-cursor ()
 ;;   (if (eq this-command 'self-insert-command)
 ;;         (my/change-cursor))
@@ -482,7 +505,7 @@
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
     ;; (global-set-key (kbd "s-t") '+vterm/toggle)
-    (global-set-key (kbd "s-t") 'shell-pop)
+    (global-set-key (kbd "s-t") 'my/shell-pop)
     (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
     (global-set-key (kbd "s-1") 'previous-buffer)
