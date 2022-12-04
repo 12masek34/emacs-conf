@@ -35,6 +35,7 @@
 (package! lsp-pyright)
 (package! python-black)
 (package! mark-lines)
+(package! shell-pop)
 
 
 ;; To install a package directly from a remote git repo, you must specify a
