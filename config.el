@@ -34,8 +34,8 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-spacegrey)
 ;; (setq doom-theme 'doom-zenburn)
-(setq doom-theme 'doom-miramare)
-;; (setq doom-theme 'doom-opera-light)
+;; (setq doom-theme 'doom-miramare)
+(setq doom-theme nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -436,6 +436,10 @@
       "M-o" nil
       )
 
+(with-eval-after-load 'centered-cursor-mode
+  (define-key ccm-map (kbd "M-v") nil)
+  )
+
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
     (global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -10)))
@@ -504,8 +508,8 @@
     (global-set-key (kbd "s-4") 'bookmark-jump)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
-    ;; (global-set-key (kbd "s-t") '+vterm/toggle)
-    (global-set-key (kbd "s-t") 'my/shell-pop)
+    (global-set-key (kbd "s-t") '+vterm/toggle)
+    ;; (global-set-key (kbd "s-t") 'my/shell-pop)
     (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
     (global-set-key (kbd "s-1") 'previous-buffer)
@@ -552,6 +556,9 @@
     (global-set-key (kbd "s-M-g") 'consult-git-grep)
     (global-set-key (kbd "M-c") 'vterm-copy-mode)
     (global-set-key (kbd "M-v") 'pyvenv-activate)
+    (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
+    (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
+    (global-set-key (kbd "s-b") 'magit-blame-addition)
 
     map))
 
@@ -958,8 +965,3 @@
 ;;cache projectile enable
 (setq projectile-enable-caching t)
 ;;=======================================================
-(use-package! shell-pop
-  :init  (custom-set-variables
-          '(shell-pop-window-size 40)
-          '(shell-pop-restore-window-configuration t)
-          ))
