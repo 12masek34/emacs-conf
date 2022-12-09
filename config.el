@@ -34,8 +34,8 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-spacegrey)
 ;; (setq doom-theme 'doom-zenburn)
-;; (setq doom-theme 'doom-miramare)
-(setq doom-theme nil)
+(setq doom-theme 'doom-miramare)
+;; (setq doom-theme nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -493,9 +493,6 @@
     (global-set-key (kbd "C-s") 'kill-whole-line)
 
     (global-unset-key (kbd "s-["))
-    (global-set-key (kbd "M-[") 'pop-global-mark)
-    (global-set-key (kbd "M-]") 'consult-global-mark)
-
     ;; switch window
     (global-set-key (kbd "C-x M-w") 'windmove-up)
     (global-set-key (kbd "C-x M-s") 'windmove-down)
@@ -526,6 +523,7 @@
     (global-set-key (kbd "s-3") 'ibuffer)
     (global-set-key (kbd "s-]") 'goto-last-change-reverse)
     (global-set-key (kbd "s-[") 'goto-last-change)
+    (global-set-key (kbd "s-\\") 'consult-mark)
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
     (global-set-key (kbd "M-<tab>") 'move-line-or-region-right)
