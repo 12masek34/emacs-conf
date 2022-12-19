@@ -33,7 +33,6 @@
 (package! iedit)
 (package! browse-kill-ring)
 (package! lsp-pyright)
-(package! python-black)
 (package! mark-lines)
 
 ;; To install a package directly from a remote git repo, you must specify a

@@ -563,9 +563,8 @@
 
 (map! :leader
         (:prefix "b"
-                :desc "black region" "r" #'python-black-region
-                :desc "black buffer" "b" #'python-black-buffer
-                :desc "black partial" "f" #'python-black-partial-dwim
+                :desc "black/format region" "r" #'+format/region
+                :desc "black/format buffer" "b" #'+format/buffer
                 ))
 
 (map! :leader
