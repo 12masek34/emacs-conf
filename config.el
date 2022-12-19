@@ -552,11 +552,12 @@
     (global-set-key (kbd "M-s-p") 'delete-horizontal-space)
     (global-set-key (kbd "s-g") 'consult-ripgrep)
     (global-set-key (kbd "s-M-g") 'consult-git-grep)
-    (global-set-key (kbd "M-c") 'vterm-copy-mode)
     (global-set-key (kbd "M-v") 'pyvenv-activate)
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
     (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
     (global-set-key (kbd "s-b") 'magit-blame-addition)
+    (global-set-key (kbd "s-M-q") 'beginning-of-defun)
+    (global-set-key (kbd "s-M-e") 'end-of-defun)
 
     map))
 
