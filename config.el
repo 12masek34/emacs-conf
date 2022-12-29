@@ -39,7 +39,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -150,9 +150,6 @@
 
 ;; (add-hook 'post-command-hook #'modify-cursor)
 ;;=======================================================
-;;=======================================================
-;;  relative number line
-(setq display-line-numbers-type 'relative)
 ;;=======================================================
 ;; makes the column number show up
 (column-number-mode 1)
@@ -506,6 +503,7 @@
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
     (global-set-key (kbd "s-t") '+vterm/toggle)
+    (global-set-key (kbd "s-M-t") 'vterm-copy-mode)
     ;; (global-set-key (kbd "s-t") 'my/shell-pop)
     (global-set-key (kbd "s-T") 'vterm-other-window)
     (global-set-key (kbd "s-d") 'duplicate-line)
@@ -542,7 +540,7 @@
     (global-set-key (kbd "C-k") 'kill-this-buffer)
     (global-set-key (kbd "C-M-d") 'last-half-delete-line)
     (global-set-key (kbd "C-M-a") 'first-half-delete-line)
-    (global-set-key (kbd "M-i") 'overwrite-mode)
+    (global-set-key (kbd "M-i") 'consult-imenu)
     (global-set-key (kbd "<up>") 'comint-previous-input)
     (global-set-key (kbd "<down>") 'comint-next-input)
     (global-set-key (kbd "s-w") 'mark-lines-previous-line)
