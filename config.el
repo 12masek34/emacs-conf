@@ -210,7 +210,7 @@
   (display-time-mode t))
 ;;=======================================================
 ;; font
-(setq doom-font (font-spec :family "Monaco" :size 14 :weight 'light)
+ (setq doom-font (font-spec :family "Monaco" :size 14 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Monaco" :size 13)
       doom-unicode-font (font-spec :family "Monaco")
       doom-big-font (font-spec :family "Monaco" :size 24))
@@ -498,6 +498,8 @@
 
     (global-set-key (kbd "s-<down>") 'shrink-window)
     (global-set-key (kbd "s-<up>") 'enlarge-window)
+    (global-set-key (kbd "s-<left>") 'shrink-window-horizontally)
+    (global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
     ;;bookmarks
     (global-set-key (kbd "s-4") 'bookmark-jump)
     (global-set-key (kbd "C-b") 'bookmark-set)
