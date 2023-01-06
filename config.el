@@ -158,7 +158,7 @@
 ;;set interpritatior
 (setq python-shell-completion-native-disabled-interpreters '("python3"))
 ;; =======================================================
-(setq read-process-output-max (* 1024 1024))
+(setq read-process-output-max (* 2048 2048))
 (setq-default history-length 1000)
 (setq-default prescient-history-length 1000)
 ;;=======================================================
@@ -825,7 +825,7 @@
   :diminish (lsp-mode . "lsp")
   :config
   (setq lsp-completion-provider :capf)
-  (setq lsp-idle-delay 0.25)
+  (setq lsp-idle-delay 0.500)
   (setq lsp-signature-doc-lines 5)
   (setq gc-cons-threshold 100000000)
   :custom
