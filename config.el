@@ -795,19 +795,20 @@
     (tsc-goto-first-child-for-position cursor (point))
     (if (eq 'function_definition (tsc-node-type (tsc-current-node cursor))) (tsc-current-node cursor) nil)))
 
-( use-package tree-sitter
+(use-package! tree-sitter
    :after python-mode
    :defer t
    :config
-  (require  ' tree-sitter)
-  (require  ' tree-sitter-langs)
-  (require  ' tree-sitter-hl)
-  (add-hook  ' python-mode-hook  #'tree-sitter-hl-mode)
+  (require  'tree-sitter)
+  (require  'tree-sitter-langs)
+  (require  'tree-sitter-hl)
+  (add-hook  'python-mode-hook  #'tree-sitter-hl-mode)
   )
 ;;=======================================================
+;;=======================================================
 ;; lsp
-( after! lsp-mode
-   ( setq lsp-restart 'ignore))
+(after! lsp-mode
+   (setq lsp-restart 'ignore))
 
 (use-package! lsp-pyright
   :ensure t
@@ -849,7 +850,16 @@
                       (flycheck-add-next-checker 'python-flake8 'python-mypy)
                       (message "Added flycheck checkers.")))))
 
-
+(setq lsp-use-plists "true")
+;;=======================================================
+;;=======================================================
+;;elgot
+;; (after! eglot
+  ;; :config
+  ;; (set-eglot-client! 'python-mode '("pyright"))
+;; )
+;;=======================================================
+;;=======================================================
 (use-package! flycheck
   :ensure t
   :config
@@ -857,11 +867,16 @@
   (setq flycheck-disabled-checkers '(python-pylint))
   (setq flycheck-select-checker 'python-flake8)
   (setq lsp-diagnostics-provider :auto)
+
+  (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
+  (setq flycheck-checkers (remove 'python-pycompile flycheck-checkers))
+  (setq flycheck-checkers (remove 'python-pyright flycheck-checkers))
+
   :init (global-flycheck-mode))
 ;;=======================================================
 ;;=======================================================
 ;;company
-(use-package company
+(use-package! company
   :ensure t
   :defer t
   :custom
