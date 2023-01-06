@@ -538,7 +538,7 @@
     (global-set-key (kbd "s-<left>") 'shrink-window-horizontally)
     (global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
     ;;bookmarks
-    (global-set-key (kbd "s-4") 'bookmark-jump)
+    (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
     (global-set-key (kbd "s-t") '+vterm/toggle)
