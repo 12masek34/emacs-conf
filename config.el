@@ -598,7 +598,8 @@
     (global-set-key (kbd "s-e") 'my-mark-word)
     (global-set-key (kbd "s-q") 'my-mark-word-backward)
     (global-set-key (kbd "s-C") 'copy-word)
-    (global-set-key (kbd "C-i") 'lsp-ui-doc-show)
+    (global-set-key (kbd "s-A") 'mark-paragraph)
+    (global-set-key (kbd "M-h") 'lsp-ui-doc-show)
 
     map))
 
