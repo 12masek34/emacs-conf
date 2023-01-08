@@ -397,7 +397,7 @@
 (defun copy-word (&optional arg)
       "Copy words at point into kill-ring"
        (interactive "P")
-       (copy-thing 'backward-word 'forward-word arg)
+       (copy-thing 'forward-word 'backward-word arg)
        ;;(paste-to-mark arg)
      )
 
@@ -598,6 +598,7 @@
     (global-set-key (kbd "s-e") 'my-mark-word)
     (global-set-key (kbd "s-q") 'my-mark-word-backward)
     (global-set-key (kbd "s-C") 'copy-word)
+    (global-set-key (kbd "C-i") 'lsp-ui-doc-show)
 
     map))
 
