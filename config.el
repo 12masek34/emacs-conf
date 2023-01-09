@@ -157,6 +157,9 @@
 ;;=======================================================
 ;;set interpritatior
 (setq python-shell-completion-native-disabled-interpreters '("python3"))
+(use-package! python
+  :config
+  (setq python-shell-interpreter "python3"))
 ;; =======================================================
 (setq read-process-output-max (* 2048 2048))
 (setq-default history-length 1000)
@@ -817,6 +820,8 @@
   :init
     (setq lsp-pyright-multi-root nil)
     (setq lsp-enable-file-watchers nil)
+    (when (executable-find "python3")
+          (setq lsp-pyright-python-executable-cmd "python3"))
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
