@@ -157,7 +157,7 @@
        ;;json              ; At least it ain't XML
        ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
        (javascript
-        ;; +elgot
+        ;;+elgot
         +lsp
         +tree-sitter
         )        ; all(hope(abandon(ye(who(enter(here))))))

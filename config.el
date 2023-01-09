@@ -477,6 +477,12 @@
   (define-key ccm-map (kbd "M-v") nil)
   )
 
+
+(map! :after prog-mode
+      :map prog-mode-map
+      "M-q" nil
+      )
+
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
     (global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -10)))
@@ -843,7 +849,7 @@
   (lsp-completion-enable t)
 )
 
-(use-package lsp-python-ms
+(use-package! lsp-python-ms
   :init
   (setq lsp-python-ms-auto-install-server t)
    (set-lsp-priority!  'pyright 1)
@@ -853,8 +859,7 @@
                     (lsp-deferred)))
    ;; This hack is necessary to make additional flycheck checkers work in lsp-mode
    (flycheck-mode . (lambda ()
-                      (flycheck-add-next-checker 'lsp 'python-flake8)
-                      (flycheck-add-next-checker 'python-flake8 'python-mypy)
+                      (flycheck-add-next-checker 'lsp 'python-flake8 'python-mypy)
                       (message "Added flycheck checkers.")))))
 
 (setq lsp-use-plists "true")
