@@ -473,6 +473,11 @@
       "M-o" nil
       )
 
+(map! :after vterm
+      :map vterm-copy-mode-map
+      "C-a" nil
+      )
+
 (with-eval-after-load 'centered-cursor-mode
   (define-key ccm-map (kbd "M-v") nil)
   )
@@ -558,7 +563,7 @@
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
     (global-set-key (kbd "s-v") 'yank)
-    (global-set-key (kbd "C-s-v") 'my-replace-yank)
+    (global-set-key (kbd "s-C-v") 'my-replace-yank)
 
     (global-set-key (kbd "s-c") 'kill-ring-save)
     (global-set-key (kbd "s-x") 'kill-region)
@@ -606,9 +611,10 @@
     (global-set-key (kbd "s-M-e") 'end-of-defun)
     (global-set-key (kbd "s-e") 'my-mark-word)
     (global-set-key (kbd "s-q") 'my-mark-word-backward)
-    (global-set-key (kbd "s-C") 'copy-word)
+    (global-set-key (kbd "C-s-c") 'copy-word)
     (global-set-key (kbd "s-A") 'mark-paragraph)
     (global-set-key (kbd "M-h") 'lsp-ui-doc-show)
+    (global-set-key (kbd "s-C-x") 'my-delete-line-this-line)
 
     map))
 
@@ -853,14 +859,15 @@
   :init
   (setq lsp-python-ms-auto-install-server t)
    (set-lsp-priority!  'pyright 1)
-  :hook
-  ((python-mode . (lambda ()
-                    (require 'lsp-python-ms)
-                    (lsp-deferred)))
-   ;; This hack is necessary to make additional flycheck checkers work in lsp-mode
-   (flycheck-mode . (lambda ()
-                      (flycheck-add-next-checker 'lsp 'python-flake8 'python-mypy)
-                      (message "Added flycheck checkers.")))))
+  ;; :hook
+  ;; ((python-mode . (lambda ()
+  ;;                   (require 'lsp-python-ms)
+  ;;                   (lsp-deferred)))
+  ;;  ;; This hack is necessary to make additional flycheck checkers work in lsp-mode
+  ;;  (flycheck-mode . (lambda ()
+  ;;                     (flycheck-add-next-checker 'lsp 'python-flake8 'python-mypy)
+  ;;                     (message "Added flycheck checkers."))))
+  )
 
 (setq lsp-use-plists "true")
 ;;=======================================================
