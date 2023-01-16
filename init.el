@@ -89,10 +89,11 @@
        (syntax
         +childframe)     ; tasing you for every semicolon you forget
        (spell
-        +aspell
-        +flyspell
+        ;; +aspell
+        ;; +flyspell
         +everywhere)     ; tasing you for misspelling mispelling
-       ;; grammar           ; tasing grammar mistake every you make
+        (grammar)
+         ;; +everywhere)           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
