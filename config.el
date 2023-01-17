@@ -483,7 +483,6 @@
   (define-key ccm-map (kbd "M-v") nil)
   )
 
-
 (map! :after prog-mode
       :map prog-mode-map
       "M-q" nil
@@ -496,7 +495,6 @@
     (global-set-key (kbd "M-<right>") 'forward-word)
     (global-set-key (kbd "M-<left>") 'backward-word)
 
-    (global-unset-key (kbd "M-w"))
     (global-set-key (kbd "M-w") 'previous-line)
 
     (global-unset-key (kbd "M-s"))
@@ -510,9 +508,11 @@
 
     (global-unset-key (kbd "M-q"))
     (global-set-key (kbd "M-q") 'backward-word)
+    (global-set-key (kbd "s-q") 'backward-to-word)
 
     (global-unset-key (kbd "M-e"))
-    (global-set-key (kbd "M-e") 'forward-word)
+    (global-set-key (kbd "M-e") 'forward-to-word)
+    (global-set-key (kbd "s-e") 'forward-word)
 
     (global-unset-key (kbd "M-s-w"))
     (global-set-key (kbd "M-s-w") (lambda () (interactive) (forward-line -10)))
@@ -609,8 +609,8 @@
     (global-set-key (kbd "s-b") 'magit-blame-addition)
     (global-set-key (kbd "s-M-q") 'beginning-of-defun)
     (global-set-key (kbd "s-M-e") 'end-of-defun)
-    (global-set-key (kbd "s-e") 'my-mark-word)
-    (global-set-key (kbd "s-q") 'my-mark-word-backward)
+    (global-set-key (kbd "C-e") 'my-mark-word)
+    (global-set-key (kbd "C-q") 'my-mark-word-backward)
     (global-set-key (kbd "s-A") 'mark-paragraph)
     (global-set-key (kbd "M-h") 'lsp-ui-doc-show)
 
