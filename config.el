@@ -367,7 +367,7 @@
 (defun my-mark-line-backward (N)
   (interactive "p")
   (set-mark (point))
-  (beginning-of-line))
+  (back-to-indentation))
 
 (defun my-mark-word-backward (N)
   (interactive "p")
@@ -513,6 +513,7 @@
 (map! :after prog-mode
       :map prog-mode-map
       "M-q" nil
+      "C-M-q" nil
       )
 
 (with-eval-after-load 'centered-cursor-mode
