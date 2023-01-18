@@ -87,6 +87,10 @@
 ;; load environment
 (load! "~/.doom.d/env.el")
 
+;; column line long 79 char
+(setq! display-fill-column-indicator-column 79)
+(global-display-fill-column-indicator-mode 1)
+
 ;; font
  (setq! doom-font (font-spec :family "Monaco" :size 14 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Monaco" :size 13)
