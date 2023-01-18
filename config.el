@@ -349,7 +349,6 @@
       "Copy words at point into kill-ring"
        (interactive "P")
        (copy-thing 'forward-word 'backward-word arg)
-       ;;(paste-to-mark arg)
      )
 
 (defun my-mark-word (N)
@@ -359,6 +358,16 @@
        (not (eq last-command 'my-mark-word-backward)))
       (set-mark (point)))
   (forward-word N))
+
+(defun my-mark-line (N)
+  (interactive "p")
+  (set-mark (point))
+  (end-of-line))
+
+(defun my-mark-line-backward (N)
+  (interactive "p")
+  (set-mark (point))
+  (beginning-of-line))
 
 (defun my-mark-word-backward (N)
   (interactive "p")
@@ -461,6 +470,8 @@
       "C-a" nil
       "M-C-d" nil
       "M-C-a" nil
+      "C-M-q" nil
+      "C-M-e" nil
       )
 
 (map! :after vertico
@@ -516,6 +527,10 @@
   (define-key lsp-signature-mode-map (kbd "M-a") nil)
   )
 
+(with-eval-after-load 'lisp-mode
+  (define-key emacs-lisp-mode-map (kbd "C-M-q") nil)
+  )
+
 
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
@@ -536,6 +551,8 @@
     (global-unset-key (kbd "C-a"))
     (global-unset-key (kbd "C-s"))
     (global-unset-key (kbd "s-["))
+    (global-unset-key (kbd "C-M-q"))
+    (global-unset-key (kbd "C-M-e"))
 
 
     (global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -10)))
@@ -548,10 +565,10 @@
     (global-set-key (kbd "M-s") 'next-line)
     (global-set-key (kbd "M-a") 'backward-char)
     (global-set-key (kbd "M-d") 'forward-char)
-    (global-set-key (kbd "M-q") 'backward-word)
-    (global-set-key (kbd "s-q") 'backward-to-word)
-    (global-set-key (kbd "M-e") 'forward-to-word)
-    (global-set-key (kbd "s-e") 'forward-word)
+    (global-set-key (kbd "M-q") 'backward-to-word)
+    (global-set-key (kbd "s-q") 'backward-word)
+    (global-set-key (kbd "M-e") 'forward-word)
+    (global-set-key (kbd "s-e") 'forward-to-word)
     (global-set-key (kbd "M-C-s") 'end-of-buffer)
     (global-set-key (kbd "M-C-w") 'beginning-of-buffer)
     (global-set-key (kbd "M-s-d") 'end-of-line)
@@ -620,7 +637,9 @@
     (global-set-key (kbd "s-M-q") 'beginning-of-defun)
     (global-set-key (kbd "s-M-e") 'end-of-defun)
     (global-set-key (kbd "C-e") 'my-mark-word)
+    (global-set-key (kbd "C-M-e") 'my-mark-line)
     (global-set-key (kbd "C-q") 'my-mark-word-backward)
+    (global-set-key (kbd "C-M-q") 'my-mark-line-backward)
     (global-set-key (kbd "s-A") 'mark-paragraph)
     (global-set-key (kbd "M-h") 'lsp-ui-doc-show)
     (global-set-key (kbd "s-C-v") 'my-replace-yank)
