@@ -36,9 +36,6 @@
 (setq doom-theme 'doom-zenburn)
 ;; (setq doom-theme 'doom-miramare)
 ;; (setq doom-theme nil)
-(custom-theme-set-faces! 'doom-zenburn
-  '(default :background "#1A1818")
-  )
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
