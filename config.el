@@ -33,9 +33,12 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-spacegrey)
-;; (setq doom-theme 'doom-zenburn)
-(setq doom-theme 'doom-miramare)
+(setq doom-theme 'doom-zenburn)
+;; (setq doom-theme 'doom-miramare)
 ;; (setq doom-theme nil)
+(custom-theme-set-faces! 'doom-zenburn
+  '(default :background "#1A1818")
+  )
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -91,10 +94,10 @@
 (setq! display-fill-column-indicator-column 79)
 
 ;; font
- (setq! doom-font (font-spec :family "Monaco" :size 14 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Monaco" :size 13)
-      doom-unicode-font (font-spec :family "Monaco")
-      doom-big-font (font-spec :family "Monaco" :size 24))
+ (setq! doom-font (font-spec :family "Hack" :size 15 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Hack" :size 13)
+      doom-unicode-font (font-spec :family "Hack")
+      doom-big-font (font-spec :family "Hack" :size 24))
 
 ;; dont add end allow line
  (setq! mode-require-final-newline nil)
@@ -566,10 +569,8 @@
     (global-set-key (kbd "M-s") 'next-line)
     (global-set-key (kbd "M-a") 'backward-char)
     (global-set-key (kbd "M-d") 'forward-char)
-    (global-set-key (kbd "M-q") 'backward-to-word)
-    (global-set-key (kbd "s-q") 'backward-word)
+    (global-set-key (kbd "M-q") 'backward-word)
     (global-set-key (kbd "M-e") 'forward-word)
-    (global-set-key (kbd "s-e") 'forward-to-word)
     (global-set-key (kbd "M-C-s") 'end-of-buffer)
     (global-set-key (kbd "M-C-w") 'beginning-of-buffer)
     (global-set-key (kbd "M-s-d") 'end-of-line)
@@ -637,10 +638,10 @@
     (global-set-key (kbd "s-b") 'magit-blame-addition)
     (global-set-key (kbd "s-M-q") 'beginning-of-defun)
     (global-set-key (kbd "s-M-e") 'end-of-defun)
-    (global-set-key (kbd "C-e") 'my-mark-word)
-    (global-set-key (kbd "C-M-e") 'my-mark-line)
-    (global-set-key (kbd "C-q") 'my-mark-word-backward)
-    (global-set-key (kbd "C-M-q") 'my-mark-line-backward)
+    (global-set-key (kbd "s-e") 'my-mark-word)
+    (global-set-key (kbd "C-e") 'my-mark-line)
+    (global-set-key (kbd "s-q") 'my-mark-word-backward)
+    (global-set-key (kbd "C-q") 'my-mark-line-backward)
     (global-set-key (kbd "s-A") 'mark-paragraph)
     (global-set-key (kbd "M-h") 'lsp-ui-doc-show)
     (global-set-key (kbd "s-C-v") 'my-replace-yank)
