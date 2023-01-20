@@ -33,8 +33,8 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-spacegrey)
-(setq doom-theme 'doom-zenburn)
-;; (setq doom-theme 'doom-miramare)
+;; (setq doom-theme 'doom-zenburn)
+(setq doom-theme 'doom-gruvbox)
 ;; (setq doom-theme nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -715,19 +715,15 @@
   (reverse-im-mode t))
 
 (use-package! tree-sitter
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
-(use-package! tree-sitter
    :after python-mode
    :defer t
    :config
   (require  'tree-sitter)
   (require  'tree-sitter-langs)
   (require  'tree-sitter-hl)
+  (global-tree-sitter-mode)
   (add-hook  'python-mode-hook  #'tree-sitter-hl-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 
 ;;localize
