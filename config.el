@@ -139,6 +139,8 @@
 ;;cache projectile enable
 (setq! projectile-enable-caching t)
 
+(setq! ispell-dictionary "american")
+
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
