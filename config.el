@@ -403,6 +403,21 @@
       (move-beginning-of-line 1))
       (goto-char cur))))
 
+(defun my/select-current-line-and-forward-line (arg)
+  (interactive "p")
+  (when (not (use-region-p))
+    (forward-line 0)
+    (set-mark-command nil))
+  (forward-line arg))
+
+(defun my/select-current-line-and-previous-line (arg)
+  (interactive "p")
+  (when (not (use-region-p))
+    (forward-line 0)
+    (set-mark-command nil))
+  (previous-line arg))
+
+
 (defun zz/goto-match-paren (arg)
     "Go to the matching paren/bracket, otherwise (or if ARG is not
     nil) insert %.  vi style of % jumping to matching brace."
@@ -623,8 +638,8 @@
     (global-set-key (kbd "M-i") 'consult-imenu)
     (global-set-key (kbd "<up>") 'comint-previous-input)
     (global-set-key (kbd "<down>") 'comint-next-input)
-    (global-set-key (kbd "s-w") 'mark-lines-previous-line)
-    (global-set-key (kbd "s-s") 'mark-lines-next-line)
+    (global-set-key (kbd "s-w") 'my/select-current-line-and-previous-line)
+    (global-set-key (kbd "s-s") 'my/select-current-line-and-forward-line)
     (global-set-key (kbd "M-s-z") 'my/ls-activete-region)
     (global-set-key (kbd "M-p") 'back-to-indentation)
     (global-set-key (kbd "M-s-p") 'delete-horizontal-space)
