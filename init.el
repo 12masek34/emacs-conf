@@ -92,7 +92,7 @@
         +aspell)
         ;; +flyspell
         ;; +everywhere)     ; tasing you for misspelling mispelling
-        (grammar)
+        ;; (grammar)
          ;; +everywhere)           ; tasing grammar mistake every you make
 
        :tools

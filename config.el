@@ -146,6 +146,7 @@
 (winner-mode 1)
 ;;;; Delete selection
 (delete-selection-mode t)
+(global-superword-mode t)
 (whole-line-or-region-global-mode)
 
 ;;;;=======================================================
