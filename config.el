@@ -415,9 +415,10 @@
 (defun my/select-current-line-and-previous-line (arg)
   (interactive "p")
   (when (not (use-region-p))
-    (forward-line 0)
+    (end-of-line)
     (set-mark-command nil))
-  (previous-line arg))
+  (previous-line arg)
+  (beginning-of-line))
 
 
 (defun zz/goto-match-paren (arg)
