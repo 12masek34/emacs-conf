@@ -671,6 +671,7 @@
     (global-set-key (kbd "s-C-a") 'mark-defun)
     (global-set-key (kbd "C-<tab>") 'company-ispell)
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
+    (global-set-key (kbd "C-t") 'google-translate-at-point)
 
     map))
 
@@ -915,6 +916,12 @@
   (vterm-mode . goto-address-mode)
   (vterm-mode . (lambda () (centered-cursor-mode -1))))
 
+;; translate
+(use-package! google-translate
+  :config
+  (setq! google-translate-default-source-language "en")
+  (setq! google-translate-default-target-language "ru")
+  )
 
 ;;=======================================================
 ;;=======================================================
