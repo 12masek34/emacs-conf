@@ -142,6 +142,7 @@
 ;; vterm height window
 (setq! multi-vterm-dedicated-window-height-percent 30)
 
+;; set default dictionary
 (setq! ispell-dictionary "american")
 
 ;;fullscreen
@@ -741,12 +742,12 @@
    :after python-mode
    :defer t
    :config
-  (require  'tree-sitter)
-  (require  'tree-sitter-langs)
-  (require  'tree-sitter-hl)
+  (require 'tree-sitter)
+  (require 'tree-sitter-langs)
+  (require 'tree-sitter-hl)
   (global-tree-sitter-mode)
-  (add-hook  'python-mode-hook  #'tree-sitter-hl-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  (add-hook!  'python-mode-hook  #'tree-sitter-hl-mode)
+  (add-hook! 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 
 ;;localize
@@ -921,7 +922,8 @@
   :config
   (setq! vterm-timer-delay 0.001)
   :hook
-  (vterm-mode . goto-address-mode))
+  (vterm-mode . goto-address-mode)
+  (vterm-mode . (lambda () (centered-cursor-mode -1))))
 
 
 ;;=======================================================
@@ -941,17 +943,13 @@
 ;;=======================================================
 ;;=======================================================
 
+;; column line 79 symbol
 (add-hook! 'prog-mode-hook 'display-fill-column-indicator-mode)
 
+;; spell in text mode
 (add-hook! 'text-mode-hook
           (lambda ()
             (flyspell-mode 1)))
-
-;; prevent flyspell from finding misspellings in code
-;; (add-hook! 'prog-mode-hook
-          ;; (lambda ()
-            ;; `ispell-comments-and-strings'
-            ;; (flyspell-prog-mode)))
 
 ;;=======================================================
 ;;=======================================================
