@@ -139,6 +139,9 @@
 ;;cache projectile enable
 (setq! projectile-enable-caching t)
 
+;; vterm height window
+(setq! multi-vterm-dedicated-window-height-percent 30)
+
 (setq! ispell-dictionary "american")
 
 ;;fullscreen
@@ -325,9 +328,10 @@
 (defun my/django-runserver ()
   (cd "/Users/dmitrijmartys/SRC/zakupki/zakupki/src/zakupki")
   (interactive)
-  (if (boundp 'buf)
-      (pop-to-buffer buf)
-    (setq buf (+vterm/toggle nil)))
+  ;; (if (boundp 'buf)
+      ;; (pop-to-buffer buf)
+    ;; (setq buf (multi-vterm-dedicated-toggle)))
+  (multi-vterm-dedicated-toggle)
   (vterm-send-string "python manage.py runserver --noreload")
   (vterm-send-return))
 
@@ -605,9 +609,9 @@
     (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
-    (global-set-key (kbd "s-t") '+vterm/toggle)
+    (global-set-key (kbd "s-t") 'multi-vterm-dedicated-toggle)
     (global-set-key (kbd "s-M-t") 'vterm-copy-mode)
-    (global-set-key (kbd "s-T") 'vterm-other-window)
+    (global-set-key (kbd "s-T") 'multi-vterm)
     (global-set-key (kbd "s-d") 'duplicate-line)
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
@@ -911,6 +915,14 @@
 
 ;;kill-ring history
 (use-package! browse-kill-ring)
+
+;;vterm add active link
+(use-package! vterm
+  :config
+  (setq! vterm-timer-delay 0.001)
+  :hook
+  (vterm-mode . goto-address-mode))
+
 
 ;;=======================================================
 ;;=======================================================
