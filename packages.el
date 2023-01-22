@@ -8,23 +8,14 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! with-venv)
-(package! realgud)
 (package! centered-cursor-mode)
 (package! lsp-python-ms)
-(package! ess)
-(package! winum)
-(package! lsp-ui)
 (package! pyimport)
 (package! py-isort)
 (package! company-lsp)
 (package! anaconda-mode)
-(package! reddigg)
-(package! semantic)
-(package! tree-sitter)
-(package! stickyfunc-enhance)
 (package! goto-chg)
 (package! whole-line-or-region)
-(package! aas)
 (package! modus-themes)
 (package! move-text)
 (package! flycheck)
@@ -34,6 +25,7 @@
 (package! lsp-pyright)
 (package! mark-lines)
 (package! multi-vterm)
+(package! realgud-ipdb)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

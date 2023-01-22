@@ -858,16 +858,6 @@
     company-files
     company-yasnippet))
 
-;;aas
-(use-package! aas
-   :commands aas-mode)
-
-(use-package! semantic
-  :init
-    (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
-    (semantic-mode 1)
-    (require 'stickyfunc-enhance))
-
 ;;Toggle centered cursor
 (use-package! centered-cursor-mode
   :demand
