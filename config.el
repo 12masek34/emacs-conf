@@ -672,6 +672,7 @@
     (global-set-key (kbd "C-<tab>") 'company-ispell)
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
+    (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
 
     map))
 
