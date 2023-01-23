@@ -140,7 +140,7 @@
 (setq! projectile-enable-caching t)
 
 ;; vterm height window
-(setq! multi-vterm-dedicated-window-height-percent 30)
+(setq! multi-vterm-dedicated-window-height-percent 40)
 
 ;; set default dictionary
 (setq! ispell-dictionary "american")
@@ -474,6 +474,21 @@
             ((looking-at "\\s\)") (forward-char 1) (sp-backward-sexp))
             (t (self-insert-command (or arg 1))))))
 
+
+(defun my/kill-ring-save (beg end)
+  (interactive "r")
+  (if mark-active
+      (kill-ring-save beg end)
+    (kill-ring-save (line-beginning-position) (line-end-position))))
+
+
+(defun my/kill-region (beg end)
+  (interactive "r")
+  (if mark-active
+      (kill-region beg end)
+    (kill-region (line-beginning-position) (line-end-position))
+    (backward-delete-char 1)))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -617,8 +632,8 @@
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
     (global-set-key (kbd "s-v") 'yank)
-    (global-set-key (kbd "s-c") 'kill-ring-save)
-    (global-set-key (kbd "s-x") 'kill-region)
+    (global-set-key (kbd "s-c") ' my/kill-ring-save)
+    (global-set-key (kbd "s-x") 'my/kill-region)
     (global-set-key (kbd "s-/") 'comment-line)
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
     (global-set-key (kbd "M--") 'set-mark-command)
