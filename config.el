@@ -489,6 +489,12 @@
     (kill-region (line-beginning-position) (line-end-position))
     (backward-delete-char 1)))
 
+
+(defun my/mark-text-in-qutes ()
+     (interactive)
+     (er/expand-region 1)
+     (er/expand-region 1))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -688,6 +694,7 @@
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
     (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
+    (global-set-key (kbd "M-s--") 'my/mark-text-in-qutes)
 
     map))
 
