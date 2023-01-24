@@ -472,6 +472,16 @@
      (er/expand-region 1)
      (er/expand-region 1))
 
+
+(defun get-project-root ()
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
+
+;; Ripgrep the current word from project root
+(defun consult-ripgrep-at-point ()
+  (interactive)
+  (consult-ripgrep (get-project-root)(thing-at-point 'symbol)))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -648,8 +658,8 @@
     (global-set-key (kbd "M-s-z") 'my/ls-activete-region)
     (global-set-key (kbd "M-p") 'back-to-indentation)
     (global-set-key (kbd "M-s-p") 'delete-horizontal-space)
-    (global-set-key (kbd "s-g") 'consult-ripgrep)
-    (global-set-key (kbd "s-M-g") 'consult-git-grep)
+    (global-set-key (kbd "s-g") 'consult-ripgrep-at-point)
+    (global-set-key (kbd "s-G") 'consult-ripgrep)
     (global-set-key (kbd "M-v") 'pyvenv-activate)
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
     (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
@@ -953,3 +963,4 @@
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
+;;
