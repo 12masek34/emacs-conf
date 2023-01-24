@@ -15,7 +15,6 @@
 (package! company-lsp)
 (package! anaconda-mode)
 (package! goto-chg)
-(package! whole-line-or-region)
 (package! modus-themes)
 (package! move-text)
 (package! flycheck)

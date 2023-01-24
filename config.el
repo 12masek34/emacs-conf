@@ -153,7 +153,6 @@
 ;;;; Delete selection
 (delete-selection-mode t)
 (global-superword-mode t)
-(whole-line-or-region-global-mode)
 
 ;;;;=======================================================
 ;;#######################################################
@@ -246,17 +245,6 @@
 (defun first-half-delete-line ()
   (interactive)
   (delete-region (point) (line-beginning-position)))
-
-;;move text and return region
-(defun move-line-or-region-right ()
-  (interactive)
-(whole-line-or-region-indent-rigidly-right-to-tab-stop 1)
-(setq deactivate-mark nil))
-
-(defun move-line-or-region-left ()
-  (interactive)
-(whole-line-or-region-indent-rigidly-left-to-tab-stop 1)
-(setq deactivate-mark nil))
 
 ;;delete line and dont add kill ring
 (defun my-delete-line-this-line ()
@@ -619,7 +607,6 @@
     (global-set-key (kbd "M-s-a") 'beginning-of-line)
     (global-set-key (kbd "C-d") 'delete-word)
     (global-set-key (kbd "C-a") 'backward-delete-word)
-    (global-set-key (kbd "C-s") 'kill-whole-line)
     (global-set-key (kbd "C-x M-w") 'windmove-up)
     (global-set-key (kbd "C-x M-s") 'windmove-down)
     (global-set-key (kbd "C-x M-a") 'windmove-left)
@@ -650,8 +637,8 @@
     (global-set-key (kbd "s-\\") 'consult-mark)
     (global-set-key (kbd "M-s-e") 'forward-paragraph)
     (global-set-key (kbd "M-s-q") 'backward-paragraph)
-    (global-set-key (kbd "M-<tab>") 'move-line-or-region-right)
-    (global-set-key (kbd "M-s-<tab>") 'move-line-or-region-left)
+    (global-set-key (kbd "M-<tab>") 'python-indent-shift-right)
+    (global-set-key (kbd "M-s-<tab>") 'python-indent-shift-left)
     (global-set-key (kbd "C-w") 'move-text-up)
     (global-set-key (kbd "C-s") 'move-text-down)
     (global-set-key (kbd "s-Z") 'undo-fu-only-redo)
