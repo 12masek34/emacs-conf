@@ -313,17 +313,6 @@
     (search-forward-regexp "^[ ]*debugger;")
     (move-beginning-of-line 1))
 
-;;run ipdb debugg and realgud track
-(defun my/django-runserver ()
-  (cd "/Users/dmitrijmartys/SRC/zakupki/zakupki/src/zakupki")
-  (interactive)
-  ;; (if (boundp 'buf)
-      ;; (pop-to-buffer buf)
-    ;; (setq buf (multi-vterm-dedicated-toggle)))
-  (multi-vterm-dedicated-toggle)
-  (vterm-send-string "python manage.py runserver --noreload")
-  (vterm-send-return))
-
 (defun my/ls-activete-region()
   (interactive)
   (activate-mark)
@@ -704,7 +693,6 @@
         (:prefix "d"
          :desc "set debug breakpoint" "s" #'my/set-breackpoint
          :desc "jump to breakpoint" "j" #'my/jump-breackpoint
-         :desc "run django server" "d" #'my/django-runserver
          ))
 
 (map! :leader
