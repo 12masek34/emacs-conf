@@ -466,13 +466,6 @@
     (kill-region (line-beginning-position) (line-end-position))
     (backward-delete-char 1)))
 
-
-(defun my/mark-text-in-qutes ()
-     (interactive)
-     (er/expand-region 1)
-     (er/expand-region 1))
-
-
 (defun get-project-root ()
   (when (fboundp 'projectile-project-root)
     (projectile-project-root)))
@@ -539,6 +532,7 @@
 (map! :after vterm
       :map vterm-copy-mode-map
       "C-a" nil
+      "C-e" nil
       )
 
 
@@ -614,7 +608,6 @@
     (global-set-key (kbd "s-<up>") 'enlarge-window)
     (global-set-key (kbd "s-<left>") 'shrink-window-horizontally)
     (global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
-    (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "C-b") 'bookmark-set)
     (global-set-key (kbd "M-b") 'bookmark-jump)
     (global-set-key (kbd "s-t") 'multi-vterm-dedicated-toggle)
@@ -623,6 +616,8 @@
     (global-set-key (kbd "s-d") 'duplicate-line)
     (global-set-key (kbd "s-1") 'previous-buffer)
     (global-set-key (kbd "s-2") 'next-buffer)
+    (global-set-key (kbd "s-3") 'ibuffer)
+    (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
     (global-set-key (kbd "s-v") 'yank)
     (global-set-key (kbd "s-c") ' my/kill-ring-save)
     (global-set-key (kbd "s-x") 'my/kill-region)
@@ -630,7 +625,6 @@
     (global-set-key (kbd "M-SPC") 'newline-and-indent)
     (global-set-key (kbd "M--") 'set-mark-command)
     (global-set-key (kbd "M-=") 'rectangle-mark-mode)
-    (global-set-key (kbd "s-3") 'ibuffer)
     (global-set-key (kbd "s-]") 'goto-last-change-reverse)
     (global-set-key (kbd "s-[") 'goto-last-change)
     (global-set-key (kbd "s-\\") 'consult-mark)
@@ -658,8 +652,8 @@
     (global-set-key (kbd "M-s-z") 'my/ls-activete-region)
     (global-set-key (kbd "M-p") 'back-to-indentation)
     (global-set-key (kbd "M-s-p") 'delete-horizontal-space)
-    (global-set-key (kbd "s-g") 'consult-ripgrep-at-point)
-    (global-set-key (kbd "s-G") 'consult-ripgrep)
+    (global-set-key (kbd "s-G") 'consult-ripgrep-at-point)
+    (global-set-key (kbd "s-g") 'consult-ripgrep)
     (global-set-key (kbd "M-v") 'pyvenv-activate)
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
     (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
@@ -680,7 +674,8 @@
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
     (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
-    (global-set-key (kbd "M-s--") 'my/mark-text-in-qutes)
+    (global-set-key (kbd "M-s--") 'er/expand-region)
+    (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
 
     map))
 
