@@ -303,7 +303,7 @@
 ;; jump python breckpoint
 (defun my/jump-python-breackpoint ()
     (interactive)
-    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
+    (search-forward-regexp "^[ ]*import pdb; pdb.set_trace();")
     (move-beginning-of-line 1))
   )
 
@@ -365,8 +365,8 @@
 (defun add-py-debug ()
       "add debug code and move line down"
     (interactive)
-    (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)
-    (save-excursion (insert "import ipdb; ipdb.set_trace();")))
+    (highlight-regexp "import pdb; pdb.set_trace();" 'company-echo-common)
+    (save-excursion (insert "import pdb; pdb.set_trace();")))
 
 (defun add-js-debug ()
       "add debug code and move line down"
@@ -379,7 +379,7 @@
   (interactive)
   (let ((x (line-number-at-pos))
     (cur (point)))
-    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
+    (search-forward-regexp "^[ ]*import pdb; pdb.set_trace();")
     (if (= x (line-number-at-pos))
     (let ()
       (move-beginning-of-line 1)
@@ -818,10 +818,12 @@
   :ensure t
   :config
   (setq flycheck-enabled-checkers '(python-flake8 python-mypy))
-  (setq flycheck-disabled-checkers '(python-pylint))
-  (setq flycheck-select-checker 'python-flake8)
+  (setq flycheck-select-checker 'python-pylint)
   (setq lsp-diagnostics-provider :auto)
-  (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
+  ;; (setq flycheck-disabled-checkers '(python-pylint))
+  ;; (setq flycheck-select-checker 'python-flake8)
+  ;; (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
+  (setq flycheck-checkers (remove 'python-flake8 flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pycompile flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pyright flycheck-checkers))
   :init (global-flycheck-mode))
