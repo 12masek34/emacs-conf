@@ -8,7 +8,6 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! with-venv)
-(package! centered-cursor-mode)
 (package! lsp-python-ms)
 (package! pyimport)
 (package! py-isort)

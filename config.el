@@ -151,6 +151,7 @@
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+(setq scroll-margin 7)
 
 (winner-mode 1)
 ;;;; Delete selection
@@ -851,12 +852,6 @@
     company-files
     company-yasnippet))
 
-;;Toggle centered cursor
-(use-package! centered-cursor-mode
-  :demand
-  :config
-  (global-centered-cursor-mode))
-
 ;;ibuffer
 (use-package! ibuffer-vc
   :defer t
@@ -905,8 +900,7 @@
   :config
   (setq! vterm-timer-delay nil)
   :hook
-  (vterm-mode . goto-address-mode)
-  (vterm-mode . (lambda () (centered-cursor-mode -1))))
+  (vterm-mode . goto-address-mode))
 
 ;; translate
 (use-package! google-translate
