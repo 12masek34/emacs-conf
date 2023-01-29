@@ -85,6 +85,9 @@
 
 
 ;; load environment
+(setenv "LSP_USE_PLISTS" "1")
+(setenv "LC_ALL" "en_US.UTF-8")
+;;private
 (load! "~/.doom.d/env.el")
 
 ;; column line long 79 char
@@ -166,14 +169,6 @@
 ;;my custom function
 ;;#######################################################
 ;;=======================================================
-
-;; Turn on warn highlighting for characters outside of the 'width' char limit
-(defun font-lock-width-keyword (width)
-  "Return a font-lock style keyword for a string beyond width WIDTH
-   that uses 'font-lock-warning-face'."
-  `((,(format "^%s\\(.+\\)" (make-string width ?.))
-     (1 font-lock-warning-face t))))
-(font-lock-add-keywords 'python-mode (font-lock-width-keyword 80))
 
 (defun duplicate-line (arg)
   "Duplicate current line, leaving point in lower line."
