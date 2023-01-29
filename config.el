@@ -754,14 +754,6 @@
   (add-hook! 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 
-;;localize
-(use-package! mule
-  :defer 0.1
-  :config
-  (prefer-coding-system 'utf-8)
-  (set-language-environment "UTF-8")
-  (set-terminal-coding-system 'utf-8))
-
 ;;set interpritatior
 (use-package! python
   :config
