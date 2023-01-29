@@ -916,7 +916,7 @@
 ;;vterm add active link
 (use-package! vterm
   :config
-  (setq! vterm-timer-delay 0.01)
+  (setq! vterm-timer-delay nil)
   :hook
   (vterm-mode . goto-address-mode)
   (vterm-mode . (lambda () (centered-cursor-mode -1))))
