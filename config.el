@@ -90,8 +90,8 @@
 ;;private
 (load! "~/.doom.d/env.el")
 
-;; column line long 79 char
-(setq! display-fill-column-indicator-column 79)
+;; column line long 120 char
+(setq! display-fill-column-indicator-column 120)
 
 ;; font
  (setq! doom-font (font-spec :family "Hack" :size 15 :weight 'light)
@@ -926,7 +926,7 @@
 ;;=======================================================
 ;;=======================================================
 
-;; column line 79 symbol
+;; column line indicator
 (add-hook! 'prog-mode-hook 'display-fill-column-indicator-mode)
 
 ;; spell in text mode
