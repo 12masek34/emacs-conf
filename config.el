@@ -672,6 +672,7 @@
     (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
     (global-set-key (kbd "M-s--") 'er/expand-region)
     (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
+    (global-set-key (kbd "M-r") 'query-replace)
 
     map))
 
