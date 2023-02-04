@@ -679,6 +679,7 @@
 (map! :leader
         (:prefix "b"
                 :desc "black/format region" "r" #'+format/region
+                :desc "black/format region" "i" #'py-isort-region
                 :desc "black/format buffer" "b" #'+format/buffer
                 ))
 
