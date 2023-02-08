@@ -473,7 +473,8 @@
 
 (defun consult-line-at-point ()
     (interactive)
-    (consult-line (thing-at-point 'symbol)))
+    (consult-line (thing-at-point 'symbol))
+)
 
 (defun my/er/expand-region ()
   (interactive)
@@ -886,11 +887,6 @@
                (ibuffer-vc-set-filter-groups-by-vc-root)
                (unless (eq ibuffer-sorting-mode 'alphabetic)
                  (ibuffer-do-sort-by-alphabetic)))))
-
-;; autocmplite
-(use-package hippie-expand
-  :bind
-  ([remap dabbrev-expand] . hippie-expand))
 
 ;;go to last change buffer
 (use-package! goto-chg)
