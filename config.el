@@ -471,6 +471,10 @@
   (interactive)
   (consult-ripgrep (get-project-root)(thing-at-point 'symbol)))
 
+(defun my/er/expand-region ()
+  (interactive)
+  (er/expand-region 2))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -670,7 +674,7 @@
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
     (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
-    (global-set-key (kbd "M-s--") 'er/expand-region)
+    (global-set-key (kbd "M-s--") 'my/er/expand-region)
     (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
     (global-set-key (kbd "M-r") 'query-replace)
 
