@@ -471,6 +471,10 @@
   (interactive)
   (consult-ripgrep (get-project-root)(thing-at-point 'symbol)))
 
+(defun consult-line-at-point ()
+    (interactive)
+    (consult-line (thing-at-point 'symbol)))
+
 (defun my/er/expand-region ()
   (interactive)
   (er/expand-region 2))
@@ -677,6 +681,7 @@
     (global-set-key (kbd "M-s--") 'my/er/expand-region)
     (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
     (global-set-key (kbd "M-r") 'query-replace)
+    (global-set-key (kbd "s-F") 'consult-line-at-point)
 
     map))
 
