@@ -695,7 +695,7 @@
     (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
     (global-set-key (kbd "M-r") 'query-replace)
     (global-set-key (kbd "s-F") 'consult-line-at-point)
-    (global-set-key (kbd "s-X") 'my-kill-word-at-point)
+    (global-set-key (kbd "s-M-x") 'my-kill-word-at-point)
 
     map))
 
