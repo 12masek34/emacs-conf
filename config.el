@@ -299,7 +299,7 @@
 ;; jump python breckpoint
 (defun my/jump-python-breackpoint ()
     (interactive)
-    (search-forward-regexp "^[ ]*import pdb; pdb.set_trace();")
+    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
     (move-beginning-of-line 1))
   )
 
@@ -361,8 +361,8 @@
 (defun add-py-debug ()
       "add debug code and move line down"
     (interactive)
-    (highlight-regexp "import pdb; pdb.set_trace();" 'company-echo-common)
-    (save-excursion (insert "import pdb; pdb.set_trace();")))
+    (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)
+    (save-excursion (insert "import ipdb; ipdb.set_trace();")))
 
 (defun add-js-debug ()
       "add debug code and move line down"
@@ -375,7 +375,7 @@
   (interactive)
   (let ((x (line-number-at-pos))
     (cur (point)))
-    (search-forward-regexp "^[ ]*import pdb; pdb.set_trace();")
+    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
     (if (= x (line-number-at-pos))
     (let ()
       (move-beginning-of-line 1)
@@ -479,6 +479,18 @@
 (defun my/er/expand-region ()
   (interactive)
   (er/expand-region 2))
+
+(defun my-kill-thing-at-point (thing)
+  "Kill the `thing-at-point' for the specified kind of THING."
+  (let ((bounds (bounds-of-thing-at-point thing)))
+    (if bounds
+        (kill-region (car bounds) (cdr bounds))
+      (error "No %s at point" thing))))
+
+(defun my-kill-word-at-point ()
+  "Kill the word at point."
+  (interactive)
+  (my-kill-thing-at-point 'word))
 
 ;;=======================================================
 ;;#######################################################
@@ -683,6 +695,7 @@
     (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
     (global-set-key (kbd "M-r") 'query-replace)
     (global-set-key (kbd "s-F") 'consult-line-at-point)
+    (global-set-key (kbd "s-X") 'my-kill-word-at-point)
 
     map))
 
