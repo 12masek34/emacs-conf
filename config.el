@@ -696,6 +696,7 @@
     (global-set-key (kbd "M-r") 'query-replace)
     (global-set-key (kbd "s-F") 'consult-line-at-point)
     (global-set-key (kbd "s-M-x") 'my-kill-word-at-point)
+    (global-set-key (kbd "s-R") 'query-replace)
 
     map))
 
@@ -735,6 +736,10 @@
                                               ))
          )
 
+(map! :leader
+        (:prefix "s"
+                :desc "isearch forward" "i" #'isearch-forward
+                ))
 
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
@@ -778,6 +783,9 @@
 ;;set interpritatior
 (use-package! python
   :config
+  (setq python-indent-offset 4)
+  (setq python-indent-guess-indent-offset nil)
+  (setq python-indent-def-block-scale 1)
   (setq python-shell-interpreter "python3"))
 
 (use-package! tooltip
