@@ -158,6 +158,9 @@
 (delete-selection-mode t)
 (global-superword-mode t)
 
+(with-eval-after-load "magit"
+  (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
+
 ;;;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -383,12 +386,22 @@
       (move-beginning-of-line 1))
       (goto-char cur))))
 
-(defun my/select-current-line-and-forward-line (arg)
-  (interactive "p")
-  (when (not (use-region-p))
-    (forward-line 0)
-    (set-mark-command nil))
-  (forward-line arg))
+;; (defun my/select-current-line-and-forward-line (arg)
+;;   (interactive "p")
+;;   (when (not (use-region-p))
+;;     (forward-line 0)
+;;     (set-mark-command nil))
+;;   (forward-line arg))
+
+(defun my/select-current-line-and-forward-line ()
+  (interactive)
+  (if (region-active-p)
+      (progn
+        (forward-line 1)
+        (end-of-line))
+    (progn
+      (end-of-line)
+      (set-mark (line-beginning-position)))))
 
 (defun my/select-current-line-and-previous-line (arg)
   (interactive "p")
@@ -491,6 +504,34 @@
   "Kill the word at point."
   (interactive)
   (my-kill-thing-at-point 'word))
+
+(defun select-text-in-delimiters ()
+  (interactive)
+  (let (start end)
+    (skip-chars-backward "^<>([{\"'")
+    (backward-char)
+    (setq curChar (thing-at-point 'char))
+    (forward-char)
+    (setq start (point))
+    (if (equal curChar "(") (skip-chars-forward "^)") (skip-chars-forward "^<>)]}\"'"))
+    (if (equal curChar "{") (skip-chars-forward "^}") (skip-chars-forward "^<>)]}\"'"))
+    (if (equal curChar "[") (skip-chars-forward "^]") (skip-chars-forward "^<>)]}\"'"))
+    (if (equal curChar "'") (skip-chars-forward "^'") (skip-chars-forward "^<>)]}\"'"))
+    (if (equal curChar "\"") (skip-chars-forward "^\"") (skip-chars-forward "^<>)]}\"'"))
+    (if (equal curChar "<") (skip-chars-forward "^>") (skip-chars-forward "^<>)]}\"'"))
+    (setq end (point))
+    (set-mark start)))
+
+(defun my/select-block ()
+  (interactive)
+  (if (region-active-p)
+      (re-search-forward "\n[ \t]*\n" nil "move")
+    (progn
+      (skip-chars-forward " \n\t")
+      (when (re-search-backward "\n[ \t]*\n" nil "move")
+        (re-search-forward "\n[ \t]*\n"))
+      (push-mark (point) t t)
+      (re-search-forward "\n[ \t]*\n" nil "move"))))
 
 ;;=======================================================
 ;;#######################################################
@@ -691,8 +732,8 @@
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
     (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
-    (global-set-key (kbd "M-s--") 'my/er/expand-region)
-    (global-set-key (kbd "M-s-=") 'er/mark-inside-pairs)
+    (global-set-key (kbd "M-s--") 'select-text-in-delimiters)
+    (global-set-key (kbd "M-s-=") 'my/select-block)
     (global-set-key (kbd "M-r") 'query-replace)
     (global-set-key (kbd "s-F") 'consult-line-at-point)
     (global-set-key (kbd "s-M-x") 'my-kill-word-at-point)
