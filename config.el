@@ -747,6 +747,8 @@
     (global-set-key (kbd "s-R") 'query-replace)
     (global-set-key (kbd "s-i") 'isearch-forward)
     (global-set-key (kbd "M-'") 'my/wrap-word-quote)
+    (global-set-key (kbd "M-[") '+fold/close)
+    (global-set-key (kbd "M-]") '+fold/open)
 
     map))
 
