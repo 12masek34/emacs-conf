@@ -322,18 +322,17 @@
       (funcall symbol arg)
       (point))
 
-    (defun copy-thing (begin-of-thing end-of-thing &optional arg)
-      "Copy thing between beg & end into kill ring."
-      (save-excursion
-        (let ((beg (get-point begin-of-thing 1))
-              (end (get-point end-of-thing arg)))
-          (copy-region-as-kill beg end))))
+(defun copy-thing (begin-of-thing end-of-thing &optional arg)
+  "Copy thing between beg & end into kill ring."
+  (save-excursion
+    (let ((beg (get-point begin-of-thing 1))
+          (end (get-point end-of-thing arg)))
+      (copy-region-as-kill beg end))))
 
 (defun copy-word (&optional arg)
       "Copy words at point into kill-ring"
        (interactive "P")
-       (copy-thing 'forward-word 'backward-word arg)
-     )
+       (copy-thing 'forward-word 'backward-word arg))
 
 (defun my-mark-word (N)
   (interactive "p")
@@ -533,6 +532,13 @@
       (push-mark (point) t t)
       (re-search-forward "\n[ \t]*\n" nil "move"))))
 
+(defun my/wrap-word-quote ()
+  (interactive)
+  (forward-word)
+  (insert "'")
+  (backward-word)
+  (insert "'"))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -638,6 +644,7 @@
     (global-unset-key (kbd "s-["))
     (global-unset-key (kbd "C-M-q"))
     (global-unset-key (kbd "C-M-e"))
+    (global-unset-key (kbd "s-m"))
 
 
     (global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -10)))
@@ -738,6 +745,8 @@
     (global-set-key (kbd "s-F") 'consult-line-at-point)
     (global-set-key (kbd "s-M-x") 'my-kill-word-at-point)
     (global-set-key (kbd "s-R") 'query-replace)
+    (global-set-key (kbd "s-i") 'isearch-forward)
+    (global-set-key (kbd "M-'") 'my/wrap-word-quote)
 
     map))
 
