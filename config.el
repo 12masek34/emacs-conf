@@ -151,7 +151,7 @@
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-(setq scroll-margin 7)
+(setq! scroll-margin 7)
 
 (winner-mode 1)
 ;;;; Delete selection
@@ -747,8 +747,9 @@
     (global-set-key (kbd "s-R") 'query-replace)
     (global-set-key (kbd "s-i") 'isearch-forward)
     (global-set-key (kbd "M-'") 'my/wrap-word-quote)
-    (global-set-key (kbd "M-[") '+fold/close)
-    (global-set-key (kbd "M-]") '+fold/open)
+    (global-set-key (kbd "M-\\") '+fold/toggle)
+    (global-set-key (kbd "M-[") '+fold/close-all)
+    (global-set-key (kbd "M-]") '+fold/open-all)
 
     map))
 
