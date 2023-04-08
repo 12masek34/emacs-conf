@@ -892,14 +892,14 @@
   :ensure t
   :config
   (setq flycheck-enabled-checkers '(python-flake8 python-mypy))
-  (setq flycheck-select-checker 'python-pylint)
+  (setq flycheck-select-checker 'python-pyright)
   (setq lsp-diagnostics-provider :auto)
   ;; (setq flycheck-disabled-checkers '(python-pylint))
   ;; (setq flycheck-select-checker 'python-flake8)
   ;; (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
   (setq flycheck-checkers (remove 'python-flake8 flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pycompile flycheck-checkers))
-  (setq flycheck-checkers (remove 'python-pyright flycheck-checkers))
+  (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
   :init (global-flycheck-mode))
 
 ;;company
