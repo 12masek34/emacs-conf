@@ -127,9 +127,6 @@
 (global-auto-revert-mode 1)
 (setq! global-auto-revert-non-file-buffers t)
 
-;;consult
-(setq consult-locate-args "mdfind")
-
 ;;limit
 (setq! undo-limit 80000000)
 (setq! scroll-margin 2)
@@ -483,6 +480,11 @@
   (interactive)
   (consult-ripgrep (get-project-root)(thing-at-point 'symbol)))
 
+;; Ripgrep
+(defun my/consult-ripgrep ()
+  (interactive)
+  (consult-ripgrep))
+
 (defun consult-line-at-point ()
     (interactive)
     (consult-line (thing-at-point 'symbol))
@@ -718,7 +720,7 @@
     (global-set-key (kbd "M-p") 'back-to-indentation)
     (global-set-key (kbd "M-s-p") 'delete-horizontal-space)
     (global-set-key (kbd "s-G") 'consult-ripgrep-at-point)
-    (global-set-key (kbd "s-g") 'consult-ripgrep)
+    (global-set-key (kbd "s-g") 'my/consult-ripgrep)
     (global-set-key (kbd "M-v") 'pyvenv-activate)
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
     (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
@@ -989,6 +991,11 @@
   (setq! google-translate-default-source-language "en")
   (setq! google-translate-default-target-language "ru")
   )
+
+;;consult
+(use-package consult
+  :config
+  (setq! consult-locate-args "mdfind"))
 
 ;;=======================================================
 ;;=======================================================
