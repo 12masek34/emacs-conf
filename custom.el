@@ -16,3 +16,4 @@
  '(ts-fold-replacement-face ((t (:foreground nil :box nil :inherit font-lock-comment-face :weight light)))))
 (put 'customize-group 'disabled nil)
 (put 'projectile-ripgrep 'disabled nil)
+(put 'customize-variable 'disabled nil)
