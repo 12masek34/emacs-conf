@@ -558,6 +558,10 @@
         (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
         (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
 
+(defun my/format-indent-tab (top bottom)
+  (interactive "r")
+  (apply-macro-to-region-lines top bottom [?\s-\M-a tab]))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -776,9 +780,9 @@
 (map! :leader
         (:prefix "b"
                 :desc "black/format region" "r" #'+format/region
-                :desc "black/format region" "i" #'py-isort-region
+                :desc "isort format python import" "i" #'py-isort-region
                 :desc "black/format buffer" "b" #'+format/buffer
-                :desc "apply-function-to-region-lines" "t" #'apply-function-to-region-lines
+                :desc "my/format-indent-tab" "t" #'my/format-indent-tab
                 ))
 
 (map! :leader
