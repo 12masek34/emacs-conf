@@ -757,7 +757,7 @@
     (global-set-key (kbd "C-<tab>") 'company-ispell)
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
-    (global-set-key (kbd "M-m") 'kmacro-end-and-call-macro)
+    (global-set-key (kbd "M-m") 'apply-macro-to-region-lines)
     (global-set-key (kbd "M-s--") 'select-text-in-delimiters)
     (global-set-key (kbd "M-s-=") 'my/select-block)
     (global-set-key (kbd "M-r") 'query-replace)
@@ -778,6 +778,7 @@
                 :desc "black/format region" "r" #'+format/region
                 :desc "black/format region" "i" #'py-isort-region
                 :desc "black/format buffer" "b" #'+format/buffer
+                :desc "apply-function-to-region-lines" "t" #'apply-function-to-region-lines
                 ))
 
 (map! :leader
@@ -812,6 +813,9 @@
 (map! :leader
         (:prefix "s"
                 :desc "isearch forward" "i" #'isearch-forward
+                :desc "ejc connect db" "c" #'ejc-connect
+                :desc "ejc temp editor buffer" "t" #'ejc-get-temp-editor-buffer
+                :desc "ejc temp editor buffer" "a" #'ejc-show-tables-list
                 ))
 
 (define-minor-mode my-keys-mode
@@ -1016,7 +1020,9 @@
   (setq! consult-locate-args "mdfind"))
 
 ;;sql
-(use-package! ejc-sql)
+(use-package! ejc-sql
+  :config
+  (setq! ejc-use-flx t))
 
 ;;=======================================================
 ;;=======================================================
