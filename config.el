@@ -562,6 +562,25 @@
   (interactive "r")
   (apply-macro-to-region-lines top bottom [?\s-\M-a tab]))
 
+(defun my/python-navigate-up-to-class-statement ()
+  (interactive)
+  (let ((pos nil))
+    (while (not (equal pos (point)))
+      (setf pos (point))
+      (python-nav-backward-up-list))))
+
+(defun my/python-navigate-to-next-python-class ()
+  (interactive)
+  (my/python-navigate-up-to-class-statement)
+  (end-of-defun)
+  (end-of-defun)
+  (my/python-navigate-up-to-class-statement))
+
+(defun my/python-navigate-to-previous-python-class ()
+  (interactive)
+  (my/python-navigate-up-to-class-statement)
+  (beginning-of-defun))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -774,6 +793,8 @@
     (global-set-key (kbd "M-[") '+fold/close-all)
     (global-set-key (kbd "M-]") '+fold/open-all)
     (global-set-key (kbd "M-;") 'my/toggle-camelcase-underscores)
+    (global-set-key (kbd "C-M-e") 'my/python-navigate-to-next-python-class)
+    (global-set-key (kbd "C-M-q") 'my/python-navigate-to-previous-python-class)
 
     map))
 
