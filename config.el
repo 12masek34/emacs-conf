@@ -838,9 +838,6 @@
 (map! :leader
         (:prefix "s"
                 :desc "isearch forward" "i" #'isearch-forward
-                :desc "ejc connect db" "c" #'ejc-connect
-                :desc "ejc temp editor buffer" "t" #'ejc-get-temp-editor-buffer
-                :desc "ejc temp editor buffer" "a" #'ejc-show-tables-list
                 ))
 
 (define-minor-mode my-keys-mode
@@ -1043,11 +1040,6 @@
 (use-package consult
   :config
   (setq! consult-locate-args "mdfind"))
-
-;;sql
-(use-package! ejc-sql
-  :config
-  (setq! ejc-use-flx t))
 
 ;;=======================================================
 ;;=======================================================
