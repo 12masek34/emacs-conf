@@ -87,8 +87,6 @@
 ;; load environment
 (setenv "LSP_USE_PLISTS" "1")
 (setenv "LC_ALL" "en_US.UTF-8")
-;;private
-(load! "~/.doom.d/env.el")
 
 ;; column line long 120 char
 (setq! display-fill-column-indicator-column 120)
@@ -154,6 +152,12 @@
 ;;;; Delete selection
 (delete-selection-mode t)
 (global-superword-mode t)
+
+;; lsp sql sever
+(setq! lsp-sqls-server "~/go/bin/sqls")
+(setq! lsp-sqls-workspace-config-path nil)
+(setq! lsp-sqls-connections nil)
+(setq! sql-connection-alist nil)
 
 (with-eval-after-load "magit"
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
@@ -581,6 +585,94 @@
   (my/python-navigate-up-to-class-statement)
   (beginning-of-defun))
 
+;;;###autoload
+(defmacro any-nil? (&rest args)
+  `(not (and ,@args)))
+
+;;;###autoload
+(defmacro throw-if (condition &optional error-description)
+  "if condition is true, thrown an error"
+  `(if ,condition (error (or ,error-description ""))))
+
+;;;###autoload
+(defun format-postgres-sqls (host port user password db)
+  (format "host=%s port=%s user=%s password=%s dbname=%s"
+          host port user password db))
+
+;;;###autoload
+(defun format-mysql-sqls (host port user password db)
+  (format "%s:%s@tcp(%s:%s)/%s" user password host port db))
+
+;;;###autoload
+(defun format-postgres-uri (host port user password db)
+  (format "postgresql://%s:%s@%s:%s/%s" user password host port db))
+
+
+;;;###autoload
+(defun add-to-sqls-connections (db-type data-src-name)
+  (add-to-list 'lsp-sqls-connections
+               (list (cons 'driver db-type)
+                     (cons 'dataSourceName data-src-name))))
+
+;;;###autoload
+(defmacro add-to-sql-conection-alist (db-type name host port user password db)
+  `(add-to-list 'sql-connection-alist
+                (list (quote ,name)
+                     (list 'sql-product (quote ,db-type))
+                     (list 'sql-user ,user)
+                     (list 'sql-server ,host)
+                     (list 'sql-port ,port)
+                     (list 'sql-password ,password)
+                     (list 'sql-database ,db))))
+
+;;;###autoload
+(defmacro sql-add-postgres-db (name &rest db-info)
+  "Adds a mysql database to emacs and lsp
+   This macro expects a name to the database and a p-list of parameters
+   :port, :user, :password, :database, :host
+   The only optional is :port, its default value is 5432
+   e.g.:
+   (sql-add-postgres-db
+        my-db-name ;; notice that there are no quotes here
+        :port 1234
+        :user \"username\"
+        :host \"my-host\"
+        :database \"my-db\"
+        :password \"mypassword\")"
+  `(let ((port (or ,(plist-get db-info :port) 5432))
+         (user ,(plist-get db-info :user))
+         (password ,(plist-get db-info :password))
+         (host ,(plist-get db-info :host))
+         (db ,(plist-get db-info :database)))
+     (throw-if (any-nil? user password host db (quote ,name)) "there are info missing!")
+     (let ((full-uri (format-postgres-uri host port user password db))
+           (data-src-name (format-postgres-sqls host port user password db)))
+       (add-to-sqls-connections "postgresql" data-src-name)
+       (add-to-sql-conection-alist 'postgres ,name host port user password full-uri))))
+
+;;;###autoload
+(defmacro sql-add-mysql-db (name &rest db-info)
+  "Adds a mysql database to emacs and lsp
+   This macro expects a name to the database and a p-list of parameters
+   :port, :user, :password, :database, :host
+   The only optional is :port, its default value is 3306
+   e.g.:
+   (sql-add-mysql-db
+        my-db-name ;; notice that there are no quotes here
+        :port 1234
+        :user \"username\"
+        :host \"my-host\"
+        :database \"my-db\"
+        :password \"mypassword\")"
+  `(let ((port (or ,(plist-get db-info :port) 3306))
+         (user ,(plist-get db-info :user))
+         (password ,(plist-get db-info :password))
+         (host ,(plist-get db-info :host))
+         (db ,(plist-get db-info :database)))
+     (throw-if (any-nil? user password host db (quote ,name)) "there are info missing!")
+     (add-to-sqls-connections "mysql" (format-mysql-sqls host port user password db))
+     (add-to-sql-conection-alist 'mysql ,name host port user password db)))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -751,7 +843,7 @@
     (global-set-key (kbd "C-k") 'kill-this-buffer)
     (global-set-key (kbd "C-M-d") 'last-half-delete-line)
     (global-set-key (kbd "C-M-a") 'first-half-delete-line)
-    (global-set-key (kbd "M-i") 'consult-imenu)
+    (global-set-key (kbd "M-i") 'lsp-ui-imenu)
     (global-set-key (kbd "<up>") 'comint-previous-input)
     (global-set-key (kbd "<down>") 'comint-next-input)
     (global-set-key (kbd "s-w") 'my/select-current-line-and-previous-line)
@@ -1070,10 +1162,35 @@
 (add-hook! 'js2-mode-hook
   (setq js-indent-level 4)
   (setq js2-basic-offset 4))
+
+;; lsp sql
+(add-hook! 'sql-mode-hook 'lsp)
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
 ;; hooks end
+;;#######################################################
+;;=======================================================
+;;=======================================================
+
+;;=======================================================
+;;=======================================================
+;;#######################################################
+;; load
+;;#######################################################
+;;=======================================================
+;;=======================================================
+
+;; config db
+(load! "~/.doom.d/database.el")
+
+;;private
+(load! "~/.doom.d/env.el")
+
+;;=======================================================
+;;=======================================================
+;;#######################################################
+;; load ned
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
