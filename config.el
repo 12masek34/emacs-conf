@@ -386,13 +386,6 @@
       (move-beginning-of-line 1))
       (goto-char cur))))
 
-;; (defun my/select-current-line-and-forward-line (arg)
-;;   (interactive "p")
-;;   (when (not (use-region-p))
-;;     (forward-line 0)
-;;     (set-mark-command nil))
-;;   (forward-line arg))
-
 (defun my/select-current-line-and-forward-line ()
   (interactive)
   (if (region-active-p)
@@ -873,6 +866,7 @@
     (global-set-key (kbd "M-0") 'zz/goto-match-paren)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
     (global-set-key (kbd "M-m") 'apply-macro-to-region-lines)
+    (global-set-key (kbd "M-n") 'call-last-kbd-macro)
     (global-set-key (kbd "M-s--") 'select-text-in-delimiters)
     (global-set-key (kbd "M-s-=") 'my/select-block)
     (global-set-key (kbd "M-r") 'query-replace)
@@ -887,6 +881,7 @@
     (global-set-key (kbd "M-;") 'my/toggle-camelcase-underscores)
     (global-set-key (kbd "C-M-e") 'my/python-navigate-to-next-python-class)
     (global-set-key (kbd "C-M-q") 'my/python-navigate-to-previous-python-class)
+    (global-set-key (kbd "C-m") 'mc/edit-lines)
 
     map))
 
@@ -1190,7 +1185,7 @@
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
-;; load ned
+;; load end
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
