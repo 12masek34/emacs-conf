@@ -1114,7 +1114,9 @@
   ("s-r" . iedit-mode))
 
 ;;kill-ring history
-(use-package! browse-kill-ring)
+(use-package! browse-kill-ring
+  :config
+  (setq browse-kill-ring-separator "-----------------------------------------------------------------------------------"))
 
 ;;vterm add active link
 (use-package! vterm
