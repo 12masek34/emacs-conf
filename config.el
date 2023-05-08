@@ -1065,8 +1065,8 @@
   ;; No company-mode in shell & eshell
   (company-global-modes '(not eshell-mode shell-mode))
   ;; Use company with text and programming modes.
-    :hook ((text-mode . company-mode)
-           (prog-mode . company-mode)))
+  :hook ((text-mode . company-mode)
+         (prog-mode . company-mode)))
 
 ;;ispell
 (set-company-backend!
@@ -1133,9 +1133,15 @@
   )
 
 ;;consult
-(use-package consult
+(use-package! consult
   :config
   (setq! consult-locate-args "mdfind"))
+
+;; AI autocomplete
+(use-package! company-tabnine
+  :after company
+  :config
+  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
 ;;=======================================================
 ;;=======================================================
