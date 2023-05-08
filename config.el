@@ -882,7 +882,6 @@
     (global-set-key (kbd "M-;") 'my/toggle-camelcase-underscores)
     (global-set-key (kbd "C-M-e") 'my/python-navigate-to-next-python-class)
     (global-set-key (kbd "C-M-q") 'my/python-navigate-to-previous-python-class)
-    (global-set-key (kbd "C-m") 'mc/edit-lines)
 
     map))
 
@@ -931,6 +930,11 @@
 (map! :leader
         (:prefix "s"
                 :desc "isearch forward" "i" #'isearch-forward
+                ))
+
+(map! :leader
+        (:prefix "m"
+                :desc "mc/edit-lines" "m" #'mc/edit-lines
                 ))
 
 (define-minor-mode my-keys-mode
