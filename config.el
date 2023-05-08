@@ -129,7 +129,8 @@
 (setq! undo-limit 80000000)
 (setq! scroll-margin 2)
 
-(setq! lsp-use-plists "true")
+;; minimal size buffer
+(setq! window-safe-min-height 10)
 
 ;; enable on-the-fly spell checking
 (setq! flyspell-use-meta-tab nil)
@@ -904,8 +905,13 @@
 
 (map! :leader
         (:prefix "d"
+         ;; debug
          :desc "set debug breakpoint" "s" #'my/set-breackpoint
          :desc "jump to breakpoint" "j" #'my/jump-breackpoint
+         ;; ddatabase
+         :desc "switch connection to db" "c" #'lsp-sql-switch-connection
+         :desc "switch database" "d" #'lsp-sql-switch-database
+         :desc "execute sql query" "e" #'lsp-sql-execute-query
          ))
 
 (map! :leader
@@ -1002,6 +1008,7 @@
   :commands (lsp)
   :diminish (lsp-mode . "lsp")
   :config
+  (setq lsp-use-plists "true")
   (setq lsp-completion-provider :capf)
   (setq lsp-idle-delay 0.500)
   (setq lsp-signature-doc-lines 5)
