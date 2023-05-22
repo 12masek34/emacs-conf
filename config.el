@@ -1020,6 +1020,8 @@
   (setq lsp-restart 'ignore)
   :custom
   (lsp-keep-workspace-alive nil)
+  ;; lsp-workspace-folders-remove - remove source project
+  ;; lsp-workspace-folders-add - add new source project
   (lsp-auto-guess-root nil)
   (lsp-eldoc-enable-hover nil)
   ;; (lsp-signature-auto-activate nil)
@@ -1140,12 +1142,6 @@
 (use-package! consult
   :config
   (setq! consult-locate-args "mdfind"))
-
-;; AI autocomplete
-(use-package! company-tabnine
-  :after company
-  :config
-  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
 ;;=======================================================
 ;;=======================================================
