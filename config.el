@@ -100,8 +100,6 @@
 ;; dont add end allow line
  (setq! mode-require-final-newline nil)
 
-;; makes the column number show up
-(column-number-mode 1)
 (setq! python-shell-completion-native-disabled-interpreters '("python3"))
 
 ;;replace name buffer
@@ -115,17 +113,17 @@
 ;; delay buffer hint
 (setq! which-key-idle-delay 0.5)
 
-;;;; Disable backup
+;; Disable backup
 (setq! make-backup-files nil)
 
-;;disable dialog window
+;; disable dialog window
 (setq! use-dialog-box nil)
 
 ;; auto read on disc file
 (global-auto-revert-mode 1)
 (setq! global-auto-revert-non-file-buffers t)
 
-;;limit
+;; limit
 (setq! undo-limit 80000000)
 (setq! scroll-margin 2)
 
@@ -150,7 +148,8 @@
 (setq! scroll-margin 7)
 
 (winner-mode 1)
-;;;; Delete selection
+
+;; Delete selection
 (delete-selection-mode t)
 (global-superword-mode t)
 
@@ -163,6 +162,7 @@
 (with-eval-after-load "magit"
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
 
+;; dired
 (dirvish-override-dired-mode)
 (setq! dired-omit-files nil)
 
@@ -885,6 +885,7 @@
     (global-set-key (kbd "M-;") 'my/toggle-camelcase-underscores)
     (global-set-key (kbd "C-M-e") 'my/python-navigate-to-next-python-class)
     (global-set-key (kbd "C-M-q") 'my/python-navigate-to-previous-python-class)
+    (global-set-key (kbd "s-r") 'iedit-mode)
 
     map))
 
@@ -987,11 +988,6 @@
   (setq python-indent-def-block-scale 1)
   (setq python-shell-interpreter "python3"))
 
-(use-package! tooltip
-  :defer t
-  :custom
-  (tooltip-mode -1))
-
 ;;time
 (use-package! time
   :defer t
@@ -1031,12 +1027,6 @@
   (lsp-completion-enable t)
 )
 
-(use-package! lsp-python-ms
-  :init
-  (setq lsp-python-ms-auto-install-server t)
-   (set-lsp-priority!  'pyright 1)
-  )
-
 (use-package! flycheck
   :ensure t
   :config
@@ -1045,7 +1035,6 @@
   (setq lsp-diagnostics-provider :auto)
   ;; (setq flycheck-disabled-checkers '(python-pylint))
   ;; (setq flycheck-select-checker 'python-flake8)
-  ;; (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
   (setq flycheck-checkers (remove 'python-flake8 flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pycompile flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
@@ -1118,9 +1107,7 @@
 (use-package! iedit
   :defer
   :config
-  (set-face-background 'iedit-occurrence "Magenta")
-  :bind
-  ("s-r" . iedit-mode))
+  (set-face-background 'iedit-occurrence "Magenta"))
 
 ;;kill-ring history
 (use-package! browse-kill-ring
@@ -1162,9 +1149,6 @@
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
-
-;; column line indicator
-(add-hook! 'prog-mode-hook 'display-fill-column-indicator-mode)
 
 ;; spell in text mode
 (add-hook! 'text-mode-hook
