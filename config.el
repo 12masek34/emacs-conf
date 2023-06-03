@@ -941,6 +941,13 @@
                 :desc "mc/edit-lines" "m" #'mc/edit-lines
                 ))
 
+
+(map! :leader
+        (:prefix "r"
+                :desc "restclient-http-send-current" "e" #'restclient-http-send-current
+                ))
+
+
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
   :global t
@@ -1035,7 +1042,7 @@
   (setq lsp-diagnostics-provider :auto)
   ;; (setq flycheck-disabled-checkers '(python-pylint))
   ;; (setq flycheck-select-checker 'python-flake8)
-  (setq flycheck-checkers (remove 'python-flake8 flycheck-checkers))
+  ;; (setq flycheck-checkers (remove 'python-flake8 flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pycompile flycheck-checkers))
   (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
   :init (global-flycheck-mode))
@@ -1162,6 +1169,9 @@
 
 ;; lsp sql
 (add-hook! 'sql-mode-hook 'lsp)
+
+;; column indicator
+(add-hook!'prog-mode-hook #'display-fill-column-indicator-mode)
 
 ;;=======================================================
 ;;=======================================================
