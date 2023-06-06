@@ -737,6 +737,11 @@
       "C-M-q" nil
       )
 
+(map! :after telega
+      :map telega-chat-mode-map
+      "M-C-a" nil
+      )
+
 (with-eval-after-load 'centered-cursor-mode
   (define-key ccm-map (kbd "M-v") nil)
   )
@@ -1141,8 +1146,6 @@
   (require 'telega-alert)
   (setq! telega-chat-fill-column 125)
   (setq! telega-server-libs-prefix "/opt/homebrew")
-  ;; avatar size
-  (setf (alist-get 2 telega-avatar-factors-alist) '(2 . 0.1))
   (telega-alert-mode 1)
   (telega-mode-line-mode 1)
   (telega-notifications-mode 1)
@@ -1158,7 +1161,6 @@
   (telega-cache-dir (expand-file-name "~/Downloads/telega_cache"))
   (telega-animation-play-inline t)
   (telega-chat-show-deleted-messages-for '(all))
-  (telega-symbol-folder "📁")
   (telega-emoji-company-backend 'telega-company-telegram-emoji))
 
 ;;=======================================================
