@@ -949,6 +949,11 @@
                 :desc "telega" "t" #'telega
                 ))
 
+(map! :leader
+        (:prefix "o"
+                :desc "xwidget-webkit-browse-url" "x" #'xwidget-webkit-browse-url
+                ))
+
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
   :global t
