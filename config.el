@@ -900,10 +900,12 @@
 (map! :leader
         (:prefix "f"
                 :desc "find file" "f" #'consult-find
+                :desc "history" "h" #'recentf-open-files
                 ))
 (map! :leader
         (:prefix "s"
          :desc "sort lines" "s" #'sort-lines
+         :desc "isearch forward" "i" #'isearch-forward
                 ))
 
 (map! :leader
@@ -918,11 +920,6 @@
          ))
 
 (map! :leader
-        (:prefix "f"
-         :desc "history" "h" #'recentf-open-files
-                ))
-
-(map! :leader
         (:prefix "v"
          :desc "replace line and yank" "v" #'(lambda ()
                                               (interactive)
@@ -930,11 +927,6 @@
                                               (yank)
                                               ))
          )
-
-(map! :leader
-        (:prefix "s"
-                :desc "isearch forward" "i" #'isearch-forward
-                ))
 
 (map! :leader
         (:prefix "m"
@@ -947,6 +939,10 @@
                 :desc "restclient-http-send-current" "e" #'restclient-http-send-current
                 ))
 
+(map! :leader
+        (:prefix "t"
+                :desc "telega" "t" #'telega
+                ))
 
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
@@ -1142,7 +1138,28 @@
 
 (use-package! telega
   :config
-  (setq! telega-server-libs-prefix "/opt/homebrew"))
+  (require 'telega-alert)
+  (setq! telega-chat-fill-column 125)
+  (setq! telega-server-libs-prefix "/opt/homebrew")
+  ;; avatar size
+  (setf (alist-get 2 telega-avatar-factors-alist) '(2 . 0.1))
+  (telega-alert-mode 1)
+  (telega-mode-line-mode 1)
+  (telega-notifications-mode 1)
+  :hook
+  (telega-chat-mode . (lambda ()
+                        (set-company-backend! 'telega-chat-mode
+                          (append '(telega-company-emoji
+                                    telega-company-username
+                                    telega-company-hashtag)
+                                  (when (telega-chat-bot-p telega-chatbuf--chat)
+                                    '(telega-company-botcmd))))))
+  :custom
+  (telega-cache-dir (expand-file-name "~/Downloads/telega_cache"))
+  (telega-animation-play-inline t)
+  (telega-chat-show-deleted-messages-for '(all))
+  (telega-symbol-folder "📁")
+  (telega-emoji-company-backend 'telega-company-telegram-emoji))
 
 ;;=======================================================
 ;;=======================================================
