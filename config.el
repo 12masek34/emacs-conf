@@ -959,6 +959,12 @@
                 :desc "json-pretty-print" "p" #'json-pretty-print
                 ))
 
+(map! :leader
+        (:prefix "i"
+                :desc "ispell-change-dictionary" "d" #'ispell-change-dictionary
+                :desc "ispell-region" "r" #'ispell-region
+                ))
+
 (define-minor-mode my-keys-mode
  "Minor mode with the keys I use."
   :global t
