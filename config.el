@@ -1164,7 +1164,8 @@
   (setq! telega-server-libs-prefix "/opt/homebrew")
   (telega-mode-line-mode 1)
   (telega-notifications-mode 1)
-  ;; (telega-alert-mode 1)
+  (telega-alert-mode 1)
+  (telega-squash-message-mode 1)
   :hook
   (telega-chat-mode . (lambda ()
                         (set-company-backend! 'telega-chat-mode
