@@ -670,6 +670,14 @@
      (add-to-sqls-connections "mysql" (format-mysql-sqls host port user password db))
      (add-to-sql-conection-alist 'mysql ,name host port user password db)))
 
+(defun my/toggle-telega ()
+  (interactive)
+  (if (get-buffer "*Telega Root*")
+      (progn (telega-kill t)
+	     (message "Kill Telega"))
+    (progn (telega t)
+	   (message "Run Telega"))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -947,6 +955,7 @@
 (map! :leader
         (:prefix "t"
                 :desc "telega" "t" #'telega
+                :desc "my/toggle-telega" "T" #'my/toggle-telega
                 ))
 
 (map! :leader
@@ -1160,11 +1169,11 @@
 (use-package! telega
   :config
   (require 'telega-alert)
+  (telega-alert-mode 1)
+  ;; (telega-notifications-mode 1)
   (setq! telega-chat-fill-column 125)
   (setq! telega-server-libs-prefix "/opt/homebrew")
   (telega-mode-line-mode 1)
-  (telega-notifications-mode 1)
-  (telega-alert-mode 1)
   (telega-squash-message-mode 1)
   :hook
   (telega-chat-mode . (lambda ()
