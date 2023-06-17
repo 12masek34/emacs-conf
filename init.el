@@ -223,3 +223,5 @@
        (default +bindings +smartparens))
 
 (setenv "LSP_USE_PLISTS" "1")
+(setenv "LC_ALL" "en_US.UTF-8")
+(setenv "PYTHONUNBUFFERED" "1")
