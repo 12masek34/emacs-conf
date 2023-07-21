@@ -900,26 +900,30 @@
     (global-set-key (kbd "C-M-q") 'my/python-navigate-to-previous-python-class)
     (global-set-key (kbd "s-r") 'iedit-mode)
 
+    (evil-define-key 'normal 'global (kbd "C-t") 'google-translate-at-point)
+    (evil-define-key 'normal 'global (kbd "s-1") 'previous-buffer)
+    (evil-define-key 'normal 'global (kbd "s-2") 'next-buffer)
+
     map))
 
-(map! :leader
-        (:prefix "b"
-                :desc "black/format region" "r" #'+format/region
-                :desc "isort format python import" "i" #'py-isort-region
-                :desc "black/format buffer" "b" #'+format/buffer
-                :desc "my/format-indent-tab" "t" #'my/format-indent-tab
-                ))
+;; (map! :leader
+;;         (:prefix "b"
+;;                 :desc "black/format region" "r" #'+format/region
+;;                 :desc "isort format python import" "i" #'py-isort-region
+;;                 :desc "black/format buffer" "b" #'+format/buffer
+;;                 :desc "my/format-indent-tab" "t" #'my/format-indent-tab
+;;                 ))
 
-(map! :leader
-        (:prefix "f"
-                :desc "find file" "f" #'consult-find
-                :desc "history" "h" #'recentf-open-files
-                ))
-(map! :leader
-        (:prefix "s"
-         :desc "sort lines" "s" #'sort-lines
-         :desc "isearch forward" "i" #'isearch-forward
-                ))
+;; (map! :leader
+;;         (:prefix "f"
+;;                 :desc "find file" "f" #'consult-find
+;;                 :desc "history" "h" #'recentf-open-files
+;;                 ))
+;; (map! :leader
+;;         (:prefix "s"
+;;          :desc "sort lines" "s" #'sort-lines
+;;          :desc "isearch forward" "i" #'isearch-forward
+;;                 ))
 
 (map! :leader
         (:prefix "d"
@@ -1221,6 +1225,8 @@
 
 ;; column indicator
 (add-hook!'prog-mode-hook #'display-fill-column-indicator-mode)
+
+(remove-hook! 'doom-first-input-hook #'evil-snipe-mode)
 
 ;;=======================================================
 ;;=======================================================

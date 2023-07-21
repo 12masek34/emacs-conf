@@ -8,3 +8,11 @@
  :host "localhost"
  :database "postgres"
  :password "1234")
+
+(sql-add-postgres-db
+ ranked_choice
+ :port 5432
+ :user "rc_admin"
+ :host "localhost"
+ :database "ranked_choice"
+ :password "rc1234")
