@@ -903,27 +903,25 @@
     (evil-define-key 'normal 'global (kbd "C-t") 'google-translate-at-point)
     (evil-define-key 'normal 'global (kbd "s-1") 'previous-buffer)
     (evil-define-key 'normal 'global (kbd "s-2") 'next-buffer)
+    (evil-define-key 'normal 'global (kbd "C-d") '(lambda () (interactive) (forward-line  10)))
+    (evil-define-key 'normal 'global (kbd "C-u") '(lambda () (interactive) (forward-line  -10)))
 
     map))
 
-;; (map! :leader
-;;         (:prefix "b"
-;;                 :desc "black/format region" "r" #'+format/region
-;;                 :desc "isort format python import" "i" #'py-isort-region
-;;                 :desc "black/format buffer" "b" #'+format/buffer
-;;                 :desc "my/format-indent-tab" "t" #'my/format-indent-tab
-;;                 ))
+(map! :leader
+        (:prefix "b"
+                :desc "black/format region" "r" #'+format/region
+                :desc "my/format-indent-tab" "t" #'my/format-indent-tab
+                ))
 
-;; (map! :leader
-;;         (:prefix "f"
-;;                 :desc "find file" "f" #'consult-find
-;;                 :desc "history" "h" #'recentf-open-files
-;;                 ))
-;; (map! :leader
-;;         (:prefix "s"
-;;          :desc "sort lines" "s" #'sort-lines
-;;          :desc "isearch forward" "i" #'isearch-forward
-;;                 ))
+(map! :leader
+        (:prefix "i"
+                :desc "isort format python import" "i" #'py-isort-region
+                ))
+(map! :leader
+        (:prefix "s"
+         :desc "sort lines" "s" #'sort-lines
+                ))
 
 (map! :leader
         (:prefix "d"
