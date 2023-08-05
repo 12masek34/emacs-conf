@@ -1191,6 +1191,9 @@
   (telega-chat-show-deleted-messages-for '(all))
   (telega-emoji-company-backend 'telega-company-telegram-emoji))
 
+;; vue
+(use-package! vue-mode)
+
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
