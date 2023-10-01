@@ -835,7 +835,6 @@
     (global-set-key (kbd "s--") 'text-scale-decrease)
     (global-set-key (kbd "M-j") 'avy-goto-char-timer)
     (global-set-key (kbd "s-v") 'consult-yank-from-kill-ring)
-    (global-set-key (kbd "M-o") 'ace-window)
     (global-set-key (kbd "<f5>") 'revert-buffer)
     (global-set-key (kbd "C-k") 'kill-this-buffer)
     (global-set-key (kbd "C-M-d") 'last-half-delete-line)
