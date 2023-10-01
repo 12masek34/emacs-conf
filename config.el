@@ -163,7 +163,6 @@
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
 
 ;; dired
-(dirvish-override-dired-mode)
 (setq! dired-omit-files nil)
 
 ;;=======================================================
