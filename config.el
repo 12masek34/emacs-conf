@@ -178,104 +178,6 @@
 ;;#######################################################
 ;;=======================================================
 
-(defun duplicate-line (arg)
-  "Duplicate current line, leaving point in lower line."
-  (interactive "*p")
-  ;; save the point for undo
-  (setq buffer-undo-list (cons (point) buffer-undo-list))
-  ;; local variables for start and end of line
-  (let ((bol (save-excursion (beginning-of-line) (point)))
-        eol)
-    (save-excursion
-      ;; don't use forward-line for this, because you would have
-      ;; to check whether you are at the end of the buffer
-      (end-of-line)
-      (setq eol (point))
-      ;; store the line and disable the recording of undo information
-      (let ((line (buffer-substring bol eol))
-            (buffer-undo-list t)
-            (count arg))
-        ;; insert the line arg times
-        (while (> count 0)
-          (newline)         ;; because there is no newline in 'line'
-          (insert line)
-          (setq count (1- count)))
-        )
-      ;; create the undo information
-      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
-    ) ; end-of-let
-  ;; put the point in the lowest line and return
-  (next-line arg))
-
-;;-------------------------------------------------------
-;; Shift the selected region right if distance is positive, left if
-;; negative
-(defun shift-region (distance)
-  (let ((mark (mark)))
-    (save-excursion
-      (indent-rigidly (region-beginning) (region-end) distance)
-      (push-mark mark t t)
-      ;; Tell the command loop not to deactivate the mark
-      ;; for transient mark mode
-      (setq deactivate-mark nil))))
-
-(defun shift-right ()
-  (interactive)
-  (shift-region 4))
-
-(defun shift-left ()
-  (interactive)
-  (shift-region -4))
-
-(defun delete-word (arg)
-;; "Delete characters forward until encountering the end of a word.
-;; With argument, do this that many times."
-  (interactive "p")
-  (if (use-region-p)
-      (delete-region (region-beginning) (region-end))
-    (delete-region (point) (progn (forward-word arg) (point)))))
-
-(defun backward-delete-word (arg)
-;; "Delete characters backward until encountering the end of a word.
-;; With argument, do this that many times."
-  (interactive "p")
-  (delete-word (- arg)))
-
-(defun last-half-delete-line ()
-  (interactive)
-  (delete-region (point) (line-end-position)))
-
-(defun first-half-delete-line ()
-  (interactive)
-  (delete-region (point) (line-beginning-position)))
-
-;;delete line and dont add kill ring
-(defun my-delete-line-this-line ()
-  (interactive)
-  (delete-region (line-beginning-position) (line-end-position)))
-
-;; yank and dont move cursor to new line
-(defun custom-yank ()
-  (interactive)
-  (yank)
-  (beginning-of-line)
-  (backward-delete-char 1)
-  )
-
-;; replace region
-(defun repl-yank(beg end)
-  (interactive "r")
-  (delete-region beg end)
-  (yank 1))
-
-;; if region replace, or yank and dont add new line
-(defun crazy-yank ()
-  (interactive)
-  (if (region-active-p)
-      (call-interactively #'repl-yank))
-        (call-interactively #'custom-yank)
-  )
-
 ;; set breack point hith majore mode
 (defun my/set-breackpoint ()
   (interactive)
@@ -286,76 +188,6 @@
   (when (equal major-mode 'rjsx-mode)
     (add-js-debug))
   )
-
-(defun my/jump-breackpoint ()
-  (interactive)
-    (when (equal major-mode 'python-mode)
-    (my/jump-python-breackpoint))
-  (when (equal major-mode 'js-mode)
-    (my/jump-js-breackpoint))
-  (when (equal major-mode 'rjsx-mode)
-    (my/jump-js-breackpoint))
-
-;; jump python breckpoint
-(defun my/jump-python-breackpoint ()
-    (interactive)
-    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
-    (move-beginning-of-line 1))
-  )
-
-;; jump js breckpoint
-(defun my/jump-js-breackpoint ()
-    (interactive)
-    (search-forward-regexp "^[ ]*debugger;")
-    (move-beginning-of-line 1))
-
-(defun my/ls-activete-region()
-  (interactive)
-  (activate-mark)
-  )
-
-(defun get-point (symbol &optional arg)
-      "get the point"
-      (funcall symbol arg)
-      (point))
-
-(defun copy-thing (begin-of-thing end-of-thing &optional arg)
-  "Copy thing between beg & end into kill ring."
-  (save-excursion
-    (let ((beg (get-point begin-of-thing 1))
-          (end (get-point end-of-thing arg)))
-      (copy-region-as-kill beg end))))
-
-(defun copy-word (&optional arg)
-      "Copy words at point into kill-ring"
-       (interactive "P")
-       (copy-thing 'forward-word 'backward-word arg))
-
-(defun my-mark-word (N)
-  (interactive "p")
-  (if (and
-       (not (eq last-command this-command))
-       (not (eq last-command 'my-mark-word-backward)))
-      (set-mark (point)))
-  (forward-word N))
-
-(defun my-mark-line (N)
-  (interactive "p")
-  (set-mark (point))
-  (end-of-line))
-
-(defun my-mark-line-backward (N)
-  (interactive "p")
-  (set-mark (point))
-  (back-to-indentation))
-
-(defun my-mark-word-backward (N)
-  (interactive "p")
-  (if (and
-       (not (eq last-command this-command))
-       (not (eq last-command 'my-mark-word)))
-      (set-mark (point)))
-  (backward-word N))
 
 (defun add-py-debug ()
       "add debug code and move line down"
@@ -368,171 +200,6 @@
     (interactive)
     (highlight-regexp "debugger;" 'company-echo-common)
     (save-excursion (insert "debugger;")))
-
-(defun remove-py-debug ()
-  "remove py debug code, if found"
-  (interactive)
-  (let ((x (line-number-at-pos))
-    (cur (point)))
-    (search-forward-regexp "^[ ]*import ipdb; ipdb.set_trace();")
-    (if (= x (line-number-at-pos))
-    (let ()
-      (move-beginning-of-line 1)
-      (kill-line 1)
-      (move-beginning-of-line 1))
-      (goto-char cur))))
-
-(defun my/select-current-line-and-forward-line ()
-  (interactive)
-  (if (region-active-p)
-      (progn
-        (forward-line 1)
-        (end-of-line))
-    (progn
-      (end-of-line)
-      (set-mark (line-beginning-position)))))
-
-(defun my/select-current-line-and-previous-line (arg)
-  (interactive "p")
-  (when (not (use-region-p))
-    (end-of-line)
-    (set-mark-command nil))
-  (previous-line arg)
-  (beginning-of-line))
-
-
-(defun zz/goto-match-paren (arg)
-    "Go to the matching paren/bracket, otherwise (or if ARG is not
-    nil) insert %.  vi style of % jumping to matching brace."
-    (interactive "p")
-    (if (not (memq last-command '(set-mark
-                                  cua-set-mark
-                                  zz/goto-match-paren
-                                  down-list
-                                  up-list
-                                  end-of-defun
-                                  beginning-of-defun
-                                  backward-sexp
-                                  forward-sexp
-                                  backward-up-list
-                                  forward-paragraph
-                                  backward-paragraph
-                                  end-of-buffer
-                                  beginning-of-buffer
-                                  backward-word
-                                  forward-word
-                                  mwheel-scroll
-                                  backward-word
-                                  forward-word
-                                  mouse-start-secondary
-                                  mouse-yank-secondary
-                                  mouse-secondary-save-then-kill
-                                  move-end-of-line
-                                  move-beginning-of-line
-                                  backward-char
-                                  forward-char
-                                  scroll-up
-                                  scroll-down
-                                  scroll-left
-                                  scroll-right
-                                  mouse-set-point
-                                  next-buffer
-                                  previous-buffer
-                                  previous-line
-                                  next-line
-                                  back-to-indentation
-                                  doom/backward-to-bol-or-indent
-                                  doom/forward-to-last-non-comment-or-eol
-                                  )))
-        (self-insert-command (or arg 1))
-      (cond ((looking-at "\\s\(") (sp-forward-sexp) (backward-char 1))
-            ((looking-at "\\s\)") (forward-char 1) (sp-backward-sexp))
-            (t (self-insert-command (or arg 1))))))
-
-
-(defun my/kill-ring-save (beg end)
-  (interactive "r")
-  (if mark-active
-      (kill-ring-save beg end)
-    (kill-ring-save (line-beginning-position) (line-end-position))))
-
-
-(defun my/kill-region (beg end)
-  (interactive "r")
-  (if mark-active
-      (kill-region beg end)
-    (kill-region (line-beginning-position) (line-end-position))
-    (backward-delete-char 1)))
-
-(defun get-project-root ()
-  (when (fboundp 'projectile-project-root)
-    (projectile-project-root)))
-
-;; Ripgrep the current word from project root
-(defun consult-ripgrep-at-point ()
-  (interactive)
-  (consult-ripgrep (get-project-root)(thing-at-point 'symbol)))
-
-;; Ripgrep
-(defun my/consult-ripgrep ()
-  (interactive)
-  (consult-ripgrep))
-
-(defun consult-line-at-point ()
-    (interactive)
-    (consult-line (thing-at-point 'symbol))
-)
-
-(defun my/er/expand-region ()
-  (interactive)
-  (er/expand-region 2))
-
-(defun my-kill-thing-at-point (thing)
-  "Kill the `thing-at-point' for the specified kind of THING."
-  (let ((bounds (bounds-of-thing-at-point thing)))
-    (if bounds
-        (kill-region (car bounds) (cdr bounds))
-      (error "No %s at point" thing))))
-
-(defun my-kill-word-at-point ()
-  "Kill the word at point."
-  (interactive)
-  (my-kill-thing-at-point 'word))
-
-(defun select-text-in-delimiters ()
-  (interactive)
-  (let (start end)
-    (skip-chars-backward "^<>([{\"'")
-    (backward-char)
-    (setq curChar (thing-at-point 'char))
-    (forward-char)
-    (setq start (point))
-    (if (equal curChar "(") (skip-chars-forward "^)") (skip-chars-forward "^<>)]}\"'"))
-    (if (equal curChar "{") (skip-chars-forward "^}") (skip-chars-forward "^<>)]}\"'"))
-    (if (equal curChar "[") (skip-chars-forward "^]") (skip-chars-forward "^<>)]}\"'"))
-    (if (equal curChar "'") (skip-chars-forward "^'") (skip-chars-forward "^<>)]}\"'"))
-    (if (equal curChar "\"") (skip-chars-forward "^\"") (skip-chars-forward "^<>)]}\"'"))
-    (if (equal curChar "<") (skip-chars-forward "^>") (skip-chars-forward "^<>)]}\"'"))
-    (setq end (point))
-    (set-mark start)))
-
-(defun my/select-block ()
-  (interactive)
-  (if (region-active-p)
-      (re-search-forward "\n[ \t]*\n" nil "move")
-    (progn
-      (skip-chars-forward " \n\t")
-      (when (re-search-backward "\n[ \t]*\n" nil "move")
-        (re-search-forward "\n[ \t]*\n"))
-      (push-mark (point) t t)
-      (re-search-forward "\n[ \t]*\n" nil "move"))))
-
-(defun my/wrap-word-quote ()
-  (interactive)
-  (forward-word)
-  (insert "'")
-  (backward-word)
-  (insert "'"))
 
 (defun my/toggle-camelcase-underscores ()
   "Toggle between camelcase and underscore notation for the symbol at point."
@@ -550,29 +217,6 @@
             (downcase-region start (1+ start)))
         (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
         (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
-
-(defun my/format-indent-tab (top bottom)
-  (interactive "r")
-  (apply-macro-to-region-lines top bottom [?\s-\M-a tab]))
-
-(defun my/python-navigate-up-to-class-statement ()
-  (interactive)
-  (let ((pos nil))
-    (while (not (equal pos (point)))
-      (setf pos (point))
-      (python-nav-backward-up-list))))
-
-(defun my/python-navigate-to-next-python-class ()
-  (interactive)
-  (my/python-navigate-up-to-class-statement)
-  (end-of-defun)
-  (end-of-defun)
-  (my/python-navigate-up-to-class-statement))
-
-(defun my/python-navigate-to-previous-python-class ()
-  (interactive)
-  (my/python-navigate-up-to-class-statement)
-  (beginning-of-defun))
 
 ;;;###autoload
 (defmacro any-nil? (&rest args)
@@ -662,14 +306,6 @@
      (add-to-sqls-connections "mysql" (format-mysql-sqls host port user password db))
      (add-to-sql-conection-alist 'mysql ,name host port user password db)))
 
-(defun my/toggle-telega ()
-  (interactive)
-  (if (get-buffer "*Telega Root*")
-      (progn (telega-kill t)
-	     (message "Kill Telega"))
-    (progn (telega t)
-	   (message "Run Telega"))))
-
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -684,119 +320,8 @@
 ;;#######################################################
 ;;=======================================================
 
-(map! :after smartparens
-      :map smartparens-mode-map
-      "C-d" nil
-      "C-a" nil
-      "M-C-d" nil
-      "M-C-a" nil
-      "C-M-q" nil
-      "C-M-e" nil
-      )
-
-(map! :after vertico
-      :map vertico-map
-      "M-s" nil
-      )
-
-(map! :after dired
-      :map dired-mode-map
-      "M-s" nil
-      )
-
-(map! :after ibuffer-vc
-      :map ibuffer-mode-map
-      "M-s" nil
-      )
-
-(map! :after magit
-      :map magit-mode-map
-      "M-w" nil
-      )
-
-(map! :after magit-blame
-      :map magit-blame-read-only-mode-map
-      "M-w" nil
-      )
-
-(map! :after term
-      :map term-mode-map
-      "M-o" nil
-      )
-
-(map! :after vterm
-      :map vterm-copy-mode-map
-      "C-a" nil
-      "C-e" nil
-      )
-
-
-(map! :after prog-mode
-      :map prog-mode-map
-      "M-q" nil
-      "C-M-q" nil
-      )
-
-(map! :after telega
-      :map telega-chat-mode-map
-      "M-C-a" nil
-      )
-
-(with-eval-after-load 'centered-cursor-mode
-  (define-key ccm-map (kbd "M-v") nil)
-  )
-
-(with-eval-after-load 'rjsx-mode
-  (define-key rjsx-mode-map (kbd "C-d") nil)
-  )
-
-(with-eval-after-load 'lsp-mode
-  (define-key lsp-signature-mode-map (kbd "M-a") nil)
-  )
-
-(with-eval-after-load 'lisp-mode
-  (define-key emacs-lisp-mode-map (kbd "C-M-q") nil)
-  )
-
-
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
-    (global-unset-key (kbd "s-="))
-    (global-unset-key (kbd "s--"))
-    (global-unset-key (kbd "M-s"))
-    (global-unset-key (kbd "M-a"))
-    (global-unset-key (kbd "M-d"))
-    (global-unset-key (kbd "M-q"))
-    (global-unset-key (kbd "M-e"))
-    (global-unset-key (kbd "M-s-w"))
-    (global-unset-key (kbd "M-s-s"))
-    (global-unset-key (kbd "M-C-s"))
-    (global-unset-key (kbd "M-C-w"))
-    (global-unset-key (kbd "M-s-d"))
-    (global-unset-key (kbd "M-s-a"))
-    (global-unset-key (kbd "C-d"))
-    (global-unset-key (kbd "C-a"))
-    (global-unset-key (kbd "C-s"))
-    (global-unset-key (kbd "s-["))
-    (global-unset-key (kbd "C-M-q"))
-    (global-unset-key (kbd "C-M-e"))
-    (global-unset-key (kbd "s-m"))
-
-
-    (global-set-key (kbd "M-s-w") (lambda () (interactive) (forward-line -10)))
-    (global-set-key (kbd "M-s-s") (lambda () (interactive) (forward-line  10)))
-    (global-set-key (kbd "M-w") 'previous-line)
-    (global-set-key (kbd "M-s") 'next-line)
-    (global-set-key (kbd "M-a") 'backward-char)
-    (global-set-key (kbd "M-d") 'forward-char)
-    (global-set-key (kbd "M-q") 'backward-word)
-    (global-set-key (kbd "M-e") 'forward-word)
-    (global-set-key (kbd "M-C-s") 'end-of-buffer)
-    (global-set-key (kbd "M-C-w") 'beginning-of-buffer)
-    (global-set-key (kbd "M-s-d") 'end-of-line)
-    (global-set-key (kbd "M-s-a") 'beginning-of-line)
-    (global-set-key (kbd "C-d") 'delete-word)
-    (global-set-key (kbd "C-a") 'backward-delete-word)
     (global-set-key (kbd "C-x k") 'windmove-up)
     (global-set-key (kbd "C-x j") 'windmove-down)
     (global-set-key (kbd "C-x h") 'windmove-left)
@@ -805,120 +330,50 @@
     (global-set-key (kbd "s-k") 'enlarge-window)
     (global-set-key (kbd "s-h") 'shrink-window-horizontally)
     (global-set-key (kbd "s-l") 'enlarge-window-horizontally)
-    (global-set-key (kbd "C-b") 'bookmark-set)
-    (global-set-key (kbd "M-b") 'bookmark-jump)
-    (global-set-key (kbd "s-t") 'multi-vterm-dedicated-toggle)
-    (global-set-key (kbd "s-M-t") 'vterm-copy-mode)
-    (global-set-key (kbd "s-T") 'multi-vterm)
-    (global-set-key (kbd "s-d") 'duplicate-line)
-    (global-set-key (kbd "s-1") 'previous-buffer)
-    (global-set-key (kbd "s-2") 'next-buffer)
-    (global-set-key (kbd "s-3") 'ibuffer)
-    (global-set-key (kbd "s-4") 'bookmark-bmenu-list)
-    (global-set-key (kbd "s-v") 'yank)
-    (global-set-key (kbd "s-c") ' my/kill-ring-save)
-    (global-set-key (kbd "s-x") 'my/kill-region)
     (global-set-key (kbd "s-/") 'comment-line)
-    (global-set-key (kbd "M--") 'set-mark-command)
-    (global-set-key (kbd "M-=") 'rectangle-mark-mode)
-    (global-set-key (kbd "s-]") 'goto-last-change-reverse)
-    (global-set-key (kbd "s-[") 'goto-last-change)
-    (global-set-key (kbd "s-\\") 'consult-mark)
-    (global-set-key (kbd "M-s-e") 'forward-paragraph)
-    (global-set-key (kbd "M-s-q") 'backward-paragraph)
-    (global-set-key (kbd "M-<tab>") 'python-indent-shift-right)
-    (global-set-key (kbd "M-s-<tab>") 'python-indent-shift-left)
-    (global-set-key (kbd "C-w") 'move-text-up)
-    (global-set-key (kbd "C-s") 'move-text-down)
-    (global-set-key (kbd "s-Z") 'undo-fu-only-redo)
     (global-set-key (kbd "s-=") 'text-scale-increase)
     (global-set-key (kbd "s--") 'text-scale-decrease)
-    (global-set-key (kbd "M-j") 'avy-goto-char-timer)
     (global-set-key (kbd "s-v") 'consult-yank-from-kill-ring)
     (global-set-key (kbd "<f5>") 'revert-buffer)
     (global-set-key (kbd "C-k") 'kill-this-buffer)
-    (global-set-key (kbd "C-M-d") 'last-half-delete-line)
-    (global-set-key (kbd "C-M-a") 'first-half-delete-line)
-    (global-set-key (kbd "<up>") 'comint-previous-input)
-    (global-set-key (kbd "<down>") 'comint-next-input)
-    (global-set-key (kbd "s-w") 'my/select-current-line-and-previous-line)
-    (global-set-key (kbd "s-s") 'my/select-current-line-and-forward-line)
-    (global-set-key (kbd "s-G") 'consult-ripgrep-at-point)
-    (global-set-key (kbd "s-g") 'my/consult-ripgrep)
-    (global-set-key (kbd "M-v") 'pyvenv-activate)
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
     (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
     (global-set-key (kbd "s-b") 'magit-blame-addition)
-    (global-set-key (kbd "s-e") 'my-mark-word)
-    (global-set-key (kbd "C-e") 'my-mark-line)
-    (global-set-key (kbd "s-q") 'my-mark-word-backward)
-    (global-set-key (kbd "C-q") 'my-mark-line-backward)
-    (global-set-key (kbd "C-s-c") 'copy-word)
-    (global-set-key (kbd "s-C-x") 'my-delete-line-this-line)
-    (global-set-key (kbd "C-<tab>") 'company-ispell)
     (global-set-key (kbd "C-t") 'google-translate-at-point)
-    (global-set-key (kbd "M-m") 'apply-macro-to-region-lines)
-    (global-set-key (kbd "M-n") 'call-last-kbd-macro)
-    (global-set-key (kbd "M-s--") 'select-text-in-delimiters)
-    (global-set-key (kbd "M-s-=") 'my/select-block)
-    (global-set-key (kbd "M-r") 'query-replace)
-    (global-set-key (kbd "s-F") 'consult-line-at-point)
-    (global-set-key (kbd "s-M-x") 'my-kill-word-at-point)
-    (global-set-key (kbd "s-R") 'query-replace)
-    (global-set-key (kbd "s-i") 'isearch-forward)
-    (global-set-key (kbd "M-'") 'my/wrap-word-quote)
-    (global-set-key (kbd "M-\\") '+fold/toggle)
-    (global-set-key (kbd "M-[") '+fold/close-all)
-    (global-set-key (kbd "M-]") '+fold/open-all)
-    (global-set-key (kbd "M-;") 'my/toggle-camelcase-underscores)
-    (global-set-key (kbd "C-M-e") 'my/python-navigate-to-next-python-class)
-    (global-set-key (kbd "C-M-q") 'my/python-navigate-to-previous-python-class)
+    (global-set-key (kbd "s-;") 'my/toggle-camelcase-underscores)
     (global-set-key (kbd "s-r") 'iedit-mode)
-    (global-set-key (kbd "s-1") 'previous-buffer)
-    (global-set-key (kbd "s-2") 'next-buffer)
 
     (evil-define-key 'normal 'global (kbd "C-t") 'google-translate-at-point)
-    (evil-define-key 'normal 'global (kbd "s-1") 'previous-buffer)
-    (evil-define-key 'normal 'global (kbd "s-2") 'next-buffer)
     (evil-define-key 'normal 'global (kbd "C-d") '(lambda () (interactive) (forward-line  10)))
     (evil-define-key 'normal 'global (kbd "C-u") '(lambda () (interactive) (forward-line  -10)))
 
     map))
 
+(define-minor-mode my-keys-mode
+ "Minor mode with the keys I use."
+  :global t
+  :init-value t
+  :keymap my-keys-mode-map)
+
 (map! :leader
         (:prefix "b"
                 :desc "black/format region" "r" #'+format/region
-                :desc "my/format-indent-tab" "t" #'my/format-indent-tab
                 ))
 
 (map! :leader
         (:prefix "i"
                 :desc "isort format python import" "i" #'py-isort-region
                 ))
-(map! :leader
-        (:prefix "s"
-         :desc "sort lines" "s" #'sort-lines
-                ))
 
 (map! :leader
         (:prefix "d"
          ;; debug
          :desc "set debug breakpoint" "s" #'my/set-breackpoint
-         :desc "jump to breakpoint" "j" #'my/jump-breackpoint
          ;; ddatabase
          :desc "switch connection to db" "c" #'lsp-sql-switch-connection
          :desc "switch database" "d" #'lsp-sql-switch-database
          :desc "execute sql query" "e" #'lsp-sql-execute-query
          ))
-
-(map! :leader
-        (:prefix "v"
-         :desc "replace line and yank" "v" #'(lambda ()
-                                              (interactive)
-                                              (my-delete-line-this-line)
-                                              (yank)
-                                              ))
-         )
 
 (map! :leader
         (:prefix "m"
@@ -934,12 +389,6 @@
 (map! :leader
         (:prefix "t"
                 :desc "telega" "t" #'telega
-                :desc "my/toggle-telega" "T" #'my/toggle-telega
-                ))
-
-(map! :leader
-        (:prefix "o"
-                :desc "xwidget-webkit-browse-url" "x" #'xwidget-webkit-browse-url
                 ))
 
 (map! :leader
@@ -952,12 +401,6 @@
                 :desc "ispell-change-dictionary" "d" #'ispell-change-dictionary
                 :desc "ispell-region" "r" #'ispell-region
                 ))
-
-(define-minor-mode my-keys-mode
- "Minor mode with the keys I use."
-  :global t
-  :init-value t
-  :keymap my-keys-mode-map)
 
 ;;=======================================================
 ;;#######################################################
@@ -979,18 +422,6 @@
   (reverse-im-input-methods '("russian-computer"))
   :config
   (reverse-im-mode t))
-
-(use-package! tree-sitter
-   :after python-mode
-   :defer t
-   :config
-  (require 'tree-sitter)
-  (require 'tree-sitter-langs)
-  (require 'tree-sitter-hl)
-  (global-tree-sitter-mode)
-  (add-hook!  'python-mode-hook  #'tree-sitter-hl-mode)
-  (add-hook! 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  )
 
 ;;set interpritatior
 (use-package! python
@@ -1042,14 +473,8 @@
 (use-package! flycheck
   :ensure t
   :config
-  (setq flycheck-enabled-checkers '(python-flake8 python-mypy))
   (setq flycheck-select-checker 'python-pyright)
   (setq lsp-diagnostics-provider :auto)
-  ;; (setq flycheck-disabled-checkers '(python-pylint))
-  ;; (setq flycheck-select-checker 'python-flake8)
-  ;; (setq flycheck-checkers (remove 'python-flake8 flycheck-checkers))
-  (setq flycheck-checkers (remove 'python-pycompile flycheck-checkers))
-  (setq flycheck-checkers (remove 'python-pylint flycheck-checkers))
   :init (global-flycheck-mode))
 
 ;;company
@@ -1112,19 +537,11 @@
                (unless (eq ibuffer-sorting-mode 'alphabetic)
                  (ibuffer-do-sort-by-alphabetic)))))
 
-;;go to last change buffer
-(use-package! goto-chg)
-
 ;; replace text
 (use-package! iedit
   :defer
   :config
   (set-face-background 'iedit-occurrence "Magenta"))
-
-;;kill-ring history
-(use-package! browse-kill-ring
-  :config
-  (setq browse-kill-ring-separator "-----------------------------------------------------------------------------------"))
 
 ;;vterm add active link
 (use-package! vterm
@@ -1168,8 +585,8 @@
   (telega-chat-show-deleted-messages-for '(all))
   (telega-emoji-company-backend 'telega-company-telegram-emoji))
 
-;; vue
-(use-package! vue-mode)
+;; consult
+(consult-customize +default/search-project :preview-key 'any)
 
 ;;=======================================================
 ;;=======================================================
