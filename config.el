@@ -333,7 +333,7 @@
     (global-set-key (kbd "s-/") 'comment-line)
     (global-set-key (kbd "s-=") 'text-scale-increase)
     (global-set-key (kbd "s--") 'text-scale-decrease)
-    (global-set-key (kbd "s-v") 'consult-yank-from-kill-ring)
+    (global-set-key (kbd "s-V") 'consult-yank-from-kill-ring)
     (global-set-key (kbd "<f5>") 'revert-buffer)
     (global-set-key (kbd "C-k") 'kill-this-buffer)
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
