@@ -322,15 +322,10 @@
 
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
-    (global-set-key (kbd "C-x k") 'windmove-up)
-    (global-set-key (kbd "C-x j") 'windmove-down)
-    (global-set-key (kbd "C-x h") 'windmove-left)
-    (global-set-key (kbd "C-x l") 'windmove-right)
     (global-set-key (kbd "s-k") 'shrink-window)
     (global-set-key (kbd "s-j") 'enlarge-window)
     (global-set-key (kbd "s-h") 'shrink-window-horizontally)
     (global-set-key (kbd "s-l") 'enlarge-window-horizontally)
-    (global-set-key (kbd "s-/") 'comment-line)
     (global-set-key (kbd "s-=") 'text-scale-increase)
     (global-set-key (kbd "s--") 'text-scale-decrease)
     (global-set-key (kbd "s-V") 'consult-yank-from-kill-ring)
