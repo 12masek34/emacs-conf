@@ -391,6 +391,10 @@
                 :desc "ispell-change-dictionary" "d" #'ispell-change-dictionary
                 :desc "ispell-region" "r" #'ispell-region
                 ))
+(map! :leader
+        (:prefix "v"
+                :desc "consult-yank-from-kill-ring" "v" #'consult-yank-from-kill-ring
+                ))
 
 ;;=======================================================
 ;;#######################################################
