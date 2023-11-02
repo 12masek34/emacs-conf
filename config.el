@@ -165,6 +165,8 @@
 ;; dired
 (setq! dired-omit-files nil)
 
+;; remove line wrapping
+(setq! global-visual-line-mode nil)
 ;;=======================================================
 ;;#######################################################
 ;;base config end
