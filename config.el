@@ -401,6 +401,10 @@
         (:prefix "t"
                 :desc "google-translate-at-point" "t" #'google-translate-at-point
                 ))
+(map! :leader
+        (:prefix "w"
+                :desc "ace-window" "w" #'ace-window
+                ))
 
 ;;=======================================================
 ;;#######################################################
