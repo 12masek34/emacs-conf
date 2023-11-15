@@ -18,8 +18,6 @@
 (package! multi-vterm)
 (package! google-translate)
 (package! restclient)
-(package! telega)
-(package! alert)
 (package! protobuf-mode)
 
 ;; To install a package directly from a remote git repo, you must specify a

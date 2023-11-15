@@ -569,29 +569,6 @@
 ;; consult
 (consult-customize +default/search-project :preview-key 'any)
 
-;; telega
-(use-package! telega
-  :config
-  (require 'telega-alert)
-  (telega-alert-mode 1)
-  ;; (telega-notifications-mode 1)
-  (setq! telega-chat-fill-column 125)
-  (setq! telega-server-libs-prefix "/opt/homebrew")
-  (telega-mode-line-mode 1)
-  (telega-squash-message-mode 1)
-  :hook
-  (telega-chat-mode . (lambda ()
-                        (set-company-backend! 'telega-chat-mode
-                          (append '(telega-company-emoji
-                                    telega-company-username
-                                    telega-company-hashtag)
-                                  (when (telega-chat-bot-p telega-chatbuf--chat)
-                                    '(telega-company-botcmd))))))
-  :custom
-  (telega-cache-dir (expand-file-name "~/Downloads/telega_cache"))
-  (telega-animation-play-inline t)
-  (telega-chat-show-deleted-messages-for '(all))
-  (telega-emoji-company-backend 'telega-company-telegram-emoji))
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
