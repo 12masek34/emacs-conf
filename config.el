@@ -191,11 +191,23 @@
     (add-js-debug))
   )
 
+(defun my/set-logging ()
+  (interactive)
+  (when (equal major-mode 'python-mode)
+    (add-py-logging))
+  )
+
 (defun add-py-debug ()
-      "add debug code and move line down"
+      "add debug code"
     (interactive)
     (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)
     (save-excursion (insert "import ipdb; ipdb.set_trace();")))
+
+(defun add-py-logging ()
+      "add logging"
+    (interactive)
+    (highlight-regexp "import logging; logging.error();" 'company-echo-common)
+    (save-excursion (insert "import logging; logging.error();")))
 
 (defun add-js-debug ()
       "add debug code and move line down"
@@ -370,6 +382,7 @@
          :desc "switch connection to db" "c" #'lsp-sql-switch-connection
          :desc "switch database" "d" #'lsp-sql-switch-database
          :desc "execute sql query" "e" #'lsp-sql-execute-query
+         :desc "set logging" "l" #'my/set-logging
          ))
 
 (map! :leader
