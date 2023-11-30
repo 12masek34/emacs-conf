@@ -200,8 +200,8 @@
 (defun add-py-debug ()
       "add debug code"
     (interactive)
-    (highlight-regexp "import ipdb; ipdb.set_trace();" 'company-echo-common)
-    (save-excursion (insert "import ipdb; ipdb.set_trace();")))
+    (highlight-regexp "import pdb; pdb.set_trace();" 'company-echo-common)
+    (save-excursion (insert "import pdb; pdb.set_trace();")))
 
 (defun add-py-logging ()
       "add logging"
