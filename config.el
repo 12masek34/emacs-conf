@@ -83,11 +83,6 @@
 ;;#######################################################
 ;;=======================================================
 
-
-;; load environment
-(setenv "LSP_USE_PLISTS" "1")
-(setenv "LC_ALL" "en_US.UTF-8")
-
 ;; column line long 120 char
 (setq! display-fill-column-indicator-column 120)
 
