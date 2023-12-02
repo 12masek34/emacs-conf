@@ -365,8 +365,8 @@
   :keymap my-keys-mode-map)
 
 (map! :leader
-        (:prefix "b"
-                :desc "black/format region" "r" #'+format/region
+        (:prefix "c"
+                :desc "python black region" "b" #'python-black-region
                 ))
 
 (map! :leader
@@ -580,6 +580,11 @@
 
 ;; consult
 (consult-customize +default/search-project :preview-key 'any)
+
+; black
+(use-package! python-black
+  :demand t
+  :after python)
 
 ;;=======================================================
 ;;=======================================================
