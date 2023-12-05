@@ -363,12 +363,10 @@
         (:prefix "c"
                 :desc "python black region" "b" #'python-black-region
                 ))
-
 (map! :leader
         (:prefix "i"
                 :desc "isort format python import" "i" #'py-isort-region
                 ))
-
 (map! :leader
         (:prefix "d"
          ;; debug
@@ -379,22 +377,18 @@
          :desc "execute sql query" "e" #'lsp-sql-execute-query
          :desc "set logging" "l" #'my/set-logging
          ))
-
 (map! :leader
         (:prefix "m"
                 :desc "mc/edit-lines" "m" #'mc/edit-lines
                 ))
-
 (map! :leader
         (:prefix "r"
                 :desc "restclient-http-send-current" "e" #'restclient-http-send-current
                 ))
-
 (map! :leader
         (:prefix "j"
                 :desc "json-pretty-print" "p" #'json-pretty-print
                 ))
-
 (map! :leader
         (:prefix "i"
                 :desc "ispell-change-dictionary" "d" #'ispell-change-dictionary
