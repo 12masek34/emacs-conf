@@ -162,6 +162,9 @@
 
 ;; remove line wrapping
 (setq! global-visual-line-mode nil)
+
+;; search engine
+(setq! eww-search-prefix "https://www.google.com/search?q=")
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -405,6 +408,10 @@
 (map! :leader
         (:prefix "w"
                 :desc "ace-window" "w" #'ace-window
+                ))
+(map! :leader
+        (:prefix "s"
+                :desc "eww" "g" #'eww
                 ))
 
 ;;=======================================================
