@@ -230,6 +230,14 @@
         (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
         (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
 
+(defun eww-new ()
+  "Open new buffer by eww"
+  (interactive)
+  (let ((url (read-from-minibuffer "Enter URL or keywords: ")))
+    (switch-to-buffer (generate-new-buffer "eww"))
+    (eww-mode)
+    (eww url)))
+
 ;;;###autoload
 (defmacro any-nil? (&rest args)
   `(not (and ,@args)))
@@ -411,7 +419,7 @@
                 ))
 (map! :leader
         (:prefix "s"
-                :desc "eww" "g" #'eww
+                :desc "eww" "g" #'eww-new
                 ))
 
 ;;=======================================================
