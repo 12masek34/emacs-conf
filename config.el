@@ -354,11 +354,9 @@
     (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
     (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
     (global-set-key (kbd "s-b") 'magit-blame-addition)
-    (global-set-key (kbd "C-t") 'google-translate-at-point)
     (global-set-key (kbd "s-;") 'my/toggle-camelcase-underscores)
     (global-set-key (kbd "s-r") 'iedit-mode)
 
-    (evil-define-key 'normal 'global (kbd "C-t") 'google-translate-at-point)
     (evil-define-key 'normal 'global (kbd "C-d") '(lambda () (interactive) (forward-line  10)))
     (evil-define-key 'normal 'global (kbd "C-u") '(lambda () (interactive) (forward-line  -10)))
 
@@ -412,6 +410,7 @@
 (map! :leader
         (:prefix "t"
                 :desc "google-translate-at-point" "t" #'google-translate-at-point
+                :desc "google-translate-at-point" "T" #'google-translate-query-translate
                 ))
 (map! :leader
         (:prefix "w"
