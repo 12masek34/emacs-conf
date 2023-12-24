@@ -239,7 +239,6 @@
     (with-temp-file "/tmp/my_temp.py"
       (insert code))
     (setq result (shell-command-to-string (concat python-interpreter " /tmp/my_temp.py")))
-
     (with-output-to-temp-buffer "*Python Result*"
       (set-buffer "*Python Result*")
       (insert result))))
