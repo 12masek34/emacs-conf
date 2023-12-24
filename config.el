@@ -213,6 +213,24 @@
     (highlight-regexp "debugger;" 'company-echo-common)
     (save-excursion (insert "debugger;")))
 
+(defun my/execute-python-region ()
+  "Execute the selected Python code and display the result in the minibuffer."
+  (interactive)
+  (let ((code (buffer-substring (region-beginning) (region-end))))
+    (with-temp-file "/tmp/my_temp.py"
+      (insert code))
+    (setq result (shell-command-to-string "python3 /tmp/my_temp.py"))
+    (message result)))
+
+(defun my/execute-python-buffer ()
+  "Execute the entire Python buffer and display the result in the minibuffer."
+  (interactive)
+  (let ((code (buffer-string)))
+    (with-temp-file "/tmp/my_temp.py"
+      (insert code))
+    (setq result (shell-command-to-string "python3 /tmp/my_temp.py"))
+    (message result)))
+
 (defun my/toggle-camelcase-underscores ()
   "Toggle between camelcase and underscore notation for the symbol at point."
   (interactive)
@@ -419,6 +437,11 @@
 (map! :leader
         (:prefix "s"
                 :desc "eww" "g" #'eww-new
+                ))
+(map! :leader
+        (:prefix "e"
+                :desc "my/execute-python-region" "r" #'my/execute-python-region
+                :desc "my/execute-python-buffer" "b" #'my/execute-python-buffer
                 ))
 
 ;;=======================================================
