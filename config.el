@@ -216,20 +216,33 @@
 (defun my/execute-python-region ()
   "Execute the selected Python code and display the result in the minibuffer."
   (interactive)
-  (let ((code (buffer-substring (region-beginning) (region-end))))
+  (let* ((code (buffer-substring (region-beginning) (region-end)))
+         (venv-path (getenv "VIRTUAL_ENV"))
+         (python-interpreter (if venv-path
+                                  (concat venv-path "bin/python3")
+                                "python3")))
     (with-temp-file "/tmp/my_temp.py"
       (insert code))
-    (setq result (shell-command-to-string "python3 /tmp/my_temp.py"))
-    (message result)))
+    (setq result (shell-command-to-string (concat python-interpreter " /tmp/my_temp.py")))
+    (with-output-to-temp-buffer "*Python Result*"
+      (set-buffer "*Python Result*")
+      (insert result))))
 
 (defun my/execute-python-buffer ()
   "Execute the entire Python buffer and display the result in the minibuffer."
   (interactive)
-  (let ((code (buffer-string)))
+  (let* ((code (buffer-string))
+         (venv-path (getenv "VIRTUAL_ENV"))
+         (python-interpreter (if venv-path
+                                  (concat venv-path "bin/python3")
+                                "python3")))
     (with-temp-file "/tmp/my_temp.py"
       (insert code))
-    (setq result (shell-command-to-string "python3 /tmp/my_temp.py"))
-    (message result)))
+    (setq result (shell-command-to-string (concat python-interpreter " /tmp/my_temp.py")))
+
+    (with-output-to-temp-buffer "*Python Result*"
+      (set-buffer "*Python Result*")
+      (insert result))))
 
 (defun my/toggle-camelcase-underscores ()
   "Toggle between camelcase and underscore notation for the symbol at point."
