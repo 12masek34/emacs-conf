@@ -438,10 +438,12 @@
                 :desc "consult-yank-from-kill-ring" "v" #'consult-yank-from-kill-ring
                 ))
 (map! :leader
-        (:prefix "t"
+      (:prefix "t"
                 :desc "google-translate-at-point" "t" #'google-translate-at-point
                 :desc "google-translate-at-point" "T" #'google-translate-query-translate
-                ))
+                :desc "google-translate-at-point-reverse" "r" #'google-translate-at-point-reverse
+                :desc "google-translate-at-point-reverse" "R" #'google-translate-query-translate-reverse
+       ))
 (map! :leader
         (:prefix "w"
                 :desc "ace-window" "w" #'ace-window
