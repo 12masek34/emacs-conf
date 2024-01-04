@@ -457,6 +457,12 @@
                 :desc "my/execute-python-region" "r" #'my/execute-python-region
                 :desc "my/execute-python-buffer" "b" #'my/execute-python-buffer
                 ))
+(map! :leader
+        (:prefix "y"
+                :desc "my/requst-yandex-gpt-region" "r" #'my/requst-yandex-gpt-region
+                :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
+                :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
+                ))
 
 ;;=======================================================
 ;;#######################################################
@@ -682,6 +688,9 @@
 
 ;;private
 (load! "~/.doom.d/env.el")
+
+;;yandex gpt integration
+(load! "~/.doom.d/yandex_gpt.el")
 
 ;;=======================================================
 ;;=======================================================

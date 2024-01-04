@@ -1,1 +1,0 @@
-/Users/dmitrijmartys/dark_helmet/doom.d
