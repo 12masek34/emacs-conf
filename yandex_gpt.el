@@ -80,7 +80,7 @@
 
 (defun my/requst-yandex-gpt-by-system (system)
   (interactive)
-  (my/insert-text-and-open-temp-buffer (concat "\n" separator_request "\n" "system => " system "\n" "text => " text "\n") YANDEX_GPT_LOG_FILE)
+  (my/insert-text-and-open-temp-buffer (concat "\n" separator_request "\n" "system => " system "\n\n" "text => " text "\n") YANDEX_GPT_LOG_FILE)
   (request "https://llm.api.cloud.yandex.net/foundationModels/v1/completionAsync"
     :type "POST"
     :data (json-encode `(
