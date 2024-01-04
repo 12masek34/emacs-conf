@@ -462,6 +462,7 @@
                 :desc "my/requst-yandex-gpt-region" "r" #'my/requst-yandex-gpt-region
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
+                :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
                 ))
 
 ;;=======================================================
