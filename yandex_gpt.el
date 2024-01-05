@@ -6,10 +6,13 @@
 (setq BILLING_ACCOUNT_ID (getenv "BILLING_ACCOUNT_ID"))
 (setq temperature "0.6")
 (setq maxTokens "2000")
-(setq separator_request ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-(setq separator_response "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+(setq separator_request "***********************************************************************************************")
+(setq separator_response ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
 (setq request_id nil)
 (setq balance "unknow")
+(setq main_model "/yandexgpt/latest")
+(setq lite_model "/yandexgpt-lite/latest")
+(setq prefix_gpt "gpt://")
 
 
 (defun my/open-yandex-gpt-log ()
@@ -89,7 +92,7 @@
   (my/insert-text-and-open-temp-buffer (concat "\n" separator_request "\n" text) YANDEX_GPT_LOG_FILE)
   (request "https://llm.api.cloud.yandex.net/foundationModels/v1/completionAsync"
     :type "POST"
-    :data (json-encode `(("modelUri" . ,(concat "gpt://" YANDEX_FOLDER_ID "/yandexgpt/latest"))
+    :data (json-encode `(("modelUri" . ,(concat prefix_gpt YANDEX_FOLDER_ID main_model))
                          ("completionOptions" . (("stream" . nil)
                                                  ("temperature" . ,temperature)
                                                  ("maxTokens" . ,maxTokens)))
@@ -110,7 +113,7 @@
   (my/insert-text-and-open-temp-buffer (concat "\n" separator_request "\n" "system => " system "\n\n" "text => " text "\n") YANDEX_GPT_LOG_FILE)
   (request "https://llm.api.cloud.yandex.net/foundationModels/v1/completionAsync"
     :type "POST"
-    :data (json-encode `(("modelUri" . ,(concat "gpt://" YANDEX_FOLDER_ID "/yandexgpt/latest"))
+    :data (json-encode `(("modelUri" . ,(concat prefix_gpt YANDEX_FOLDER_ID main_model))
                          ("completionOptions" . (("stream" . nil)
                                                  ("temperature" . ,temperature)
                                                  ("maxTokens" . ,maxTokens)))
