@@ -53,6 +53,7 @@
         :headers '(("Content-Type" . "application/json"))
         :data (json-encode `(("yandexPassportOauthToken" . ,BALANCE_API_KEY)))
         :parser 'json-read
+        :sync t
         :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq iam_token (assoc-default 'iamToken data))
@@ -63,6 +64,7 @@
         :type "GET"
         :headers `(("Authorization" . ,(concat "Bearer " iam_token)))
         :parser 'json-read
+        :sync t
         :success (cl-function
                 (lambda (&key data &allow-other-keys)
                   (setq balance (assoc-default 'balance data))))))
