@@ -559,9 +559,7 @@
   ;; provide the correct casing.
   (company-dabbrev-ignore-case t)
   ;; company completion wait
-  (company-idle-delay 0)
-  ;; No company-mode in shell & eshell
-  (company-global-modes '(not eshell-mode shell-mode))
+  (company-idle-delay 0.05)
   ;; Use company with text and programming modes.
   :hook ((text-mode . company-mode)
          (prog-mode . company-mode)))
@@ -620,7 +618,7 @@
   (setq! google-translate-default-target-language "ru")
   )
 
-;;consult
+;; consult
 (use-package! consult
   :config
   (setq! consult-locate-args "mdfind"))
@@ -628,10 +626,18 @@
 ;; consult
 (consult-customize +default/search-project :preview-key 'any)
 
-; black
+;; black
 (use-package! python-black
   :demand t
   :after python)
+
+;; tabnine
+(use-package! tabnine
+  :hook ((prog-mode . tabnine-mode)
+	 (kill-emacs . tabnine-kill-process))
+  :config
+  (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point)
+  (tabnine-start-process))
 
 ;;=======================================================
 ;;=======================================================
@@ -700,3 +706,4 @@
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
+
