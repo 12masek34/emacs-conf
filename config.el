@@ -260,6 +260,44 @@
         (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
         (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
 
+(defun my/apply-function-to-region-lines (fn)
+  (interactive)
+  (save-excursion
+    (goto-char (region-end))
+    (let ((end-marker (copy-marker (point-marker)))
+          next-line-marker)
+      (goto-char (region-beginning))
+      (if (not (bolp))
+          (forward-line 1))
+      (setq next-line-marker (point-marker))
+      (while (< next-line-marker end-marker)
+        (let ((start nil)
+              (end nil))
+          (goto-char next-line-marker)
+          (save-excursion
+            (setq start (point))
+            (forward-line 1)
+            (set-marker next-line-marker (point))
+            (setq end (point)))
+          (save-excursion
+            (let ((mark-active nil))
+              (narrow-to-region start end)
+              (funcall fn)
+              (widen)))))
+      (set-marker end-marker nil)
+      (set-marker next-line-marker nil))))
+
+(defun my/wrap-qute-line()
+  (move-beginning-of-line nil)
+  (indent-for-tab-command)
+  (insert "\"")
+  (move-end-of-line nil)
+  (insert "\","))
+
+(defun my/wrap-qute-all-line ()
+  (interactive)
+  (my/apply-function-to-region-lines 'my/wrap-qute-line))
+
 (defun eww-new ()
   "Open new buffer by eww"
   (interactive)
@@ -419,6 +457,7 @@
 (map! :leader
         (:prefix "m"
                 :desc "mc/edit-lines" "m" #'mc/edit-lines
+                :desc "call-last-kbd-macro" "l" #'call-last-kbd-macro
                 ))
 (map! :leader
         (:prefix "r"
@@ -463,6 +502,10 @@
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
+                ))
+(map! :leader
+        (:prefix "\""
+                :desc "my/wrap-qute-all-line" "\"" #'my/wrap-qute-all-line
                 ))
 
 ;;=======================================================
@@ -706,4 +749,3 @@
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
-
