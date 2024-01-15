@@ -507,6 +507,10 @@
         (:prefix "\""
                 :desc "my/wrap-qute-all-line" "\"" #'my/wrap-qute-all-line
                 ))
+(map! :leader
+        (:prefix "l"
+                :desc "toggle-truncate-lines" "t" #'toggle-truncate-lines
+                ))
 
 ;;=======================================================
 ;;#######################################################
