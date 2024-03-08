@@ -566,7 +566,7 @@
   :config
   (setq lsp-use-plists "true")
   (setq lsp-completion-provider :capf)
-  (setq lsp-idle-delay 0.500)
+  (setq lsp-idle-delay 0.5)
   (setq lsp-signature-doc-lines 5)
   (setq gc-cons-threshold 100000000)
   (setq lsp-restart 'ignore)
@@ -606,7 +606,7 @@
   ;; provide the correct casing.
   (company-dabbrev-ignore-case t)
   ;; company completion wait
-  (company-idle-delay 0.05)
+  (company-idle-delay 0.5)
   ;; Use company with text and programming modes.
   :hook ((text-mode . company-mode)
          (prog-mode . company-mode)))
