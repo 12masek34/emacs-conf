@@ -418,11 +418,6 @@
     (global-set-key (kbd "s--") 'text-scale-decrease)
     (global-set-key (kbd "s-V") 'consult-yank-from-kill-ring)
     (global-set-key (kbd "<f5>") 'revert-buffer)
-    (global-set-key (kbd "C-k") 'kill-this-buffer)
-    (global-set-key (kbd "s-n") '+vc-gutter/next-hunk)
-    (global-set-key (kbd "s-p") '+vc-gutter/previous-hunk)
-    (global-set-key (kbd "s-b") 'magit-blame-addition)
-    (global-set-key (kbd "s-;") 'my/toggle-camelcase-underscores)
     (global-set-key (kbd "s-r") 'iedit-mode)
 
     (evil-define-key 'normal 'global (kbd "C-d") '(lambda () (interactive) (forward-line  10)))
@@ -438,7 +433,7 @@
 
 (map! :leader
         (:prefix "c"
-                :desc "python black region" "b" #'python-black-region
+                :desc "camel case to snake case" ";" #'my/toggle-camelcase-underscores
                 ))
 (map! :leader
         (:prefix "i"
