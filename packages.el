@@ -21,7 +21,9 @@
 (package! protobuf-mode)
 (package! telega)
 (package! python-black)
+(package! apheleia)
 ;; (package! tabnine)
+
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
