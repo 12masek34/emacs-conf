@@ -106,7 +106,7 @@
 (setq-default prescient-history-length 1000)
 
 ;; delay buffer hint
-(setq! which-key-idle-delay 0.5)
+(setq! which-key-idle-delay 0.05)
 
 ;; Disable backup
 (setq! make-backup-files nil)
@@ -434,6 +434,7 @@
 (map! :leader
         (:prefix "c"
                 :desc "camel case to snake case" ";" #'my/toggle-camelcase-underscores
+                :desc "python black region" "b" #'python-black-region
                 ))
 (map! :leader
         (:prefix "i"
@@ -561,7 +562,7 @@
   :config
   (setq lsp-use-plists "true")
   (setq lsp-completion-provider :capf)
-  (setq lsp-idle-delay 0.5)
+  (setq lsp-idle-delay 0.05)
   (setq lsp-signature-doc-lines 5)
   (setq gc-cons-threshold 100000000)
   (setq lsp-restart 'ignore)
@@ -601,7 +602,7 @@
   ;; provide the correct casing.
   (company-dabbrev-ignore-case t)
   ;; company completion wait
-  (company-idle-delay 0.5)
+  (company-idle-delay 0.05)
   ;; Use company with text and programming modes.
   :hook ((text-mode . company-mode)
          (prog-mode . company-mode)))
