@@ -484,6 +484,10 @@
                 :desc "ace-window" "w" #'ace-window
                 ))
 (map! :leader
+        (:prefix "o"
+                :desc "telega" "m" #'telega
+                ))
+(map! :leader
         (:prefix "s"
                 :desc "eww" "g" #'eww-new
                 ))
@@ -683,6 +687,14 @@
   (setq! telega-server-libs-prefix "/opt/homebrew")
   (telega-mode-line-mode 1)
   (telega-squash-message-mode 1)
+
+  :bind (:map telega-chat-button-map
+              ("h" . nil)
+              ("o" . telega-chat-button-toggle-view)
+              )
+        (:map telega-msg-button-map
+              ("SPC" . nil)
+                )
   :hook
   (telega-chat-mode . (lambda ()
                         (set-company-backend! 'telega-chat-mode
