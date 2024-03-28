@@ -693,6 +693,11 @@
   (setq! telega-chat-fill-column 125)
   (telega-mode-line-mode 1)
   (telega-squash-message-mode 1)
+  :bind (:map telega-chat-button-map
+              ("h" . nil)
+              ("o" . telega-chat-button-toggle-view))
+        (:map telega-msg-button-map
+              ("SPC" . nil))
   :hook
   (telega-chat-mode . (lambda ()
                         (set-company-backend! 'telega-chat-mode
