@@ -19,7 +19,6 @@
 (package! google-translate)
 (package! restclient)
 (package! protobuf-mode)
-(package! telega)
 (package! python-black)
 (package! apheleia)
 ;; (package! tabnine)

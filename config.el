@@ -499,7 +499,6 @@
 (map! :leader
       (:prefix "o"
        :desc "other-frame" "o" #'other-frame
-       :desc "telega" "m" #'telega
        ))
 (map! :leader
         (:prefix "s"
@@ -686,32 +685,6 @@
 ;; consult
 (consult-customize +default/search-project :preview-key 'any)
 
-;; telega
-(use-package! telega
-  :config
-  (telega-notifications-mode 1)
-  (setq! telega-chat-fill-column 125)
-  (telega-mode-line-mode 1)
-  (telega-squash-message-mode 1)
-  :bind (:map telega-chat-button-map
-              ("h" . nil)
-              ("o" . telega-chat-button-toggle-view))
-        (:map telega-msg-button-map
-              ("SPC" . nil))
-  :hook
-  (telega-chat-mode . (lambda ()
-                        (set-company-backend! 'telega-chat-mode
-                          (append '(telega-company-emoji
-                                    telega-company-username
-                                    telega-company-hashtag)
-                                  (when (telega-chat-bot-p telega-chatbuf--chat)
-                                    '(telega-company-botcmd))))))
-  :custom
-  (telega-cache-dir (expand-file-name "~/Downloads/telega_cache"))
-  (telega-animation-play-inline t)
-  (telega-chat-show-deleted-messages-for '(all))
-  (telega-emoji-company-backend 'telega-company-telegram-emoji))
-
 ;;fix doom format (temporary)
 (use-package! python-black
   :demand t
@@ -719,26 +692,6 @@
 
 (use-package! apheleia
   :commands (apheleia--get-formatters))
-
-(use-package! telega
-  :config
-  ;; (telega-notifications-mode 1)
-  (setq! telega-chat-fill-column 125)
-  (telega-mode-line-mode 1)
-  (telega-squash-message-mode 1)
-  :hook
-  (telega-chat-mode . (lambda ()
-                        (set-company-backend! 'telega-chat-mode
-                          (append '(telega-company-emoji
-                                    telega-company-username
-                                    telega-company-hashtag)
-                                  (when (telega-chat-bot-p telega-chatbuf--chat)
-                                    '(telega-company-botcmd))))))
-  :custom
-  (telega-cache-dir (expand-file-name "~/Загрузки/telega_cache"))
-  (telega-animation-play-inline t)
-  (telega-chat-show-deleted-messages-for '(all))
-  (telega-emoji-company-backend 'telega-company-telegram-emoji))
 
 ;; tabnine
 ;; (use-package! tabnine
