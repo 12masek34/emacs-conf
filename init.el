@@ -91,7 +91,6 @@
        (spell
         +flyspell
         +hunspell
-        ;; +aspell
         +everywhere)     ; tasing you for misspelling mispelling
         ;; (grammar
          ;; +everywhere)           ; tasing grammar mistake every you make
