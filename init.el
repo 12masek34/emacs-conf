@@ -90,7 +90,8 @@
         +childframe)     ; tasing you for every semicolon you forget
        (spell
         +flyspell
-        +aspell
+        +hunspell
+        ;; +aspell
         +everywhere)     ; tasing you for misspelling mispelling
         ;; (grammar
          ;; +everywhere)           ; tasing grammar mistake every you make

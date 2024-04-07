@@ -165,6 +165,13 @@
 
 ;; search engine
 (setq! eww-search-prefix "https://www.google.com/search?q=")
+
+;; ispell multiple config
+(with-eval-after-load "ispell"
+(setq ispell-program-name "hunspell")
+(setq ispell-local-dictionary "ru_RU,en_US")
+(ispell-set-spellchecker-params)
+(ispell-hunspell-add-multi-dic "ru_RU,en_US"))
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -178,7 +185,7 @@
 ;;#######################################################
 ;;=======================================================
 
-;; set breack point hith majore mode
+;; set break point hitch majore mode
 (defun my/set-breackpoint ()
   (interactive)
   (when (equal major-mode 'python-mode)
