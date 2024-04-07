@@ -109,6 +109,7 @@
        lookup              ; navigate your code and its documentation
        (lsp
         ;;+elgot
+        +peek
         +pyright
         )               ; M-x vscode
        magit             ; a git porcelain for Emacs
