@@ -11,7 +11,6 @@
 (package! py-isort)
 (package! anaconda-mode)
 (package! modus-themes)
-(package! flycheck)
 (package! reverse-im)
 (package! iedit)
 (package! lsp-pyright)

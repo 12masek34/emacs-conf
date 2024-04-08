@@ -90,7 +90,8 @@
         +childframe)     ; tasing you for every semicolon you forget
        (spell
         +flyspell
-        +aspell
+        ;; +aspell
+        +hunspell
         +everywhere)     ; tasing you for misspelling mispelling
         ;; (grammar
          ;; +everywhere)           ; tasing grammar mistake every you make
@@ -110,6 +111,7 @@
        (lsp
         ;;+elgot
         +pyright
+        +peek
         )               ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs

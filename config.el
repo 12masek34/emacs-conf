@@ -139,9 +139,6 @@
 ;; vterm height window
 (setq! multi-vterm-dedicated-window-height-percent 40)
 
-;; set default dictionary
-(setq! ispell-dictionary "american")
-
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
@@ -171,6 +168,15 @@
 
 ;; search engine eww
 (setq! eww-search-prefix "https://www.google.com/search?q=")
+
+;; ispell multiple config
+(with-eval-after-load "ispell"
+(setq! ispell-program-name "hunspell")
+(setq! ispell-local-dictionary "ru_RU,en_US")
+(setq! ispell-dictionary "ru_RU,en_US")
+(ispell-set-spellchecker-params)
+(ispell-hunspell-add-multi-dic "ru_RU,en_US"))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -593,13 +599,6 @@
   (lsp-completion-enable t)
   )
 
-(use-package! flycheck
-  :ensure t
-  :config
-  (setq flycheck-select-checker 'python-pyright)
-  (setq lsp-diagnostics-provider :auto)
-  :init (global-flycheck-mode))
-
 ;;company
 (use-package! company
   :ensure t
@@ -623,15 +622,6 @@
   ;; Use company with text and programming modes.
   :hook ((text-mode . company-mode)
          (prog-mode . company-mode)))
-;;ispell
-(set-company-backend!
-  '(text-mode
-    markdown-mode
-    gfm-mode)
-  '( :seperate
-     company-ispell
-     company-files
-     company-yasnippet))
 
 ;;ibuffer
 (use-package! ibuffer-vc
