@@ -662,14 +662,6 @@
   :demand t
   :after python)
 
-;; tabnine
-;; (use-package! tabnine
-;;   :hook ((prog-mode . tabnine-mode)
-;; 	 (kill-emacs . tabnine-kill-process))
-;;   :config
-;;   (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point)
-;;   (tabnine-start-process))
-
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
