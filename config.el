@@ -321,6 +321,27 @@
   (interactive)
   (my/apply-function-to-region-lines 'my/wrap-qute-line))
 
+(defun my/start_esk ()
+  (interactive)
+  (message "start ESK")
+  (message(shell-command "
+        cd /home/user/src/web-client-front && make clean && make start-d ;
+        cd /home/user/src/request-back && make clean && make start-d ;
+        cd /home/user/src/core-back && make clean && make start-d ;
+        cd /home/user/src/voice-analysis-back && make clean && make start-d ;
+        cd /home/user/src/voice-synthesis-back && make clean && make start-d ;
+        cd /home/user/src/chat-back && make clean && make start-d ;
+        cd /home/user/src/int-mesh-back && make clean && make start-d ;
+        cd /home/user/src/int-wmeters-back && make clean && make start-d ;
+        cd /home/user/src/int-elk-back && make clean && make start-d ;
+        cd /home/user/src/int-emias-back && make clean && make start-d ;
+        cd /home/user/src/int-sudir-back && make clean && make start-d ;
+        cd /home/user/src/int-chatbot-back && make clean && make start-d ;
+        cd /home/user/src/int-lmchat-back && make clean && make start-d ;
+        cd /home/user/src/mocks-back && make clean && make start-d ;
+        cd /home/user/src/analytics-back && make clean && make start-d ;
+")))
+
 ;;;###autoload
 (defmacro any-nil? (&rest args)
   `(not (and ,@args)))
