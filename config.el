@@ -311,6 +311,27 @@
     (eww-mode)
     (eww url)))
 
+(defun my/start_esk ()
+  (interactive)
+  (message "start ESK")
+  (message(shell-command "
+        cd /Users/dmitrijmartys/src/esk/web-client-front && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/request-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/core-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/voice-analysis-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/voice-synthesis-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/chat-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-mesh-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-wmeters-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-elk-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-emias-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-sudir-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-chatbot-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/int-lmchat-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/mocks-back && make clean && make start-d ;
+        cd /Users/dmitrijmartys/src/esk/analytics-back && make clean && make start-d ;
+")))
+
 ;;;###autoload
 (defmacro any-nil? (&rest args)
   `(not (and ,@args)))
