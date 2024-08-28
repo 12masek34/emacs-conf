@@ -177,6 +177,9 @@
 (ispell-set-spellchecker-params)
 (ispell-hunspell-add-multi-dic "ru_RU,en_US"))
 
+;; sql formatter
+(setq sqlformat-command 'pgformatter)
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -206,7 +209,6 @@
   (when (equal major-mode 'python-mode)
     (add-py-logging))
   )
-
 
 (defun add-py-logging ()
   "add logging"
@@ -512,6 +514,10 @@
                 :desc "my/wrap-qute-all-line" "\"" #'my/wrap-qute-all-line
                 ))
 (map! :leader
+        (:prefix "o"
+                :desc "other-frame" "o" #'other-frame
+                ))
+(map! :leader
         (:prefix "l"
                 :desc "toggle-truncate-lines" "t" #'toggle-truncate-lines
                 ))
@@ -664,18 +670,6 @@
 (use-package! python-black
   :demand t
   :after python)
-
-(use-package! apheleia
-  :commands (apheleia--get-formatters))
-
-;; tabnine
-;; (use-package! tabnine
-;;   :hook ((prog-mode . tabnine-mode)
-;; 	 (kill-emacs . tabnine-kill-process))
-;;   :config
-;;   (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point)
-;;   (tabnine-start-process))
-
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
