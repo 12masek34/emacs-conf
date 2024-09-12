@@ -155,7 +155,10 @@
 (setq! lsp-sqls-workspace-config-path nil)
 (setq! lsp-sqls-connections nil)
 (setq! sql-connection-alist nil)
+(setq! lsp-sqls-timeout 300)
+(setq! lsp-response-timeout 300)
 
+;; magit
 (with-eval-after-load "magit"
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
 
@@ -454,7 +457,8 @@
        ;; ddatabase
        :desc "switch connection to db" "c" #'lsp-sql-switch-connection
        :desc "switch database" "d" #'lsp-sql-switch-database
-       :desc "execute sql query" "e" #'lsp-sql-execute-query
+       :desc "execute sql region" "e" #'lsp-sql-execute-query
+       :desc "execute sql paragraph" "p" #'lsp-sql-execute-paragraph
        :desc "set logging" "l" #'my/set-logging
        ))
 (map! :leader
