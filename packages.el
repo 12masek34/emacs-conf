@@ -19,7 +19,6 @@
 (package! restclient)
 (package! protobuf-mode)
 (package! python-black)
-(package! sqlformat)
 
 
 ;; To install a package directly from a remote git repo, you must specify a
