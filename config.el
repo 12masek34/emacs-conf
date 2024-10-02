@@ -404,6 +404,16 @@
      (add-to-sqls-connections "mysql" (format-mysql-sqls host port user password db))
      (add-to-sql-conection-alist 'mysql ,name host port user password db)))
 
+(defun my/split-window-vertically ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1))
+
+(defun my/split-window-horizontally ()
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -429,6 +439,8 @@
     (global-set-key (kbd "s-V") 'consult-yank-from-kill-ring)
     (global-set-key (kbd "<f5>") 'revert-buffer)
     (global-set-key (kbd "s-r") 'iedit-mode)
+    (global-set-key (kbd "C-x 2") 'my/split-window-vertically)
+    (global-set-key (kbd "C-x 3") 'my/split-window-horizontally)
 
     (evil-define-key 'normal 'global (kbd "C-d") '(lambda () (interactive) (forward-line  10)))
     (evil-define-key 'normal 'global (kbd "C-u") '(lambda () (interactive) (forward-line  -10)))
