@@ -316,6 +316,45 @@
         cd /home/user/src/analytics-back && make clean && make start-d ;
 ")))
 
+(defun my/start_vpn ()
+  "Start a randomly chosen VPN in the background."
+  (interactive)
+  (let* ((default-directory (expand-file-name "~/Downloads/hideme_240095281740650/other os/"))
+         (vpn-configs '("Belgium, Oostkamp S8.ovpn"
+                        "Czech Republic, Prague S7.ovpn"
+                        "Germany, Offenbach S3.ovpn"
+                        "Netherlands, Amsterdam S2.ovpn"
+                        "Spain, Madrid.ovpn"
+                        "United Kingdom, London L1.ovpn"
+                        "Canada, Chambly ROUTERS.ovpn"
+                        "Denmark, Copenhagen S8.ovpn"
+                        "Italy, Milan S2.ovpn"
+                        "Norway, Fredrikstad ROUTERS.ovpn"
+                        "Turkey, Istanbul ROUTERS.ovpn"
+                        "Canada, Laval ROUTERS.ovpn"
+                        "France, Gravelines.ovpn"
+                        "Kazakhstan, Almaty S3.ovpn"
+                        "Norway, Moss ROUTERS.ovpn"
+                        "Ukraine, Kyiv L1.ovpn"))
+         (sudo-password (getenv "SUDOPASS"))
+         (random-config (nth (random (length vpn-configs)) vpn-configs)))
+    (message "Starting VPN with config: %s" random-config)
+    (start-process
+     "openvpn-process"
+     "*openvpn-output*"
+     "bash" "-c"
+     (format "echo %s | sudo -S openvpn --config '%s'" sudo-password random-config))
+    (message "VPN process started in background with config: %s" random-config)))
+
+(defun my/stop_vpn ()
+  "Stop all running OpenVPN processes started by the my/start-vpn function."
+  (interactive)
+  (let ((process-list (process-list)))
+    (dolist (proc process-list)
+      (when (string-match "^openvpn-process" (process-name proc))
+        (kill-process proc)
+        (message "OpenVPN process %s stopped." (process-name proc))))))
+
 ;;;###autoload
 (defmacro any-nil? (&rest args)
   `(not (and ,@args)))
