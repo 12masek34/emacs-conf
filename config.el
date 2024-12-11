@@ -347,13 +347,16 @@
     (message "VPN process started in background with config: %s" random-config)))
 
 (defun my/stop_vpn ()
-  "Stop all running OpenVPN processes started by the my/start-vpn function."
+  "Kill OpneVPN."
   (interactive)
-  (let ((process-list (process-list)))
-    (dolist (proc process-list)
-      (when (string-match "^openvpn-process" (process-name proc))
-        (kill-process proc)
-        (message "OpenVPN process %s stopped." (process-name proc))))))
+  (let* ((sudo-password (getenv "SUDOPASS")))
+    (message "Kill openVPN")
+    (start-process
+     "openvpn-process"
+     "*openvpn-output*"
+     "bash" "-c"
+     (format "echo %s | sudo -S killall openvpn" sudo-password))
+    (message "Kill OpneVPN process.")))
 
 ;;;###autoload
 (defmacro any-nil? (&rest args)
