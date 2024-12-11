@@ -172,14 +172,7 @@
 (ispell-hunspell-add-multi-dic "ru_RU,en_US"))
 
 ;; chat gpt conf
-(setq! chatgpt-code-query-map
-      '(
-        ;; ChatGPT.el defaults, string for each shortcut
-        ("bug" . "Тут ошибка, исправь ее.")
-        ("doc" . "Напиши на это документацию.")
-        ("tune" . "Улучши это.")
-        ("understand" . "Что это делает?")
-        ("refactor" . "Сделай рефакторинг.")))
+(setq! gptel-api-key (getenv "OPENAI_API_KEY"))
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -410,6 +403,14 @@
   (split-window-horizontally)
   (other-window 1))
 
+(defun my/open-chatgpt-buffer ()
+  "Open the *ChatGPT* buffer if it exists."
+  (interactive)
+  (let ((buffer-name "*ChatGPT*"))
+    (if (get-buffer buffer-name)
+        (switch-to-buffer buffer-name)
+      (message "Buffer %s does not exist." buffer-name))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -516,8 +517,9 @@
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
-                :desc "ChatGPT query" "y" #'chatgpt-query
-                :desc "ChatGPT run" "r" #'chatgpt-run
+                :desc "ChatGPT create buffer" "c" #'gptel
+                :desc "ChatGPT open buffer" "b" #'my/open-chatgpt-buffer
+                :desc "ChatGPT send" "y" #'gptel-send
                 ))
 (map! :leader
         (:prefix "\""
