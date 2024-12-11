@@ -19,6 +19,8 @@
 (package! restclient)
 (package! protobuf-mode)
 (package! python-black)
+(package! chatgpt
+  :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

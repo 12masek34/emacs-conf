@@ -170,6 +170,16 @@
 (setq! ispell-dictionary "ru_RU,en_US")
 (ispell-set-spellchecker-params)
 (ispell-hunspell-add-multi-dic "ru_RU,en_US"))
+
+;; chat gpt conf
+(setq! chatgpt-code-query-map
+      '(
+        ;; ChatGPT.el defaults, string for each shortcut
+        ("bug" . "Тут ошибка, исправь ее.")
+        ("doc" . "Напиши на это документацию.")
+        ("tune" . "Улучши это.")
+        ("understand" . "Что это делает?")
+        ("refactor" . "Сделай рефакторинг.")))
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -506,6 +516,8 @@
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
+                :desc "ChatGPT query" "y" #'chatgpt-query
+                :desc "ChatGPT run" "r" #'chatgpt-run
                 ))
 (map! :leader
         (:prefix "\""
