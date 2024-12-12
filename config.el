@@ -403,14 +403,6 @@
   (split-window-horizontally)
   (other-window 1))
 
-(defun my/open-chatgpt-buffer ()
-  "Open the *ChatGPT* buffer if it exists."
-  (interactive)
-  (let ((buffer-name "*ChatGPT*"))
-    (if (get-buffer buffer-name)
-        (switch-to-buffer buffer-name)
-      (message "Buffer %s does not exist." buffer-name))))
-
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -518,7 +510,7 @@
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT create buffer" "c" #'gptel
-                :desc "ChatGPT open buffer" "b" #'my/open-chatgpt-buffer
+                :desc "ChatGPT add region" "a" #'gptel-add
                 :desc "ChatGPT send" "y" #'gptel-send
                 ))
 (map! :leader
