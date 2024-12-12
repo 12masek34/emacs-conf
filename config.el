@@ -183,6 +183,9 @@
 ;; sql formatter
 (setq sqlformat-command 'pgformatter)
 
+;; ChatGPT config
+(setq! gptel-api-key (getenv "OPENAI_API_KEY"))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -334,8 +337,7 @@
                         "Canada, Laval ROUTERS.ovpn"
                         "France, Gravelines.ovpn"
                         "Kazakhstan, Almaty S3.ovpn"
-                        "Norway, Moss ROUTERS.ovpn"
-                        "Ukraine, Kyiv L1.ovpn"))
+                        "Norway, Moss ROUTERS.ovpn"))
          (sudo-password (getenv "SUDOPASS"))
          (random-config (nth (random (length vpn-configs)) vpn-configs)))
     (message "Starting VPN with config: %s" random-config)
@@ -456,6 +458,14 @@
   (split-window-horizontally)
   (other-window 1))
 
+(defun my/open-chatgpt-buffer ()
+  "Open the *ChatGPT* buffer if it exists."
+  (interactive)
+  (let ((buffer-name "gpt"))
+    (if (get-buffer buffer-name)
+        (switch-to-buffer buffer-name)
+      (message "Buffer %s does not exist." buffer-name))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -566,6 +576,9 @@
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
+                :desc "ChatGPT create buffer" "c" #'gptel
+                :desc "ChatGPT open buffer" "b" #'my/open-chatgpt-buffer
+                :desc "ChatGPT send" "y" #'gptel-send
                 ))
 (map! :leader
         (:prefix "\""

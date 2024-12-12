@@ -19,6 +19,7 @@
 (package! restclient)
 (package! protobuf-mode)
 (package! python-black)
+(package! gptel)
 
 
 ;; To install a package directly from a remote git repo, you must specify a
