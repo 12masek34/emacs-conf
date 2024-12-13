@@ -172,7 +172,8 @@
 (ispell-hunspell-add-multi-dic "ru_RU,en_US"))
 
 ;; chat gpt conf
-(setq! gptel-api-key (getenv "OPENAI_API_KEY"))
+(setq! chatgpt-shell-openai-key (getenv "OPENAI_API_KEY"))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -509,9 +510,7 @@
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
-                :desc "ChatGPT create buffer" "c" #'gptel
-                :desc "ChatGPT add region" "a" #'gptel-add
-                :desc "ChatGPT send" "y" #'gptel-send
+                :desc "ChatGPT" "y" #'chatgpt-shell
                 ))
 (map! :leader
         (:prefix "\""
