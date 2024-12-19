@@ -173,6 +173,7 @@
 
 ;; chat gpt conf
 (setq! chatgpt-shell-openai-key (getenv "OPENAI_API_KEY"))
+(setq! chatgpt-shell-insert-dividers t)
 
 ;;=======================================================
 ;;#######################################################
@@ -284,27 +285,6 @@
     (switch-to-buffer (generate-new-buffer "eww"))
     (eww-mode)
     (eww url)))
-
-(defun my/start_esk ()
-  (interactive)
-  (message "start ESK")
-  (message(shell-command "
-        cd /Users/dmitrijmartys/src/esk/web-client-front && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/request-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/core-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/voice-analysis-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/voice-synthesis-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/chat-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-mesh-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-wmeters-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-elk-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-emias-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-sudir-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-chatbot-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/int-lmchat-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/mocks-back && make clean && make start-d ;
-        cd /Users/dmitrijmartys/src/esk/analytics-back && make clean && make start-d ;
-")))
 
 ;;;###autoload
 (defmacro any-nil? (&rest args)
@@ -506,11 +486,11 @@
                 ))
 (map! :leader
         (:prefix "y"
-                :desc "my/requst-yandex-gpt-region" "r" #'my/requst-yandex-gpt-region
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT" "y" #'chatgpt-shell
+                :desc "ChatGPT region" "r" #'chatgpt-shell-send-and-review-region
                 ))
 (map! :leader
         (:prefix "\""
