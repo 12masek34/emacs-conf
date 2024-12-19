@@ -185,6 +185,7 @@
 
 ;; ChatGPT config
 (setq! chatgpt-shell-openai-key (getenv "OPENAI_API_KEY"))
+(setq! chatgpt-shell-insert-dividers t)
 
 ;;=======================================================
 ;;#######################################################
@@ -543,11 +544,11 @@
                 ))
 (map! :leader
         (:prefix "y"
-                :desc "my/requst-yandex-gpt-region" "r" #'my/requst-yandex-gpt-region
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT" "y" #'chatgpt-shell
+                :desc "ChatGPT region" "r" #'chatgpt-shell-send-and-review-region
                 ))
 (map! :leader
         (:prefix "\""
