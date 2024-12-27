@@ -613,6 +613,8 @@
 (use-package! lsp-mode
   :commands (lsp)
   :diminish (lsp-mode . "lsp")
+  :hook ((typescript-mode . lsp)
+         (js-mode . lsp))
   :config
   (setq lsp-use-plists "true")
   (setq lsp-enable-file-watchers nil)
@@ -700,12 +702,9 @@
   )
 
 ;;consult
-(use-package! consult
+ (use-package! consult
   :config
-  (setq! consult-locate-args "mdfind"))
-
-;; consult
-(consult-customize +default/search-project :preview-key 'any)
+  (consult-customize +default/search-project :preview-key 'any))
 
 ;;fix doom format (temporary)
 (use-package! python-black
