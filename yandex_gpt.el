@@ -104,7 +104,7 @@
     :success (cl-function
               (lambda (&key data &allow-other-keys)
                 (setq request_id (assoc-default 'id data))
-                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance "`temperature => `" temperature "`model => `" main_model "`\n" separator_request) YANDEX_GPT_LOG_FILE)
+                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance " `temperature => `" temperature "`model => `" main_model "`\n" separator_request) YANDEX_GPT_LOG_FILE)
                 (my/response-yandex-gpt)))))
 
 (defun my/requst-yandex-gpt-by-system (system)
@@ -126,5 +126,5 @@
     :success (cl-function
               (lambda (&key data &allow-other-keys)
                 (setq request_id (assoc-default 'id data))
-                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance "`temperature => `" temperature "`model => `" main_model  "`\n" separator_request) YANDEX_GPT_LOG_FILE)
+                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance " `temperature => `" temperature "`model => `" main_model  "`\n" separator_request) YANDEX_GPT_LOG_FILE)
                 (my/response-yandex-gpt)))))
