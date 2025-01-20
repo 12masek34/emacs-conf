@@ -4,13 +4,13 @@
 (setq YANDEX_GPT_LOG_FILE (getenv "YANDEX_GPT_LOG_FILE"))
 (setq BALANCE_API_KEY (getenv "BALANCE_API_KEY"))
 (setq BILLING_ACCOUNT_ID (getenv "BILLING_ACCOUNT_ID"))
-(setq temperature "0.6")
+(setq temperature "0.9")
 (setq maxTokens "2000")
 (setq separator_request "***********************************************************************************************")
 (setq separator_response ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
 (setq request_id nil)
 (setq balance "unknown")
-(setq main_model "/yandexgpt/latest")
+(setq main_model "/yandexgpt/rc")
 (setq lite_model "/yandexgpt-lite/latest")
 (setq prefix_gpt "gpt://")
 
@@ -104,7 +104,7 @@
     :success (cl-function
               (lambda (&key data &allow-other-keys)
                 (setq request_id (assoc-default 'id data))
-                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance "`\n" separator_request) YANDEX_GPT_LOG_FILE)
+                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance "`temperature => `" temperature "`model => `" main_model "`\n" separator_request) YANDEX_GPT_LOG_FILE)
                 (my/response-yandex-gpt)))))
 
 (defun my/requst-yandex-gpt-by-system (system)
@@ -126,5 +126,5 @@
     :success (cl-function
               (lambda (&key data &allow-other-keys)
                 (setq request_id (assoc-default 'id data))
-                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance "`\n" separator_request) YANDEX_GPT_LOG_FILE)
+                (my/insert-text-and-open-temp-buffer (concat "\n\nrequest id => `" request_id "` send time => `" (format-time-string "%Y-%m-%d %H:%M:%S") "` balance `" balance "`temperature => `" temperature "`model => `" main_model  "`\n" separator_request) YANDEX_GPT_LOG_FILE)
                 (my/response-yandex-gpt)))))
