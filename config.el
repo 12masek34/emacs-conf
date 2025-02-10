@@ -595,63 +595,47 @@
   (display-time-24hr-format t)
   (display-time-mode t))
 
+;; lsp-pyright
 (use-package! lsp-pyright
-  :ensure t
   :init
-  (setq lsp-pyright-multi-root nil)
-  (setq lsp-enable-file-watchers nil)
-  (when (executable-find "python3")
-    (setq lsp-pyright-python-executable-cmd "python3"))
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))  ; or lsp-deferred
+  (setq lsp-pyright-multi-root nil
+        lsp-enable-file-watchers nil
+        lsp-pyright-python-executable-cmd (or (executable-find "python3") python-shell-interpreter))
+  :hook (python-mode . lsp-deferred))
 
+;; lsp-mode
 (use-package! lsp-mode
-  :commands (lsp)
-  :diminish (lsp-mode . "lsp")
-  :hook ((typescript-mode . lsp)
-         (js-mode . lsp))
+  :commands lsp
+  :diminish lsp-mode
+  :hook ((typescript-mode . lsp-deferred)
+         (js-mode . lsp-deferred))
   :config
-  (setq lsp-use-plists "true")
-  (setq lsp-enable-file-watchers nil)
-  (setq lsp-completion-provider :capf)
-  (setq lsp-idle-delay 0.05)
-  (setq lsp-signature-doc-lines 5)
-  (setq gc-cons-threshold 100000000)
-  (setq lsp-restart 'ignore)
+  (setq lsp-use-plists t
+        lsp-enable-file-watchers nil
+        lsp-completion-provider :capf
+        lsp-idle-delay 0.05
+        lsp-signature-doc-lines 5
+        gc-cons-threshold (* 100 1024 1024)  ;; 100MB во время работы
+        lsp-restart 'ignore)
   :custom
   (lsp-keep-workspace-alive nil)
-  ;; lsp-workspace-folders-remove - remove source project
-  ;; lsp-workspace-folders-add - add new source project
   (lsp-auto-guess-root nil)
   (lsp-eldoc-enable-hover nil)
-  ;; (lsp-signature-auto-activate nil)
-  (lsp-completion-enable t)
-  )
+  (lsp-completion-enable t))
 
-;;company
+;; company
 (use-package! company
-  :ensure t
   :defer t
   :custom
-  ;; Search other buffers with the same modes for completion instead of
-  ;; searching all other buffers.
-  (company-dabbrev-other-buffers t)
-  (company-dabbrev-code-other-buffers t)
-  ;; M-<num> to select an option according to its number.
+  (company-idle-delay 0)
+  (company-minimum-prefix-length 3)
   (company-show-numbers t)
-  ;; Only 2 letters required for completion to activate.
-  (company-minimum-prefix-length 2)
-  ;; Do not downcase completions by default.
   (company-dabbrev-downcase nil)
-  ;; Even if I write something with the wrong case,
-  ;; provide the correct casing.
   (company-dabbrev-ignore-case t)
-  ;; company completion wait
-  (company-idle-delay 0.05)
-  ;; Use company with text and programming modes.
   :hook ((text-mode . company-mode)
-         (prog-mode . company-mode)))
+         (prog-mode . company-mode))
+  :config
+  (setq company-backends '(company-capf company-dabbrev company-keywords company-files)))
 
 ;;ibuffer
 (use-package! ibuffer-vc
@@ -738,6 +722,10 @@
 
 ;; column indicator
 (add-hook!'prog-mode-hook #'display-fill-column-indicator-mode)
+
+;; Сброс gc-cons-threshold после загрузки LSP
+(add-hook! 'lsp-after-initialize-hook (lambda () (setq gc-cons-threshold (* 20 1024 1024))))
+
 
 (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
 
