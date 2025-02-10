@@ -727,7 +727,7 @@
 (add-hook! 'lsp-after-initialize-hook (lambda () (setq gc-cons-threshold (* 20 1024 1024))))
 
 
-(remove-hook 'doom-first-input-hook #'evil-snipe-mode)
+(remove-hook! 'doom-first-input-hook #'evil-snipe-mode)
 
 ;;=======================================================
 ;;=======================================================
