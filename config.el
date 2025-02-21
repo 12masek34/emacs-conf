@@ -172,8 +172,7 @@
 (ispell-hunspell-add-multi-dic "ru_RU,en_US"))
 
 ;; chat gpt conf
-(setq! chatgpt-shell-openai-key (getenv "OPENAI_API_KEY"))
-(setq! chatgpt-shell-insert-dividers t)
+(setq! gptel-api-key (getenv "OPENAI_API_KEY"))
 
 ;;=======================================================
 ;;#######################################################
@@ -489,8 +488,8 @@
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
-                :desc "ChatGPT" "y" #'chatgpt-shell
-                :desc "ChatGPT region" "r" #'chatgpt-shell-send-and-review-region
+                :desc "ChatGPT" "y" #'gptel
+                :desc "ChatGPT menu" "m" #'gptel-menu
                 ))
 (map! :leader
         (:prefix "\""
