@@ -266,19 +266,6 @@
       (set-marker end-marker nil)
       (set-marker next-line-marker nil))))
 
-(defun my/wrap-qute-line()
-  (move-beginning-of-line nil)
-  (indent-for-tab-command)
-  (insert "\"")
-  (move-end-of-line nil)
-  (insert "\","))
-
-(defun my/wrap-qute-all-line ()
-  (interactive)
-  (my/apply-function-to-region-lines 'my/wrap-qute-line))
-
-(defun eww-new ()
-  "Open new buffer by eww"
   (interactive)
   (let ((url (read-from-minibuffer "Enter URL or keywords: ")))
     (switch-to-buffer (generate-new-buffer "eww"))
