@@ -151,8 +151,8 @@
 (setq! lsp-sqls-workspace-config-path nil)
 (setq! lsp-sqls-connections nil)
 (setq! sql-connection-alist nil)
-(setq! lsp-sqls-timeout 300)
-(setq! lsp-response-timeout 300)
+(setq! lsp-sqls-timeout 5)
+(setq! lsp-sqls-disable-diagnostics t)
 
 ;; magit
 (with-eval-after-load "magit"
@@ -181,6 +181,10 @@
 
 ;; ChatGPT config
 (setq! gptel-api-key (getenv "OPENAI_API_KEY"))
+
+;; magit
+(setq! process-coding-system-alist
+      (cons '("git" . utf-8) process-coding-system-alist))
 
 ;;=======================================================
 ;;#######################################################
@@ -255,33 +259,6 @@
     (switch-to-buffer (generate-new-buffer "eww"))
     (eww-mode)
     (eww url)))
-
-(defun my/apply-function-to-region-lines (fn)
-  (interactive)
-  (save-excursion
-    (goto-char (region-end))
-    (let ((end-marker (copy-marker (point-marker)))
-          next-line-marker)
-      (goto-char (region-beginning))
-      (if (not (bolp))
-          (forward-line 1))
-      (setq next-line-marker (point-marker))
-      (while (< next-line-marker end-marker)
-        (let ((start nil)
-              (end nil))
-          (goto-char next-line-marker)
-          (save-excursion
-            (setq start (point))
-            (forward-line 1)
-            (set-marker next-line-marker (point))
-            (setq end (point)))
-          (save-excursion
-            (let ((mark-active nil))
-              (narrow-to-region start end)
-              (funcall fn)
-              (widen)))))
-      (set-marker end-marker nil)
-      (set-marker next-line-marker nil))))
 
 (defun my/start_vpn ()
   "Start a randomly chosen VPN in the background."
@@ -560,7 +537,6 @@
 
 ;; russian key to eng binding
 (use-package! reverse-im
-  :ensure t
   :custom
   (reverse-im-input-methods '("russian-computer"))
   :config
@@ -627,7 +603,6 @@
 ;;ibuffer
 (use-package! ibuffer-vc
   :defer t
-  :ensure t
   :config
   (define-ibuffer-column icon
     (:name "Icon" :inline t)
