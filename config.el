@@ -83,6 +83,10 @@
 ;;#######################################################
 ;;=======================================================
 
+
+;; encoding
+(set-language-environment 'utf-8)
+
 ;; column line long 120 char
 (setq! display-fill-column-indicator-column 120)
 
