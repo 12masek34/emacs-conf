@@ -488,8 +488,7 @@
        ;; ddatabase
        :desc "switch connection to db" "c" #'lsp-sql-switch-connection
        :desc "switch database" "d" #'lsp-sql-switch-database
-       :desc "execute sql region" "e" #'lsp-sql-execute-paragraph
-       :desc "execute sql paragraph" "p" #'lsp-sql-execute-paragraph
+       :desc "execute sql paragraph" "e" #'lsp-sql-execute-paragraph
        :desc "set logging" "l" #'my/set-logging
        ))
 (map! :leader
