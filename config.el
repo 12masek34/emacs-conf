@@ -150,7 +150,10 @@
 (setq! lsp-sqls-workspace-config-path nil)
 (setq! lsp-sqls-connections nil)
 (setq! sql-connection-alist nil)
+(setq! lsp-sqls-timeout 5)
+(setq! lsp-sqls-disable-diagnostics t)
 
+;; magit
 (with-eval-after-load "magit"
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
 
@@ -173,6 +176,10 @@
 
 ;; chat gpt conf
 (setq! gptel-api-key (getenv "OPENAI_API_KEY"))
+
+;; magit
+(setq! process-coding-system-alist
+      (cons '("git" . utf-8) process-coding-system-alist))
 
 ;;=======================================================
 ;;#######################################################
@@ -239,33 +246,16 @@
         (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
         (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
 
-(defun my/apply-function-to-region-lines (fn)
+(defun eww-new ()
+  "Open new buffer by eww"
   (interactive)
-  (save-excursion
-    (goto-char (region-end))
-    (let ((end-marker (copy-marker (point-marker)))
-          next-line-marker)
-      (goto-char (region-beginning))
-      (if (not (bolp))
-          (forward-line 1))
-      (setq next-line-marker (point-marker))
-      (while (< next-line-marker end-marker)
-        (let ((start nil)
-              (end nil))
-          (goto-char next-line-marker)
-          (save-excursion
-            (setq start (point))
-            (forward-line 1)
-            (set-marker next-line-marker (point))
-            (setq end (point)))
-          (save-excursion
-            (let ((mark-active nil))
-              (narrow-to-region start end)
-              (funcall fn)
-              (widen)))))
-      (set-marker end-marker nil)
-      (set-marker next-line-marker nil))))
+  (let ((url (read-from-minibuffer "Enter URL or keywords: ")))
+    (switch-to-buffer (generate-new-buffer "eww"))
+    (eww-mode)
+    (eww url)))
 
+(defun my/start_vpn ()
+  "Start a randomly chosen VPN in the background."
   (interactive)
   (let ((url (read-from-minibuffer "Enter URL or keywords: ")))
     (switch-to-buffer (generate-new-buffer "eww"))
@@ -502,7 +492,6 @@
 
 ;; russian key to eng binding
 (use-package! reverse-im
-  :ensure t
   :custom
   (reverse-im-input-methods '("russian-computer"))
   :config
@@ -569,7 +558,6 @@
 ;;ibuffer
 (use-package! ibuffer-vc
   :defer t
-  :ensure t
   :config
   (define-ibuffer-column icon
     (:name "Icon" :inline t)
