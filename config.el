@@ -374,6 +374,10 @@
 ;;#######################################################
 ;;=======================================================
 
+(after! window
+  (define-key global-map (kbd "C-x 2") #'my/split-window-vertically)
+  (define-key global-map (kbd "C-x 3") #'my/split-window-horizontally))
+
 (defvar my-keys-mode-map
   (let ((map (make-sparse-keymap)))
     (global-set-key (kbd "s-k") 'shrink-window)
@@ -385,8 +389,6 @@
     (global-set-key (kbd "s-V") 'consult-yank-from-kill-ring)
     (global-set-key (kbd "<f5>") 'revert-buffer)
     (global-set-key (kbd "s-r") 'iedit-mode)
-    (global-set-key (kbd "C-x 2") 'my/split-window-vertically)
-    (global-set-key (kbd "C-x 3") 'my/split-window-horizontally)
 
     (evil-define-key 'normal 'global (kbd "C-d") '(lambda () (interactive) (forward-line  10)))
     (evil-define-key 'normal 'global (kbd "C-u") '(lambda () (interactive) (forward-line  -10)))
