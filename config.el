@@ -102,12 +102,12 @@
 (setq! doom-fallback-buffer-name "► Doom"
        +doom-dashboard-name "► Doom")
 
-(setq! read-process-output-max (* 2048 2048))
+(setq! read-process-output-max (* 1024 1024))
 (setq-default history-length 1000)
 (setq-default prescient-history-length 1000)
 
 ;; delay buffer hint
-(setq! which-key-idle-delay 0.05)
+(setq! which-key-idle-delay 0.1)
 
 ;; Disable backup
 (setq! make-backup-files nil)
@@ -121,7 +121,6 @@
 
 ;; limit
 (setq! undo-limit 80000000)
-(setq! scroll-margin 2)
 
 ;; minimal size buffer
 (setq! window-safe-min-height 10)
@@ -157,6 +156,8 @@
 ;; magit
 (with-eval-after-load "magit"
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
+(setq! process-coding-system-alist
+      (cons '("git" . utf-8) process-coding-system-alist))
 
 ;; dired
 (setq! dired-omit-files nil)
@@ -181,10 +182,6 @@
 
 ;; ChatGPT config
 (setq! gptel-api-key (getenv "OPENAI_API_KEY"))
-
-;; magit
-(setq! process-coding-system-alist
-      (cons '("git" . utf-8) process-coding-system-alist))
 
 ;;=======================================================
 ;;#######################################################
@@ -559,6 +556,7 @@
   :custom
   (display-time-default-load-average nil)
   (display-time-24hr-format t)
+  :config
   (display-time-mode t))
 
 ;; lsp-pyright
@@ -581,7 +579,7 @@
         lsp-completion-provider :capf
         lsp-idle-delay 0.05
         lsp-signature-doc-lines 5
-        gc-cons-threshold (* 100 1024 1024)  ;; 100MB во время работы
+        gc-cons-threshold (* 100 1024 1024)
         lsp-restart 'ignore)
   :custom
   (lsp-keep-workspace-alive nil)
@@ -606,10 +604,6 @@
 ;;ibuffer
 (use-package! ibuffer-vc
   :defer t
-  :config
-  (define-ibuffer-column icon
-    (:name "Icon" :inline t)
-    (all-the-icons-ivy--icon-for-mode major-mode))
   :custom
   (ibuffer-formats
    '((mark modified read-only vc-status-mini " "
@@ -630,7 +624,7 @@
 (use-package! iedit
   :defer
   :config
-  (set-face-background 'iedit-occurrence "Magenta"))
+  (set-face-attribute 'iedit-occurrence nil :background (doom-color 'highlight)))
 
 ;;vterm add active link
 (use-package! vterm
