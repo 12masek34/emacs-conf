@@ -422,8 +422,8 @@
          ))
 (map! :leader
         (:prefix "m"
-                :desc "mc/edit-lines" "m" #'mc/edit-lines
-                :desc "call-last-kbd-macro" "l" #'call-last-kbd-macro
+                :desc "mc/edit-beginnings-of-lines" "m" #'mc/edit-beginnings-of-lines
+                :desc "mc/edit-ends-of-lines" "M" #'mc/edit-ends-of-lines
                 ))
 (map! :leader
         (:prefix "r"
