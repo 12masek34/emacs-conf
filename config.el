@@ -461,8 +461,8 @@
        ))
 (map! :leader
       (:prefix "m"
-       :desc "mc/edit-lines" "m" #'mc/edit-beginnings-of-lines
-       :desc "mc/edit-lines" "M" #'mc/edit-ends-of-lines
+       :desc "mc/edit-beginnings-of-lines" "m" #'mc/edit-beginnings-of-lines
+       :desc "mc/edit-ends-of-lines" "M" #'mc/edit-ends-of-lines
        ))
 (map! :leader
       (:prefix "r"
