@@ -164,8 +164,8 @@
 ;; remove line wrapping
 (setq! global-visual-line-mode nil)
 
-;; search engine
-(setq! eww-search-prefix "https://www.google.com/search?q=")
+;; search engine eww
+(setq! eww-search-prefix "https://ya.ru/search/?text=")
 
 ;; ispell multiple config
 (with-eval-after-load "ispell"
