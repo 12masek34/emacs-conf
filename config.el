@@ -167,7 +167,7 @@
 (setq! truncate-lines t)
 
 ;; search engine eww
-(setq! eww-search-prefix "https://www.google.com/search?q=")
+(setq! eww-search-prefix "https://ya.ru/search/?text=")
 
 ;; ispell multiple config
 (with-eval-after-load "ispell"
