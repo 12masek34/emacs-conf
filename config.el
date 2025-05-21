@@ -298,6 +298,80 @@
      (format "echo %s | sudo -S killall openvpn" sudo-password))
     (message "Kill OpneVPN process.")))
 
+(defun my/process-sqlalchemy-kill-ring ()
+  (interactive)
+  (let* ((region-text-raw (current-kill 0))
+         (lines (split-string region-text-raw "\n" t))
+         (first-line (car lines))
+         (rest-lines (cdr lines))
+         (engine-pos (string-match "sqlalchemy\\.engine\\.Engine" first-line))
+         (trimmed-first-line (if engine-pos
+                                 (string-trim (substring first-line (+ engine-pos (length "sqlalchemy.engine.Engine"))))
+                               first-line))
+         (lines-after-trimmed (cons trimmed-first-line rest-lines))
+         (region-lines (butlast lines-after-trimmed))
+         (region-text (mapconcat #'identity region-lines "\n"))
+         (last-line (car (last lines)))
+         (params (when (string-match "(\\(.*\\))[^)]*$" last-line)
+                   (split-string (match-string 1 last-line) ", *")))
+         )
+    (setq region-text (substitute-sql-params region-text params))
+    (setq region-text (format-sql-with-pg-format region-text))
+    (let ((output-buffer (get-buffer-create "*SQL Output*")))
+      (with-current-buffer output-buffer
+        (read-only-mode -1)
+        (erase-buffer)
+        (insert region-text)
+        (goto-char (point-min))
+        (sql-mode)
+        (read-only-mode 1))
+      (pop-to-buffer output-buffer))
+    ))
+
+(defun substitute-sql-params (region-text params)
+  (let ((i 1)
+        (result region-text))
+    (dolist (param params result)
+      (setq result
+            (replace-regexp-in-string
+             (format "\\$%d::\\w+" i)
+             (downcase(format "%s" param))
+             result
+             'fixedcase 'literal))
+      (setq i (1+ i)))))
+
+(defun format-sql-with-pg-format (sql-text)
+  (let ((pg-format-args '("--keyword-case" "2"
+                          "--wrap-limit" "80"
+                          "--spaces" "2"))
+        (output-buffer (generate-new-buffer "*pg_format-output*")))
+    (with-temp-buffer
+      (insert sql-text)
+      (let ((exit-code
+             (apply #'call-process-region
+                    (point-min)
+                    (point-max)
+                    "pg_format"
+                    nil
+                    output-buffer
+                    nil
+                    pg-format-args)))
+        (if (eq exit-code 0)
+            (with-current-buffer output-buffer
+              (buffer-string))
+          (with-current-buffer output-buffer
+            (error "pg_format failed: %s" (buffer-string))))))))
+
+(defun my/copy-region-and-process-sqlalchemy ()
+  (interactive)
+  (if (use-region-p)
+      (let ((text (buffer-substring-no-properties (region-beginning) (region-end))))
+        (kill-new text)
+        (deactivate-mark)
+        (message "Copied region: %s" text)
+        (my/process-sqlalchemy-kill-ring))
+    (message "No region selected.")))
+
 ;;;###autoload
 (defmacro any-nil? (&rest args)
   `(not (and ,@args)))
@@ -455,6 +529,7 @@
        :desc "switch database" "d" #'lsp-sql-switch-database
        :desc "execute sql paragraph" "e" #'lsp-sql-execute-paragraph
        :desc "set logging" "l" #'my/set-logging
+       :desc "forma sqlalchemy log" "f" #'my/copy-region-and-process-sqlalchemy
        ))
 (map! :leader
       (:prefix "m"
@@ -477,6 +552,7 @@
 (map! :leader
       (:prefix "v"
        :desc "consult-yank-from-kill-ring" "v" #'consult-yank-from-kill-ring
+       :desc "vterm-copy-mode" "c" #'vterm-copy-mode
        ))
 (map! :leader
       (:prefix "t"
