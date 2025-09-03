@@ -199,7 +199,7 @@
 ;; set breack point hith majore mode
 (defun my/set-breackpoint ()
   (interactive)
-  (when (equal major-mode 'python-mode)
+  (when (equal major-mode 'python-ts-mode)
     (add-py-debug))
   (when (equal major-mode 'js-mode)
     (add-js-debug))
@@ -209,7 +209,7 @@
 
 (defun my/set-logging ()
   (interactive)
-  (when (equal major-mode 'python-mode)
+  (when (equal major-mode 'python-ts-mode)
     (add-py-logging))
   )
 
@@ -260,22 +260,22 @@
 (defun my/start_vpn ()
   "Start a randomly chosen VPN in the background."
   (interactive)
-  (let* ((default-directory (expand-file-name "~/Downloads/hideme_240095281740650/other os/"))
-         (vpn-configs '("Belgium, Oostkamp S8.ovpn"
-                        "Czech Republic, Prague S7.ovpn"
-                        "Germany, Offenbach S3.ovpn"
-                        "Netherlands, Amsterdam S2.ovpn"
-                        "Spain, Madrid.ovpn"
-                        "United Kingdom, London L1.ovpn"
-                        "Canada, Chambly ROUTERS.ovpn"
-                        "Denmark, Copenhagen S8.ovpn"
-                        "Italy, Milan S2.ovpn"
-                        "Norway, Fredrikstad ROUTERS.ovpn"
-                        "Turkey, Istanbul ROUTERS.ovpn"
+  (let* ((default-directory (expand-file-name "~/Downloads/hideme_460469629149884/other os/"))
+         (vpn-configs '("Austria, Graz S6.ovpn"
+                        "Belgium, Oostkamp S8.ovpn"
                         "Canada, Laval ROUTERS.ovpn"
-                        "France, Gravelines.ovpn"
-                        "Kazakhstan, Almaty S3.ovpn"
-                        "Norway, Moss ROUTERS.ovpn"))
+                        "Canada, Quebec S1.ovpn"
+                        "Croatia, Zagreb S2.ovpn"
+                        "Czech Republic, Prague S7.ovpn"
+                        "Estonia, Tallinn S4.ovpn"
+                        "Finland, Helsinki S5.ovpn"
+                        "France, Gravelines S2.ovpn"
+                        "France, Paris S6.ovpn"
+                        "Germany, Limburg S13.ovpn"
+                        "Germany, Offenbach S2.ovpn"
+                        "Hong Kong, Central District.ovpn"
+                        "Hungary, Budapest S1.ovpn"
+                        "Lithuania, Vilnius ROUTERS.ovpn"))
          (sudo-password (getenv "SUDOPASS"))
          (random-config (nth (random (length vpn-configs)) vpn-configs)))
     (message "Starting VPN with config: %s" random-config)

@@ -16,7 +16,8 @@
 (package! lsp-pyright)
 (package! multi-vterm)
 (package! google-translate)
-(package! restclient)
+(package! restclient
+  :recipe (:host github :repo "pashky/restclient.el"))
 (package! protobuf-mode)
 (package! python-black)
 (package! gptel)
