@@ -509,6 +509,7 @@
                 :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT" "y" #'gptel
                 :desc "ChatGPT send" "S" #'gptel-send
+                :desc "ChatGPT send" "r" #'gptel-rewrite
                 :desc "ChatGPT menu" "m" #'gptel-menu
                 ))
 (map! :leader
