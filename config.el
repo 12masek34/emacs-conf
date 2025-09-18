@@ -201,7 +201,7 @@
 ;; set break point hitch majore mode
 (defun my/set-breackpoint ()
   (interactive)
-  (when (equal major-mode 'python-mode)
+  (when (equal major-mode 'python-ts-mode)
     (add-py-debug))
   (when (equal major-mode 'js-mode)
     (add-js-debug))
@@ -211,7 +211,7 @@
 
 (defun my/set-logging ()
   (interactive)
-  (when (equal major-mode 'python-mode)
+  (when (equal major-mode 'python-ts-mode)
     (add-py-logging))
   )
 
@@ -546,8 +546,11 @@
         (:prefix "y"
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
-                :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
+                :desc "my/requst-yandex-gpt-system" "S" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT" "y" #'gptel
+                :desc "ChatGPT add" "a" #'gptel-add
+                :desc "ChatGPT send" "s" #'gptel-send
+                :desc "ChatGPT rewrite" "r" #'gptel-rewrite
                 :desc "ChatGPT menu" "m" #'gptel-menu
                 ))
 (map! :leader
@@ -602,7 +605,7 @@
   (setq lsp-pyright-multi-root nil
         lsp-enable-file-watchers nil
         lsp-pyright-python-executable-cmd (or (executable-find "python3") python-shell-interpreter))
-  :hook (python-mode . lsp-deferred))
+  :hook (python-ts-mode . lsp-deferred))
 
 ;; lsp-mode
 (use-package! lsp-mode
