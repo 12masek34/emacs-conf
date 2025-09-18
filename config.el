@@ -182,6 +182,13 @@
 
 ;; ChatGPT config
 (setq! gptel-api-key (getenv "OPENAI_API_KEY"))
+(gptel-make-openai "YandexGPT"
+  :host "llm.api.cloud.yandex.net"
+  :endpoint "/v1/chat/completions"
+  :stream t
+  :key (getenv "YANDEX_API_KEY")
+  :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
+            gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
 
 ;;=======================================================
 ;;#######################################################
@@ -723,3 +730,11 @@
 ;;#######################################################
 ;;=======================================================
 ;;=======================================================
+
+(gptel-make-openai "YandexGPT"
+  :host "llm.api.cloud.yandex.net"
+  :endpoint "/v1/chat/completions"
+  :stream t
+  :key (getenv "YANDEX_API_KEY")
+  :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
+            gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
