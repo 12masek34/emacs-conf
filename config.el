@@ -506,10 +506,11 @@
         (:prefix "y"
                 :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
-                :desc "my/requst-yandex-gpt-system" "s" #'my/requst-yandex-gpt-system
+                :desc "my/requst-yandex-gpt-system" "S" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT" "y" #'gptel
-                :desc "ChatGPT send" "S" #'gptel-send
-                :desc "ChatGPT send" "r" #'gptel-rewrite
+                :desc "ChatGPT" "a" #'gptel-add
+                :desc "ChatGPT send" "s" #'gptel-send
+                :desc "ChatGPT rewrite" "r" #'gptel-rewrite
                 :desc "ChatGPT menu" "m" #'gptel-menu
                 ))
 (map! :leader
