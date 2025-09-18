@@ -548,7 +548,8 @@
                 :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
                 :desc "my/requst-yandex-gpt-system" "S" #'my/requst-yandex-gpt-system
                 :desc "ChatGPT" "y" #'gptel
-                :desc "ChatGPT add" "a" #'gptel-add
+                :desc "ChatGPT add context" "a" #'gptel-add
+                :desc "ChatGPT remove all context" "r" #'gptel-context-remove-all
                 :desc "ChatGPT send" "s" #'gptel-send
                 :desc "ChatGPT rewrite" "r" #'gptel-rewrite
                 :desc "ChatGPT menu" "m" #'gptel-menu
