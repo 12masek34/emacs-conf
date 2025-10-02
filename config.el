@@ -190,6 +190,25 @@
   :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
             gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
 
+;; Mail
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+(after! mu4e
+  (setq mu4e-root-maildir "/home/user/Maildir/work"
+        mu4e-get-mail-command "mbsync -a"
+        mu4e-update-interval 300
+        mu4e-maildir-shortcuts
+        '(("/INBOX"  . ?i)
+          ("/Sent"   . ?s)
+          ("/Drafts" . ?d)
+          ("/Trash"  . ?t)))
+  (setq message-send-mail-function 'message-send-mail-with-sendmail
+        sendmail-program "/usr/bin/msmtp"
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-sendmail-f-is-evil t
+        user-mail-address "martys.dmitriy@krasnoe-beloe.ru"
+        user-full-name "Дмитрий Мартысь")
+  (run-at-time "0 sec" 300 'mu4e-update-mail-and-index))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
