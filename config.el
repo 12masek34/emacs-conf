@@ -204,6 +204,29 @@
         user-full-name "Дмитрий Мартысь")
   (run-at-time "0 sec" 300 'mu4e-update-mail-and-index))
 
+;;telega
+(use-package! telega
+  :defer t
+  :init
+  (advice-add 'telega :after (lambda (&rest _) (delete-other-windows)))
+  :config
+  (telega-notifications-mode 1)
+  (setq telega-root-show-avatars t
+        telega-user-show-avatars t
+        telega-chat-show-avatars t
+        telega-root-auto-fill t))
+
+
+(use-package gptel-aibo
+  :config
+  (setq gptel-aibo-prompt-prefix-alist
+        '((".*" . "Ты всегда отвечаешь пользователю на русском языке, если он явно не попросит иное."))))
+
+(after! gptel-aibo
+  (map! :map gptel-aibo-mode-map
+        :n "RET" #'gptel-aibo-send
+        :i "RET" #'gptel-aibo-send))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -549,9 +572,14 @@
                 :desc "google-translate-at-point-reverse" "R" #'google-translate-query-translate-reverse
        ))
 (map! :leader
-        (:prefix "w"
-                :desc "ace-window" "w" #'ace-window
-                ))
+      (:prefix "w"
+       :desc "ace-window" "w" #'ace-window
+       ))
+(map! :leader
+      (:prefix "o"
+       :desc "other-frame" "o" #'other-frame
+       :desc "Telega fullscreen" "c" (cmd! (telega) (delete-other-windows))
+       ))
 (map! :leader
         (:prefix "s"
                 :desc "eww" "g" #'eww-new
@@ -563,13 +591,12 @@
                 ))
 (map! :leader
         (:prefix "y"
-                :desc "my/requst-yandex-gpt-input" "i" #'my/requst-yandex-gpt-input
-                :desc "my/open-yandex-gpt-log" "l" #'my/open-yandex-gpt-log
-                :desc "my/requst-yandex-gpt-system" "S" #'my/requst-yandex-gpt-system
-                :desc "ChatGPT" "y" #'gptel
+                :desc "ChatGPT" "Y" #'gptel
+                :desc "ChatGPT aibo" "y" #'gptel-aibo
+                :desc "ChatGPT aibo apply" "s" #'gptel-aibo-apply-last-suggestions
+                :desc "ChatGPT aibo summon" "S" #'gptel-aibo-summon
                 :desc "ChatGPT add context" "a" #'gptel-add
                 :desc "ChatGPT remove all context" "A" #'gptel-context-remove-all
-                :desc "ChatGPT send" "s" #'gptel-send
                 :desc "ChatGPT rewrite" "r" #'gptel-rewrite
                 :desc "ChatGPT menu" "m" #'gptel-menu
                 ))
@@ -771,9 +798,6 @@
 
 ;;private
 (load! "~/.doom.d/env.el")
-
-;;yandex gpt integration
-(load! "~/.doom.d/yandex_gpt.el")
 
 ;;=======================================================
 ;;=======================================================

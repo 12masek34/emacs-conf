@@ -20,6 +20,8 @@
 (package! protobuf-mode)
 (package! python-black)
 (package! gptel)
+(package! gptel-aibo)
+(package! telega)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
