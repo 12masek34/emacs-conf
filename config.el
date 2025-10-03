@@ -536,7 +536,7 @@
        ))
 (map! :leader
       (:prefix "w"
-       :desc "google-translate-at-point" "w" #'ace-window
+       :desc "ace-window" "w" #'ace-window
        ))
 (map! :leader
       (:prefix "o"
