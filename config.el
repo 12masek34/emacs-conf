@@ -202,7 +202,7 @@
         message-sendmail-f-is-evil t
         user-mail-address "martys.dmitriy@krasnoe-beloe.ru"
         user-full-name "Дмитрий Мартысь")
-  (run-at-time "0 sec" 300 'mu4e-update-mail-and-index))
+  (run-at-time "0 sec" 300 (lambda () (mu4e-update-mail-and-index t))))
 
 ;;telega
 (use-package! telega
