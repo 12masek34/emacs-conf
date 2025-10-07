@@ -497,6 +497,26 @@
   (split-window-horizontally)
   (other-window 1))
 
+(defun my/generate-commit-message-from-gpt ()
+  (interactive)
+  (require 'gptel)
+  (let* ((default-directory (magit-toplevel))
+         (branch (magit-get-current-branch))
+         (diff (with-temp-buffer
+                 (call-process "git" nil t nil "diff" "--cached")
+                 (buffer-string)))
+         (prompt (format "Here are the staged changes from (staged diff):\n\n%s\n\n\
+                        Based on these changes, generate a clear and concise commit message \
+                        that starts with the branch name \"%s\". Do not include a commit body, \
+                        only a single-line commit title." diff branch)))
+    (gptel-request
+     prompt
+     :callback
+     (lambda (response _info)
+       (save-excursion
+         (goto-char (point-min))
+         (insert (format "%s: %s\n\n" branch (string-trim response))))))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -608,14 +628,15 @@
                 ))
 (map! :leader
         (:prefix "y"
-                :desc "ChatGPT" "Y" #'gptel
-                :desc "ChatGPT aibo" "y" #'gptel-aibo
-                :desc "ChatGPT aibo apply" "s" #'gptel-aibo-apply-last-suggestions
-                :desc "ChatGPT aibo summon" "S" #'gptel-aibo-summon
-                :desc "ChatGPT add context" "a" #'gptel-add
-                :desc "ChatGPT remove all context" "A" #'gptel-context-remove-all
-                :desc "ChatGPT rewrite" "r" #'gptel-rewrite
-                :desc "ChatGPT menu" "m" #'gptel-menu
+                :desc "gptel" "Y" #'gptel
+                :desc "gptel-aibo" "y" #'gptel-aibo
+                :desc "gptel-aibo apply" "s" #'gptel-aibo-apply-last-suggestions
+                :desc "gptel-aibo summon" "S" #'gptel-aibo-summon
+                :desc "gptel add context" "a" #'gptel-add
+                :desc "gptel remove all context" "A" #'gptel-context-remove-all
+                :desc "gptel rewrite" "r" #'gptel-rewrite
+                :desc "gptel menu" "m" #'gptel-menu
+                :desc "gptel generate commit message" "c" #'my/generate-commit-message-from-gpt
                 ))
 (map! :leader
         (:prefix "\""
