@@ -468,9 +468,8 @@
                  (call-process "git" nil t nil "diff" "--cached")
                  (buffer-string)))
          (prompt (format "Here are the staged changes from (staged diff):\n\n%s\n\n\
-                        Based on these changes, generate a clear and concise commit message \
-                        that starts with the branch name \"%s\". Do not include a commit body, \
-                        only a single-line commit title." diff branch)))
+                        Based on these changes, generate a clear and concise commit message. \
+                         Do not include a commit body, only a single-line commit title." diff)))
     (gptel-request
      prompt
      :callback
