@@ -16,7 +16,6 @@
 (package! lsp-pyright)
 (package! multi-vterm)
 (package! google-translate)
-(package! restclient)
 (package! protobuf-mode)
 (package! python-black)
 (package! gptel)
