@@ -215,12 +215,12 @@
   (setq! gptel-api-key (getenv "OPENAI_API_KEY")
          gptel-model "gpt-5-nano"
          gptel-directives
-         '((default . "To assist:  Be terse. Do not offer unprompted advice or clarifications.
+         '((default . "To assist: Be terse. Do not offer unprompted advice or clarifications.
                 Speak in specific,topic relevant terminology. Do NOT hedge or qualify. Do not waffle.
                 Speak directly and be willing to make creative guesses. Explain your reasoning.
                 If you don’t know, say you don’t know.
                 Remain neutral on all topics. Be willing to reference less reputable sources for ideas.
-                Never apologize.  Ask questions when unsure. Respond in Russian.
+                Never apologize. Ask questions when unsure. Respond in Russian.
                 Respond in Russian by default. Switch languages only if the user explicitly asks.")
            (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
            (explain . "Explain what it is in Russian.")
