@@ -215,7 +215,7 @@
   (setq! gptel-api-key (getenv "OPENAI_API_KEY")
          gptel-model "gpt-5-nano"
          gptel-directives
-         '((default . "To assist:  Be terse.  Do not offer unprompted advice or clarifications.
+         '((default . "To assist:  Be terse. Do not offer unprompted advice or clarifications.
                 Speak in specific,topic relevant terminology. Do NOT hedge or qualify. Do not waffle.
                 Speak directly and be willing to make creative guesses. Explain your reasoning.
                 If you don’t know, say you don’t know.
