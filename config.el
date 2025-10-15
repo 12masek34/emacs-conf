@@ -243,6 +243,15 @@
         :n "RET" #'gptel-aibo-send
         :i "RET" #'gptel-aibo-send))
 
+;; restclient
+(after! restclient
+  (set-popup-rule! "^\\*HTTP Response\\*"
+    :size 0.5
+    :quit t
+    :select t
+    :ttl nil
+    :side 'bottom))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
