@@ -215,7 +215,7 @@
 (use-package! gptel
   :config
   (setq! gptel-api-key (getenv "OPENAI_API_KEY")
-         gptel-model "gpt-5-nano"
+         gptel-model "gpt-4o-mini"
          gptel-directives
          '((default . "To assist: Be terse. Do not offer unprompted advice or clarifications.
                 Speak in specific,topic relevant terminology. Do NOT hedge or qualify. Do not waffle.
@@ -240,7 +240,9 @@
 ;; gpt
 (use-package! gptel-aibo
   :config
-  (setq! gptel-aibo-system-message "Respond in Russian by default. Switch languages only if the user explicitly asks.")
+  (setq! gptel-aibo--system-message (concat
+                                     gptel-aibo--system-message
+                                     "\nAlways reply in Russian, unless the user explicitly requests another language."))
   (map! :map gptel-aibo-mode-map
         :n "RET" #'gptel-aibo-send
         :i "RET" #'gptel-aibo-send))
