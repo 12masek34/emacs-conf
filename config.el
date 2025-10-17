@@ -207,8 +207,20 @@
   (setq telega-root-show-avatars t
         telega-user-show-avatars t
         telega-chat-show-avatars t
-        telega-root-auto-fill t
-        telega-chat-show-deleted-messages-for 'all)
+        telega-root-auto-fill-mode t
+        telega-chat-show-deleted-messages-for 'all
+
+        telega-completing-read-function 'completing-read
+        telega-emoji-use-images t
+        telega-emoji-font-family "Noto Color Emoji"
+        telega-chat-use-markdown t
+        telega-chat-prompt-show-avatar t
+        telega-chat-input-markups '("markdown2" "html")
+        telega-animation-play-inline t
+        telega-root-show-pinned-messages t
+        telega-chatbuf-attach-inline-images t
+        telega-sort-chats-by 'unread
+        telega-mode-line-mode t)
   (map! :map telega-msg-button-map "SPC" nil))
 
 ;; gpt
