@@ -207,7 +207,8 @@
   (setq telega-root-show-avatars t
         telega-user-show-avatars t
         telega-chat-show-avatars t
-        telega-root-auto-fill t))
+        telega-root-auto-fill t)
+  (map! :map telega-msg-button-map "SPC" nil))
 
 ;; gpt
 (use-package! gptel
