@@ -93,6 +93,11 @@
        doom-unicode-font (font-spec :family "Hack")
        doom-big-font (font-spec :family "Hack" :size 24))
 
+;; use Noto Color Emoji for emoji
+(when (member "Noto Color Emoji" (font-family-list))
+  (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") nil 'prepend)
+  (set-fontset-font t 'emoji  (font-spec :family "Noto Color Emoji") nil 'prepend))
+
 ;; dont add end allow line
 (setq! mode-require-final-newline nil)
 
