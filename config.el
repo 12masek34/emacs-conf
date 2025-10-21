@@ -199,21 +199,24 @@
 
 ;;telega
 (use-package! telega
-  :defer t
+  :after telega
   :init
   (advice-add 'telega :after (lambda (&rest _) (delete-other-windows)))
   :config
   (telega-notifications-mode 1)
-  (setq telega-root-show-avatars t
-        telega-user-show-avatars t
-        telega-chat-show-avatars t
-        telega-root-auto-fill-mode t
-        telega-chat-show-deleted-messages-for 'all
-        telega-completing-read-function 'completing-read
-        telega-emoji-use-images nil
-        telega-chat-input-markups '("markdown2" nil)
-        telega-animation-play-inline t
-        telega-mode-line-mode t)
+  (add-hook 'telega-ready-hook
+            (lambda ()
+              (setq telega-root-show-avatars t
+                    telega-user-show-avatars t
+                    telega-chat-show-avatars t
+                    telega-root-auto-fill-mode t
+                    telega-chat-show-deleted-messages-for 'all
+                    telega-completing-read-function 'completing-read
+                    telega-emoji-use-images nil
+                    telega-chat-input-markups '("markdown2" nil)
+                    telega-animation-play-inline t)
+              (telega-root--update)))
+  (add-hook 'telega-ready-hook #'telega-mode-line-mode)
   (map! :map telega-msg-button-map "SPC" nil))
 
 ;; gpt
