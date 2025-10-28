@@ -209,6 +209,8 @@
   :after telega
   :init
   (advice-add 'telega :after (lambda (&rest _) (delete-other-windows)))
+  :custom
+  (telega-cache-dir (expand-file-name "~/Downloads/telega_cache"))
   :config
   (telega-notifications-mode 1)
   (add-hook 'telega-ready-hook
