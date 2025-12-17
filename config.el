@@ -226,7 +226,12 @@
                     telega-animation-play-inline t)
               (telega-root--update)))
   (add-hook 'telega-ready-hook #'telega-mode-line-mode)
-  (map! :map telega-msg-button-map "SPC" nil))
+  :bind
+  (:map telega-chat-button-map
+        ("h" . nil)
+        ("<tab>" . telega-chat-button-toggle-view)
+        ("SPC" . nil))
+  )
 
 ;; gpt
 (use-package! gptel
