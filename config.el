@@ -234,8 +234,23 @@
 ;; gpt
 (use-package! gptel
   :config
-  (setq! gptel-api-key (getenv "OPENAI_API_KEY")
-         gptel-model "gpt-4o-mini"
+  (setq! gptel-backend
+        (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+        :key (lambda () (getenv "OPENROUTER_API_KEY"))
+        :models '(x-ai/grok-code-fast-1
+                google/gemini-2.5-flash
+                google/gemini-2.5-flash-lite
+                openai/gpt-5
+                openai/gpt-oss-120b
+                openai/gpt-4o-mini
+                qwen/qwen3-coder
+                qwen/qwen3-coder:free
+                qwen/qwen3-coder-30b-a3b-instruct
+                anthropic/claude-sonnet-4.5
+                ))
          gptel-directives
          '((default . "To assist: Be terse. Do not offer unprompted advice or clarifications.
                 Speak in specific,topic relevant terminology. Do NOT hedge or qualify. Do not waffle.
@@ -245,17 +260,18 @@
                 Never apologize. Ask questions when unsure. Respond in Russian.")
            (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
            (explain . "Explain what it is in Russian.")
-           (explain_code . "Explain in Russian what this code does to a novice programmer."))))
-
-;; gpt
-(setq! gptel-api-key (getenv "OPENAI_API_KEY"))
-(gptel-make-openai "YandexGPT"
-  :host "llm.api.cloud.yandex.net"
-  :endpoint "/v1/chat/completions"
-  :stream t
-  :key (getenv "YANDEX_API_KEY")
-  :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
-            gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
+           (explain_code . "Explain in Russian what this code does to a novice programmer.")))
+        
+        (gptel-make-openai "YandexGPT"
+        :host "llm.api.cloud.yandex.net"
+        :endpoint "/v1/chat/completions"
+        :stream t
+        :key (lambda () (getenv "YANDEX_API_KEY"))
+        :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
+                gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
+  :custom
+  (gptel-model 'x-ai/grok-code-fast-1)
+        )
 
 ;; gpt
 (use-package! gptel-aibo
