@@ -510,21 +510,45 @@
 (defun my/generate-commit-message-from-gpt ()
   (interactive)
   (require 'gptel)
+  (require 'magit)
   (let* ((default-directory (magit-toplevel))
          (branch (magit-get-current-branch))
          (diff (with-temp-buffer
                  (call-process "git" nil t nil "diff" "--cached")
                  (buffer-string)))
-         (prompt (format "Here are the staged changes from (staged diff):\n\n%s\n\n\
-                        Based on these changes, generate a clear and concise commit message. \
-                         Do not include a commit body, only a single-line commit title." diff)))
+         (prompt
+          (format
+           "Generate a single-line git commit title for the following staged diff. \
+           Output ONLY the commit title, nothing else.\n\
+           Staged diff:\n%s"
+           diff)))
     (gptel-request
      prompt
      :callback
      (lambda (response _info)
-       (save-excursion
-         (goto-char (point-min))
-         (insert (format "%s: %s\n\n" branch (string-trim response))))))))
+       (let* ((text
+               (cond
+                ((stringp response) response)
+                ((consp response) (cdr response))
+                ((and (listp response)
+                      (alist-get 'content response))
+                 (alist-get 'content response))
+                (t "")))
+              (lines (split-string (string-trim text) "\n")))
+         (let ((title (cl-loop for line in lines
+                               for trimmed = (string-trim line)
+                               when (and (> (length trimmed) 10)
+                                         (or (string-prefix-p "Add" trimmed)
+                                             (string-prefix-p "Update" trimmed)
+                                             (string-prefix-p "Fix" trimmed)
+                                             (string-prefix-p "Remove" trimmed))
+                                         (not (string-prefix-p "The" trimmed))
+                                         (not (string-match-p "\\bstage\\b" trimmed)))
+                               return trimmed)))
+           (when title
+             (save-excursion
+               (goto-char (point-min))
+               (insert (format "%s: %s\n\n" branch title))))))))))
 
 ;;=======================================================
 ;;#######################################################
