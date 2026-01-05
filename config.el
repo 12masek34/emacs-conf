@@ -270,8 +270,7 @@
         :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
                 gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
   :custom
-  (gptel-model 'x-ai/grok-code-fast-1)
-        )
+  (gptel-model 'x-ai/grok-code-fast-1))
 
 ;; gpt
 (use-package! gptel-aibo
