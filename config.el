@@ -519,36 +519,22 @@
          (prompt
           (format
            "Generate a single-line git commit title for the following staged diff. \
-           Output ONLY the commit title, nothing else.\n\
+           Output ONLY the commit title, nothing else. Response must be in English\n\
            Staged diff:\n%s"
            diff)))
+  (let ((gptel-backend (gptel-make-openai "YandexGPT"
+                       :host "llm.api.cloud.yandex.net"
+                       :endpoint "/v1/chat/completions"
+                       :stream t
+                       :key (lambda () (getenv "YANDEX_API_KEY"))
+                       :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest))))
     (gptel-request
      prompt
      :callback
      (lambda (response _info)
-       (let* ((text
-               (cond
-                ((stringp response) response)
-                ((consp response) (cdr response))
-                ((and (listp response)
-                      (alist-get 'content response))
-                 (alist-get 'content response))
-                (t "")))
-              (lines (split-string (string-trim text) "\n")))
-         (let ((title (cl-loop for line in lines
-                               for trimmed = (string-trim line)
-                               when (and (> (length trimmed) 10)
-                                         (or (string-prefix-p "Add" trimmed)
-                                             (string-prefix-p "Update" trimmed)
-                                             (string-prefix-p "Fix" trimmed)
-                                             (string-prefix-p "Remove" trimmed))
-                                         (not (string-prefix-p "The" trimmed))
-                                         (not (string-match-p "\\bstage\\b" trimmed)))
-                               return trimmed)))
-           (when title
-             (save-excursion
-               (goto-char (point-min))
-               (insert (format "%s: %s\n\n" branch title))))))))))
+       (save-excursion
+         (goto-char (point-min))
+         (insert (format "%s: %s\n\n" branch (string-trim response)))))))))
 
 ;;=======================================================
 ;;#######################################################
