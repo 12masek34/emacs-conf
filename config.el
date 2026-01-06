@@ -326,7 +326,6 @@
   (highlight-regexp "import logging; logging.error();" 'company-echo-common)
   (save-excursion (insert "import logging; logging.error();")))
 
-
 (defun add-py-debug ()
   "add debug code and move line down"
   (interactive)
@@ -826,7 +825,6 @@
 
 ;; Сброс gc-cons-threshold после загрузки LSP
 (add-hook! 'lsp-after-initialize-hook (lambda () (setq gc-cons-threshold (* 20 1024 1024))))
-
 
 (remove-hook! 'doom-first-input-hook #'evil-snipe-mode)
 
