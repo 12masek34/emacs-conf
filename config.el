@@ -681,8 +681,8 @@
                 ))
 (map! :leader
         (:prefix "y"
-                :desc "gptel" "Y" #'gptel
-                :desc "gptel-aibo" "y" #'gptel-aibo
+                :desc "gptel" "y" #'gptel
+                :desc "gptel-aibo" "Y" #'gptel-aibo
                 :desc "gptel agent" "g" #'gptel-agent
                 :desc "gptel-aibo apply" "s" #'gptel-aibo-apply-last-suggestions
                 :desc "gptel-aibo summon" "S" #'gptel-aibo-summon
