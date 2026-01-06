@@ -866,6 +866,7 @@
 (add-hook!'prog-mode-hook #'display-fill-column-indicator-mode)
 
 (remove-hook! 'doom-first-input-hook #'evil-snipe-mode)
+
 ;; Сброс gc-cons-threshold после загрузки LSP
 (add-hook! 'lsp-after-initialize-hook (lambda () (setq gc-cons-threshold (* 20 1024 1024))))
 
