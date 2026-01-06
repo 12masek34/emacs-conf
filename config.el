@@ -284,12 +284,6 @@ Never apologize. Ask questions when unsure. Respond in Russian.")
         :n "RET" #'gptel-aibo-send
         :i "RET" #'gptel-aibo-send))
 
-;; gpt
-(use-package! gptel-agent
-  :config
-  (setq gptel-agent-default-objective
-      "All answers must be provided in Russian."))
-
 ;; restclient
 (after! restclient
   (set-popup-rule! "^\\*HTTP Response\\*"
