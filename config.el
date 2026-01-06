@@ -282,6 +282,12 @@ Never apologize. Ask questions when unsure. Respond in Russian.")
         :n "RET" #'gptel-aibo-send
         :i "RET" #'gptel-aibo-send))
 
+;; gpt
+(use-package! gptel-agent
+  :config
+  (setq gptel-agent-default-objective
+      "All answers must be provided in Russian."))
+
 ;; restclient
 (after! restclient
   (set-popup-rule! "^\\*HTTP Response\\*"
@@ -686,6 +692,7 @@ Never apologize. Ask questions when unsure. Respond in Russian.")
         (:prefix "y"
                 :desc "gptel" "Y" #'gptel
                 :desc "gptel-aibo" "y" #'gptel-aibo
+                :desc "gptel agent" "g" #'gptel-agent
                 :desc "gptel-aibo apply" "s" #'gptel-aibo-apply-last-suggestions
                 :desc "gptel-aibo summon" "S" #'gptel-aibo-summon
                 :desc "gptel add context" "a" #'gptel-add

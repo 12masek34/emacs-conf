@@ -20,6 +20,7 @@
 (package! python-black)
 (package! gptel)
 (package! gptel-aibo)
+(package! gptel-agent)
 (package! telega)
 
 ;; To install a package directly from a remote git repo, you must specify a
