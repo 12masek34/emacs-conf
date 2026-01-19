@@ -210,6 +210,7 @@
   :custom
   (telega-cache-dir (expand-file-name "~/Downloads/telega_cache"))
   :config
+  (setq telega-translate-to-language-by-default "ru")
   (telega-notifications-mode 1)
   (add-hook 'telega-ready-hook
             (lambda ()
