@@ -262,25 +262,8 @@
                 qwen/qwen3-coder-30b-a3b-instruct
                 anthropic/claude-sonnet-4.5
                 )))
-        (gptel-make-openai "YandexGPT"
-        :host "llm.api.cloud.yandex.net"
-        :endpoint "/v1/chat/completions"
-        :stream t
-        :key (lambda () (getenv "YANDEX_API_KEY"))
-        :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest
-                gpt://b1gcsgl4scmij7umsgjs/yandexgpt-lite/latest))
   :custom
   (gptel-model 'x-ai/grok-code-fast-1))
-
-;; gpt
-(use-package! gptel-aibo
-  :config
-  (setq! gptel-aibo--system-message (concat
-                                     gptel-aibo--system-message
-                                     "\nAlways reply in Russian, unless the user explicitly requests another language."))
-  (map! :map gptel-aibo-mode-map
-        :n "RET" #'gptel-aibo-send
-        :i "RET" #'gptel-aibo-send))
 
 ;; restclient
 (after! restclient
@@ -669,10 +652,7 @@
 (map! :leader
         (:prefix "y"
                 :desc "gptel" "y" #'gptel
-                :desc "gptel-aibo" "Y" #'gptel-aibo
-                :desc "gptel agent" "g" #'gptel-agent
-                :desc "gptel-aibo apply" "s" #'gptel-aibo-apply-last-suggestions
-                :desc "gptel-aibo summon" "S" #'gptel-aibo-summon
+                :desc "gptel agent" "Y" #'gptel-agent
                 :desc "gptel add context" "a" #'gptel-add
                 :desc "gptel remove all context" "A" #'gptel-context-remove-all
                 :desc "gptel rewrite" "r" #'gptel-rewrite

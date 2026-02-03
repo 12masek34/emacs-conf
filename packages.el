@@ -19,7 +19,6 @@
 (package! protobuf-mode)
 (package! python-black)
 (package! gptel)
-(package! gptel-aibo)
 (package! gptel-agent)
 (package! telega)
 
