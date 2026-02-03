@@ -444,6 +444,30 @@
         (my/process-sqlalchemy-kill-ring))
     (message "No region selected.")))
 
+(defun my/vpn_wg_start ()
+  (interactive)
+  (let ((sudo-password (getenv "SUDOPASS")))
+    (if (not sudo-password)
+        (message "Переменная окружения SUDOPASS не установлена!")
+      (start-process
+       "wg-up-process"
+       "*wg-output*"
+       "bash" "-c"
+       (format "echo %s | sudo -S wg-quick up wg0" sudo-password))
+      (message "VPN wg0 запущен."))))
+
+(defun my/vpn_wg_stop ()
+  (interactive)
+  (let ((sudo-password (getenv "SUDOPASS")))
+    (if (not sudo-password)
+        (message "Переменная окружения SUDOPASS не установлена!")
+      (start-process
+       "wg-down-process"
+       "*wg-output*"
+       "bash" "-c"
+       (format "echo %s | sudo -S wg-quick down wg0" sudo-password))
+      (message "VPN wg0 остановлен."))))
+
 ;;;###autoload
 (defmacro any-nil? (&rest args)
   `(not (and ,@args)))
@@ -557,12 +581,15 @@
            Output ONLY the commit title, nothing else. Response must be in English\n\
            Staged diff:\n%s"
            diff)))
-  (let ((gptel-backend (gptel-make-openai "YandexGPT"
-                       :host "llm.api.cloud.yandex.net"
-                       :endpoint "/v1/chat/completions"
-                       :stream t
-                       :key (lambda () (getenv "YANDEX_API_KEY"))
-                       :models '(gpt://b1gcsgl4scmij7umsgjs/yandexgpt/latest))))
+    (let ((gptel-backend
+         (gptel-make-openai "OpenRouter"
+                :host "openrouter.ai"
+                :endpoint "/api/v1/chat/completions"
+                :stream nil
+                :key (lambda () (getenv "OPENROUTER_API_KEY"))
+                :models '(openai/gpt-4o-mini))
+
+          ))
     (gptel-request
      prompt
      :callback
