@@ -256,8 +256,9 @@
                 google/gemini-2.5-flash-lite
                 google/gemini-3-flash-preview
                 openai/gpt-5
-                openai/gpt-oss-120b
+                openai/gpt-5.1-codex-mini
                 openai/gpt-4o-mini
+                qwen/qwen3-coder-next
                 qwen/qwen3-coder-flash
                 qwen/qwen3-coder
                 qwen/qwen3-coder:free
