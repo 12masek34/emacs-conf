@@ -252,12 +252,15 @@
         :models '(x-ai/grok-code-fast-1
                 google/gemini-2.5-flash
                 google/gemini-2.5-flash-lite
+                google/gemini-3-flash-preview
                 openai/gpt-5
                 openai/gpt-oss-120b
                 openai/gpt-4o-mini
+                qwen/qwen3-coder-flash
                 qwen/qwen3-coder
                 qwen/qwen3-coder:free
                 qwen/qwen3-coder-30b-a3b-instruct
+                deepseek/deepseek-v3.2
                 anthropic/claude-sonnet-4.5
                 )))
   :custom
