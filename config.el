@@ -355,46 +355,28 @@
     (eww url)))
 
 (defun my/start_vpn ()
-  "Start a randomly chosen VPN in the background."
   (interactive)
-  (let* ((default-directory (expand-file-name "~/Downloads/vpn/"))
-         (vpn-configs '("Austria_Graz_S6.ovpn"
-                        ;; "Belgium, Oostkamp S8.ovpn"
-                        ;; "Canada, Laval ROUTERS.ovpn"
-                        ;; "Canada, Quebec S1.ovpn"
-                        ;; "Croatia, Zagreb S2.ovpn"
-                        ;; "Czech Republic, Prague S7.ovpn"
-                        ;; "Estonia, Tallinn S4.ovpn"
-                        ;; "Finland, Helsinki S5.ovpn"
-                        ;; "France, Gravelines S2.ovpn"
-                        ;; "France, Paris S6.ovpn"
-                        ;; "Germany, Limburg S13.ovpn"
-                        ;; "Germany, Offenbach S2.ovpn"
-                        ;; "Hong Kong, Central District.ovpn"
-                        ;; "Hungary, Budapest S1.ovpn"
-                        ;; "Lithuania, Vilnius ROUTERS.ovpn"
-                        ))
-         (sudo-password (getenv "SUDOPASS"))
-         (random-config (nth (random (length vpn-configs)) vpn-configs)))
-    (message "Starting VPN with config: %s" random-config)
+  (let ((sudo-password (getenv "SUDOPASS")))
+    (message "Starting VPN via awg-quick@wg1.service...")
     (start-process
-     "openvpn-process"
-     "*openvpn-output*"
+     "awg-vpn-process"
+     "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S openvpn --config '%s'" sudo-password random-config))
-    (message "VPN process started in background with config: %s" random-config)))
+     (format "echo %s | sudo -S systemctl start awg-quick@wg1.service"
+             sudo-password))
+    (message "VPN start command sent.")))
 
 (defun my/stop_vpn ()
-  "Kill OpneVPN."
   (interactive)
-  (let* ((sudo-password (getenv "SUDOPASS")))
-    (message "Kill openVPN")
+  (let ((sudo-password (getenv "SUDOPASS")))
+    (message "Stopping VPN awg-quick@wg1.service...")
     (start-process
-     "openvpn-process"
-     "*openvpn-output*"
+     "awg-vpn-stop-process"
+     "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S killall openvpn" sudo-password))
-    (message "Kill OpneVPN process.")))
+     (format "echo %s | sudo -S systemctl stop awg-quick@wg1.service"
+             sudo-password))
+    (message "VPN stop command sent.")))
 
 (defun my/vpn_wg_start ()
   (interactive)
