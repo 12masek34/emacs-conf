@@ -250,6 +250,9 @@
         :stream t
         :key (lambda () (getenv "OPENROUTER_API_KEY"))
         :models '(x-ai/grok-code-fast-1
+                minimax/minimax-m2.1
+                moonshotai/kimi-k2.5
+                x-ai/grok-4-fast
                 google/gemini-2.5-flash
                 google/gemini-2.5-flash-lite
                 google/gemini-3-flash-preview
@@ -265,7 +268,7 @@
                 anthropic/claude-sonnet-4.5
                 )))
   :custom
-  (gptel-model 'x-ai/grok-code-fast-1))
+  (gptel-model 'minimax/minimax-m2.1))
 
 ;; restclient
 (after! restclient
@@ -352,10 +355,32 @@
 (defun my/start_vpn ()
   "Start a randomly chosen VPN in the background."
   (interactive)
-  (let ((url (read-from-minibuffer "Enter URL or keywords: ")))
-    (switch-to-buffer (generate-new-buffer "eww"))
-    (eww-mode)
-    (eww url)))
+  (let* ((default-directory (expand-file-name "~/Downloads/vpn/"))
+         (vpn-configs '("Austria_Graz_S6.ovpn"
+                        ;; "Belgium, Oostkamp S8.ovpn"
+                        ;; "Canada, Laval ROUTERS.ovpn"
+                        ;; "Canada, Quebec S1.ovpn"
+                        ;; "Croatia, Zagreb S2.ovpn"
+                        ;; "Czech Republic, Prague S7.ovpn"
+                        ;; "Estonia, Tallinn S4.ovpn"
+                        ;; "Finland, Helsinki S5.ovpn"
+                        ;; "France, Gravelines S2.ovpn"
+                        ;; "France, Paris S6.ovpn"
+                        ;; "Germany, Limburg S13.ovpn"
+                        ;; "Germany, Offenbach S2.ovpn"
+                        ;; "Hong Kong, Central District.ovpn"
+                        ;; "Hungary, Budapest S1.ovpn"
+                        ;; "Lithuania, Vilnius ROUTERS.ovpn"
+                        ))
+         (sudo-password (getenv "SUDOPASS"))
+         (random-config (nth (random (length vpn-configs)) vpn-configs)))
+    (message "Starting VPN with config: %s" random-config)
+    (start-process
+     "openvpn-process"
+     "*openvpn-output*"
+     "bash" "-c"
+     (format "echo %s | sudo -S openvpn --config '%s'" sudo-password random-config))
+    (message "VPN process started in background with config: %s" random-config)))
 
 (defun my/process-sqlalchemy-kill-ring ()
   (interactive)
