@@ -260,7 +260,7 @@
                 google/gemini-3-flash-preview
                 openai/gpt-5
                 openai/gpt-5.1-codex-mini
-                openai/gpt-4o-mini
+                openai/gpt-5-mini
                 qwen/qwen3-coder-next
                 qwen/qwen3-coder-flash
                 qwen/qwen3-coder
@@ -270,7 +270,7 @@
                 anthropic/claude-sonnet-4.5
                 )))
   :custom
-  (gptel-model 'minimax/minimax-m2.1))
+  (gptel-model 'openai/gpt-5.1-codex-mini))
 
 ;; restclient
 (after! restclient
