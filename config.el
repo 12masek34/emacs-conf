@@ -270,7 +270,7 @@
                 anthropic/claude-sonnet-4.5
                 )))
   :custom
-  (gptel-model 'openai/gpt-5.1-codex-mini))
+  (gptel-model 'minimax/minimax-m2.1))
 
 ;; restclient
 (after! restclient
