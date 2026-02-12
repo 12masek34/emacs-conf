@@ -532,6 +532,30 @@
          (goto-char (point-min))
          (insert (format "%s: %s\n\n" branch (string-trim response)))))))))
 
+(defun my/gptel-review-staged-changes ()
+  (interactive)
+  (let* ((diff (string-trim (shell-command-to-string "git diff --cached")))
+         (session-name "*gptel-review*"))
+    (if (string-empty-p diff)
+        (message "Нет staged changes для отправки.")
+      (gptel session-name)
+      (with-current-buffer session-name
+        (read-only-mode -1)
+        (setq-local gptel-system-prompt
+                    "You are a senior software engineer performing a code review.
+Report only critical issues: bugs, logic errors, security risks,
+performance problems, and bad design decisions.
+Be concise, technical, and skip praise or filler.")
+        (erase-buffer)
+        (insert
+         "Perform a code review of the following staged git diff.\n"
+         "Return only important findings.\nAlways write your response in Russian.\n\n"
+         "=== STAGED GIT DIFF ===\n\n"
+         diff)
+        (goto-char (point-max))
+        (gptel-send))
+      (pop-to-buffer session-name))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -648,6 +672,7 @@
                 :desc "gptel rewrite" "r" #'gptel-rewrite
                 :desc "gptel menu" "m" #'gptel-menu
                 :desc "gptel generate commit message" "c" #'my/generate-commit-message-from-gpt
+                :desc "gptel review" "R" #'my/gptel-review-staged-changes
                 ))
 (map! :leader
         (:prefix "\""
