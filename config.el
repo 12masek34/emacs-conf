@@ -152,7 +152,6 @@
 
 ;; lsp sql sever
 (setq! lsp-sqls-server "~/go/bin/sqls")
-(setq! lsp-sqls-workspace-config-path nil)
 (setq! lsp-sqls-connections nil)
 (setq! sql-connection-alist nil)
 (setq! lsp-sqls-timeout 5)
@@ -165,7 +164,7 @@
       (cons '("git" . utf-8) process-coding-system-alist))
 
 ;; dired
-(setq! dired-omit-files nil)
+(setq dired-omit-files "^$")
 
 ;; remove line wrapping
 (setq! global-visual-line-mode nil)
@@ -253,6 +252,7 @@
         :key (lambda () (getenv "OPENROUTER_API_KEY"))
         :models '(x-ai/grok-code-fast-1
                 minimax/minimax-m2.1
+                minimax/minimax-m2.5
                 moonshotai/kimi-k2.5
                 x-ai/grok-4-fast
                 google/gemini-2.5-flash
@@ -268,9 +268,12 @@
                 qwen/qwen3-coder-30b-a3b-instruct
                 deepseek/deepseek-v3.2
                 anthropic/claude-sonnet-4.5
+                qwen/qwen3.5-plus-02-15
+                moonshotai/kimi-k2.5
+                z-ai/glm-5
                 )))
   :custom
-  (gptel-model 'minimax/minimax-m2.1))
+  (gptel-model 'minimax/minimax-m2.5))
 
 ;; restclient
 (after! restclient
