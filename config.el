@@ -223,7 +223,8 @@
                     telega-completing-read-function 'completing-read
                     telega-emoji-use-images nil
                     telega-chat-input-markups '("markdown2" nil)
-                    telega-animation-play-inline t)
+                    telega-animation-play-inline t
+                    telega-proxy-status-mode)
               (telega-root--update)))
   (add-hook 'telega-ready-hook #'telega-mode-line-mode)
   :bind
@@ -253,6 +254,7 @@
         :models '(x-ai/grok-code-fast-1
                 minimax/minimax-m2.1
                 minimax/minimax-m2.5
+                minimax/minimax-m2.7
                 moonshotai/kimi-k2.5
                 x-ai/grok-4-fast
                 google/gemini-2.5-flash
@@ -273,7 +275,7 @@
                 z-ai/glm-5
                 )))
   :custom
-  (gptel-model 'minimax/minimax-m2.5))
+  (gptel-model 'minimax/minimax-m2.7))
 
 ;; restclient
 (after! restclient
