@@ -224,7 +224,7 @@
                     telega-emoji-use-images nil
                     telega-chat-input-markups '("markdown2" nil)
                     telega-animation-play-inline t
-                    telega-proxy-status-mode)
+                    telega-proxy-status-mode t)
               (telega-root--update)))
   (add-hook 'telega-ready-hook #'telega-mode-line-mode)
   :bind
