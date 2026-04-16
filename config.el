@@ -251,28 +251,16 @@
         :endpoint "/api/v1/chat/completions"
         :stream t
         :key (lambda () (getenv "OPENROUTER_API_KEY"))
-        :models '(x-ai/grok-code-fast-1
-                minimax/minimax-m2.1
+        :models '(
+                x-ai/grok-code-fast-1
+                x-ai/grok-4-fast
                 minimax/minimax-m2.5
                 minimax/minimax-m2.7
-                moonshotai/kimi-k2.5
-                x-ai/grok-4-fast
-                google/gemini-2.5-flash
-                google/gemini-2.5-flash-lite
-                google/gemini-3-flash-preview
-                openai/gpt-5
-                openai/gpt-5.1-codex-mini
-                openai/gpt-5-mini
+                google/gemini-3.1-flash-lite-preview
+                openai/gpt-4o-mini
                 qwen/qwen3-coder-next
-                qwen/qwen3-coder-flash
-                qwen/qwen3-coder
-                qwen/qwen3-coder:free
-                qwen/qwen3-coder-30b-a3b-instruct
                 deepseek/deepseek-v3.2
-                anthropic/claude-sonnet-4.5
-                qwen/qwen3.5-plus-02-15
-                moonshotai/kimi-k2.5
-                z-ai/glm-5
+                z-ai/glm-4.7-flash
                 )))
   :custom
   (gptel-model 'minimax/minimax-m2.7))
