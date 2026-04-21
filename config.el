@@ -237,33 +237,33 @@
 ;; gpt
 (use-package! gptel
   :config
-(with-eval-after-load 'gptel
-  (setq gptel-directives
-        (mapcar
-         (lambda (entry)
-           (cons (car entry)
-                 (concat (cdr entry)
-                         "\n\nAll responses MUST be in Russian.")))
-         gptel-directives)))
+  (with-eval-after-load 'gptel
+    (setq gptel-directives
+          (mapcar
+           (lambda (entry)
+             (cons (car entry)
+                   (concat (cdr entry)
+                           "\n\nОтвечай всегда на Русском языке.")))
+           gptel-directives)))
   (setq! gptel-backend
-        (gptel-make-openai "OpenRouter"
-        :host "openrouter.ai"
-        :endpoint "/api/v1/chat/completions"
-        :stream t
-        :key (lambda () (getenv "OPENROUTER_API_KEY"))
-        :models '(
-                x-ai/grok-code-fast-1
-                x-ai/grok-4-fast
-                minimax/minimax-m2.5
-                minimax/minimax-m2.7
-                google/gemini-3.1-flash-lite-preview
-                openai/gpt-4o-mini
-                qwen/qwen3-coder-next
-                deepseek/deepseek-v3.2
-                z-ai/glm-4.7-flash
-                )))
+         (gptel-make-openai "OpenRouter"
+           :host "openrouter.ai"
+           :endpoint "/api/v1/chat/completions"
+           :stream t
+           :key (lambda () (getenv "OPENROUTER_API_KEY"))
+           :models '(
+                     x-ai/grok-code-fast-1
+                     x-ai/grok-4-fast
+                     minimax/minimax-m2.5
+                     minimax/minimax-m2.7
+                     google/gemini-3.1-flash-lite-preview
+                     openai/gpt-4o-mini
+                     qwen/qwen3-coder-next
+                     deepseek/deepseek-v3.2
+                     z-ai/glm-4.7-flash
+                     )))
   :custom
-  (gptel-model 'minimax/minimax-m2.7))
+  (gptel-model 'deepseek/deepseek-v3.2))
 
 ;; restclient
 (after! restclient
