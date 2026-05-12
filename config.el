@@ -253,10 +253,12 @@
                      openai/gpt-4o-mini
                      qwen/qwen3-coder-next
                      deepseek/deepseek-v3.2
+                     deepseek/deepseek-v4-pro
+                     deepseek/deepseek-v4-flash
                      z-ai/glm-4.7-flash
                      )))
   :custom
-  (gptel-model 'deepseek/deepseek-v3.2))
+  (gptel-model 'deepseek/deepseek-v4-flash))
 
 ;; restclient
 (after! restclient
