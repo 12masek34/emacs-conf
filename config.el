@@ -258,7 +258,7 @@
                      z-ai/glm-4.7-flash
                      )))
   :custom
-  (gptel-model 'deepseek/deepseek-v4-flash))
+  (gptel-model 'minimax/minimax-m2.5))
 
 ;; restclient
 (after! restclient
@@ -268,6 +268,15 @@
     :select t
     :ttl nil
     :side 'bottom))
+
+;; rust
+(after! rustic
+  (setq rustic-lsp-server 'rust-analyzer)
+  (setq lsp-rust-analyzer-server-display-inlay-hints t)
+  (setq lsp-rust-analyzer-proc-macro-enable t)
+  (setq lsp-rust-analyzer-experimental-proc-attr-macros t)
+  (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+)
 
 ;;=======================================================
 ;;#######################################################
@@ -421,7 +430,9 @@
                 :endpoint "/api/v1/chat/completions"
                 :stream nil
                 :key (lambda () (getenv "OPENROUTER_API_KEY"))
-                :models '(openai/gpt-4o-mini))
+                :models '(deepseek/deepseek-v4-flash)
+                :request-params
+                '(:reasoning (:type "disabled")))
 
           ))
     (gptel-request
@@ -543,6 +554,7 @@ Be concise, technical, and skip praise or filler.")
        :desc "google-translate-at-point-reverse" "r" #'google-translate-at-point-reverse
        :desc "google-translate-at-point" "T" #'google-translate-query-translate
        :desc "google-translate-at-point-reverse" "R" #'google-translate-query-translate-reverse
+       :desc "google-translate-at-point-reverse" "p" #'telega-describe-proxies
        ))
 (map! :leader
       (:prefix "w"
@@ -644,7 +656,10 @@ Be concise, technical, and skip praise or filler.")
         lsp-idle-delay 0.05
         lsp-signature-doc-lines 5
         gc-cons-threshold (* 100 1024 1024)
-        lsp-restart 'ignore)
+        lsp-restart 'ignore
+        lsp-disabled-clients '(rls)
+        lsp-log-io nil
+        lsp-enable-on-type-formatting nil)
   :custom
   (lsp-keep-workspace-alive nil)
   (lsp-auto-guess-root nil)
