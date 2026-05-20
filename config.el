@@ -568,6 +568,7 @@ Be concise, technical, and skip praise or filler.")
                 :desc "gptel agent" "Y" #'gptel-agent
                 :desc "gptel add context" "a" #'gptel-add
                 :desc "gptel remove all context" "A" #'gptel-context-remove-all
+                :desc "gptel add file" "f" #'gptel-add-file
                 :desc "gptel rewrite" "r" #'gptel-rewrite
                 :desc "gptel menu" "m" #'gptel-menu
                 :desc "gptel generate commit message" "c" #'my/generate-commit-message-from-gpt
