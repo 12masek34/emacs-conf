@@ -430,7 +430,9 @@
                 :endpoint "/api/v1/chat/completions"
                 :stream nil
                 :key (lambda () (getenv "OPENROUTER_API_KEY"))
-                :models '(mistralai/mistral-nemo))
+                :models '(deepseek/deepseek-v4-flash)
+                :request-params
+                '(:reasoning (:enabled :json-false)))
 
           ))
     (gptel-request
