@@ -354,24 +354,24 @@
 (defun my/start_vpn ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
-    (message "Starting VPN via awg-quick@wg2.service...")
+    (message "Starting VPN via awg-quick@wg1.service...")
     (start-process
      "awg-vpn-process"
      "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S systemctl start awg-quick@wg2.service"
+     (format "echo %s | sudo -S systemctl start awg-quick@wg1.service"
              sudo-password))
     (message "VPN start command sent.")))
 
 (defun my/stop_vpn ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
-    (message "Stopping VPN awg-quick@wg2.service...")
+    (message "Stopping VPN awg-quick@wg1.service...")
     (start-process
      "awg-vpn-stop-process"
      "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S systemctl stop awg-quick@wg2.service"
+     (format "echo %s | sudo -S systemctl stop awg-quick@wg1.service"
              sudo-password))
     (message "VPN stop command sent.")))
 
