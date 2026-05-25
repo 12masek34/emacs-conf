@@ -430,7 +430,7 @@
                 :endpoint "/api/v1/chat/completions"
                 :stream nil
                 :key (lambda () (getenv "OPENROUTER_API_KEY"))
-                :models '(deepseek/deepseek-v4-flash)
+                :models '(openai/gpt-4o-mini)
                 :request-params
                 '(:reasoning (:enabled :json-false)))
 
