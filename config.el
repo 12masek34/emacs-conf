@@ -258,7 +258,7 @@
                      z-ai/glm-4.7-flash
                      )))
   :custom
-  (gptel-model 'minimax/minimax-m2.5))
+  (gptel-model 'deepseek/deepseek-v4-flash))
 
 ;; restclient
 (after! restclient
