@@ -1,4 +1,3 @@
-
 ;;; SQL Results Viewer — красивая таблица для результатов SQL-запросов
 
 (require 'cl-lib)
