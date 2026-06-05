@@ -6,8 +6,8 @@
   "Максимальная ширина колонки (в символах) в таблице результатов.")
 
 (map! :map my/sql-result-mode-map
-      :n "RET" #'my/sql-result-show-cell
-      :n "i"   #'my/sql-result-inspect-cell
+      :n "i" #'my/sql-result-show-cell
+      :n "RET"   #'my/sql-result-inspect-cell
       :n "q"   #'quit-window)
 
 (define-derived-mode my/sql-result-mode tabulated-list-mode "SQL-Result"
@@ -43,8 +43,8 @@
 
 
 (map! :map my/sql-cell-detail-mode-map
-      :n "RET" #'my/sql-result-show-cell
-      :n "i"   #'my/sql-result-inspect-cell
+      :n "i" #'my/sql-result-show-cell
+      :n "RET"   #'my/sql-result-inspect-cell
       :n "C-g"   #'my/sql-result--close-cell-detail
       :n "q"   #'my/sql-result--close-cell-detail)
 
@@ -195,3 +195,7 @@ RESULT — список списков (org-table), возможно с `hline' 
   (interactive)
   (let ((result (org-babel-execute-src-block)))
     (my/sql-popup result)))
+
+;; переделать на vtable
+;; заголовки не скроляться с колонками
+;; при просмотре колонки не все данные

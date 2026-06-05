@@ -562,7 +562,7 @@ Be concise, technical, and skip praise or filler.")
        :desc "set debug breakpoint" "s" #'my/set-breackpoint
        ;; ddatabase
        :desc "sql-connect" "c" #'sql-connect
-       :desc "sql-send-paragraph" "e" #'sql-send-paragraph
+       :desc "sql execute" "e" #'my/org-babel-execute-and-popup
        :desc "set logging" "l" #'my/set-logging
        ))
 (map! :leader
