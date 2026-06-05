@@ -85,10 +85,10 @@
 
 
 ;; column line long 120 char
-(setq! display-fill-column-indicator-column 120)
+(setopt display-fill-column-indicator-column 120)
 
 ;; font
-(setq! doom-font (font-spec :family "Hack" :size 15 :weight 'light)
+(setopt doom-font (font-spec :family "Hack" :size 15 :weight 'light)
        doom-variable-pitch-font (font-spec :family "Hack" :size 13)
        doom-unicode-font (font-spec :family "Hack")
        doom-big-font (font-spec :family "Hack" :size 24))
@@ -99,78 +99,69 @@
   (set-fontset-font t 'emoji  (font-spec :family "Noto Color Emoji") nil 'prepend))
 
 ;; dont add end allow line
-(setq! mode-require-final-newline nil)
+(setopt mode-require-final-newline nil)
 
-(setq! python-shell-completion-native-disabled-interpreters '("python3"))
+(setopt python-shell-completion-native-disabled-interpreters '("python3"))
 
-;;replace name buffer
-(setq! doom-fallback-buffer-name "► Doom"
-       +doom-dashboard-name "► Doom")
-
-(setq! read-process-output-max (* 1024 1024))
-(setq-default history-length 1000)
-(setq-default prescient-history-length 1000)
+(setopt read-process-output-max (* 1024 1024))
+(setopt history-length 1000)
+(setopt prescient-history-length 1000)
 
 ;; delay buffer hint
-(setq! which-key-idle-delay 0.1)
+(setopt which-key-idle-delay 0.1)
 
 ;; Disable backup
-(setq! make-backup-files nil)
+(setopt make-backup-files nil)
 
 ;; disable dialog window
-(setq! use-dialog-box nil)
+(setopt use-dialog-box nil)
 
 ;; auto read on disc file
 (global-auto-revert-mode 1)
-(setq! global-auto-revert-non-file-buffers t)
+(setopt global-auto-revert-non-file-buffers t)
 
 ;; limit
-(setq! undo-limit 80000000)
+(setopt undo-limit 80000000)
 
 ;; minimal size buffer
-(setq! window-safe-min-height 10)
-
-;; enable on-the-fly spell checking
-(setq! flyspell-use-meta-tab nil)
+(setopt window-safe-min-height 10)
 
 ;;cache projectile enable
-(setq! projectile-enable-caching t)
+(setopt projectile-enable-caching t)
 
 ;; vterm height window
-(setq! multi-vterm-dedicated-window-height-percent 40)
+(setopt multi-vterm-dedicated-window-height-percent 40)
 
 ;;fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-(setq! scroll-margin 7)
-
-(winner-mode 1)
+(setopt scroll-margin 7)
 
 ;; Delete selection
 (delete-selection-mode t)
-(global-superword-mode t)
 
 ;; magit
 (with-eval-after-load "magit"
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-local-branches))
-(setq! process-coding-system-alist
+
+(setopt process-coding-system-alist
       (cons '("git" . utf-8) process-coding-system-alist))
 
 ;; dired
 (setq dired-omit-files "^$")
 
 ;; remove line wrapping
-(setq! global-visual-line-mode nil)
-(setq! truncate-lines t)
+(setopt global-visual-line-mode nil)
+(setopt truncate-lines t)
 
 ;; search engine eww
-(setq! eww-search-prefix "https://ya.ru/search/?text=")
+(setopt eww-search-prefix "https://ya.ru/search/?text=")
 
 ;; ispell multiple config
 (with-eval-after-load "ispell"
-(setq! ispell-program-name "hunspell")
-(setq! ispell-local-dictionary "ru_RU,en_US")
-(setq! ispell-dictionary "ru_RU,en_US")
+(setopt ispell-program-name "hunspell")
+(setopt ispell-local-dictionary "ru_RU,en_US")
+(setopt ispell-dictionary "ru_RU,en_US")
 (ispell-set-spellchecker-params)
 (ispell-hunspell-add-multi-dic "ru_RU,en_US"))
 
@@ -238,7 +229,7 @@
                    (concat (cdr entry)
                            "\n\nОтвечай всегда на Русском языке.")))
            gptel-directives)))
-  (setq! gptel-backend
+  (setopt gptel-backend
          (gptel-make-openai "OpenRouter"
            :host "openrouter.ai"
            :endpoint "/api/v1/chat/completions"
@@ -757,15 +748,15 @@ Be concise, technical, and skip praise or filler.")
 ;;vterm add active link
 (use-package! vterm
   :config
-  (setq! vterm-timer-delay nil)
+  (setopt vterm-timer-delay nil)
   :hook
   (vterm-mode . goto-address-mode))
 
 ;; translate
 (use-package! google-translate
   :config
-  (setq! google-translate-default-source-language "en")
-  (setq! google-translate-default-target-language "ru")
+  (setopt google-translate-default-source-language "en")
+  (setopt google-translate-default-target-language "ru")
   )
 
 ;;consult
