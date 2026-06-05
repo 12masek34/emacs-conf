@@ -278,6 +278,20 @@
   (setq lsp-rust-analyzer-cargo-watch-command "clippy")
 )
 
+(after! markdown-mode
+  (map! :map evil-markdown-mode-map
+        :n "TAB" nil
+        :v "TAB" nil
+        :n "<tab>" nil
+        :v "<tab>" nil))
+
+(after! eca
+  (map! :map eca-chat-mode-map
+        :n "<tab>" #'eca-chat-toggle-expandable-block))
+
+(after! vertico
+  (define-key vertico-map (kbd "C-v") #'yank))
+
 ;;=======================================================
 ;;#######################################################
 ;;base config end
@@ -354,24 +368,24 @@
 (defun my/start_vpn ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
-    (message "Starting VPN via awg-quick@wg1.service...")
+    (message "Starting VPN via awg-quick@wg2.service...")
     (start-process
      "awg-vpn-process"
      "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S systemctl start awg-quick@wg1.service"
+     (format "echo %s | sudo -S systemctl start awg-quick@wg2.service"
              sudo-password))
     (message "VPN start command sent.")))
 
 (defun my/stop_vpn ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
-    (message "Stopping VPN awg-quick@wg1.service...")
+    (message "Stopping VPN awg-quick@wg2.service...")
     (start-process
      "awg-vpn-stop-process"
      "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S systemctl stop awg-quick@wg1.service"
+     (format "echo %s | sudo -S systemctl stop awg-quick@wg2.service"
              sudo-password))
     (message "VPN stop command sent.")))
 
@@ -466,6 +480,40 @@ Be concise, technical, and skip praise or filler.")
         (goto-char (point-max))
         (gptel-send))
       (pop-to-buffer session-name))))
+
+(defun my/openrouter-get-balance ()
+  (interactive)
+  (let ((api-key (getenv "OPENROUTER_API_KEY")))
+    (unless api-key
+      (error "OPENROUTER_API_KEY environment variable not set"))
+
+    (message "Fetching balance...")
+    (with-temp-buffer
+      (call-process "curl" nil t nil
+                    "-s" "-X" "GET"
+                    "https://openrouter.ai/api/v1/credits"
+                    "-H" (concat "Authorization: Bearer " api-key)
+                    "-H" "Content-Type: application/json"
+                    "--max-time" "5")
+
+      (goto-char (point-min))
+      (condition-case nil
+          (let ((json-object-type 'alist)
+                (json-array-type 'list)
+                (data (json-read)))
+
+            (let* ((data-alist (cdr (assq 'data data)))
+                   (total (cdr (assq 'total_credits data-alist)))
+                   (usage (cdr (assq 'total_usage data-alist)))
+                   (remaining (- total usage))
+                   (formatted (format "$%.2f" remaining)))
+
+              (when (called-interactively-p 'any)
+                (message "OpenRouter balance: %s" formatted))
+
+              formatted))
+        (json-read-error
+         (error "Failed to parse JSON response"))))))
 
 ;;=======================================================
 ;;#######################################################
@@ -571,20 +619,21 @@ Be concise, technical, and skip praise or filler.")
                 ))
 (map! :leader
         (:prefix "e"
-                :desc "my/execute-python-region" "r" #'my/execute-python-region
-                :desc "my/execute-python-buffer" "b" #'my/execute-python-buffer
+                :desc "eca" "e" #'eca
+                :desc "eca stop" "s" #'eca-stop
+                :desc "eca restart" "r" #'eca-restart
+                :desc "eca workspace" "w" #'eca-workspaces
+                :desc "eca chat new" "n" #'eca-chat-new
+                :desc "eca chat clear" "c" #'eca-chat-clear
+                :desc "eca chat select agent" "a" #'eca-chat-select-agent
+                :desc "eca chat select model" "m" #'eca-chat-select-model
+                :desc "openrouter balance" "b" #'my/openrouter-get-balance
                 ))
 (map! :leader
         (:prefix "y"
                 :desc "gptel" "y" #'gptel
-                :desc "gptel agent" "Y" #'gptel-agent
-                :desc "gptel add context" "a" #'gptel-add
-                :desc "gptel remove all context" "A" #'gptel-context-remove-all
-                :desc "gptel add file" "f" #'gptel-add-file
-                :desc "gptel rewrite" "r" #'gptel-rewrite
-                :desc "gptel menu" "m" #'gptel-menu
                 :desc "gptel generate commit message" "c" #'my/generate-commit-message-from-gpt
-                :desc "gptel review" "R" #'my/gptel-review-staged-changes
+                :desc "gptel review" "r" #'my/gptel-review-staged-changes
                 ))
 (map! :leader
         (:prefix "\""
