@@ -19,6 +19,71 @@
   `i'           — открыть полное содержимое ячейки в отдельном буфере"
   (setq-local tabulated-list-padding 2))
 
+(defun my/sql-result--build-header ()
+  "Build header-line string for tabulated-list, respecting horizontal scroll.
+Preserves sort indicator and click-to-sort button properties."
+  (let* ((hscroll (window-hscroll))
+         (fmt (and (vectorp tabulated-list-format) tabulated-list-format))
+         (padding (or tabulated-list-padding 0))
+         (pos (1+ padding))
+         (button-props `(help-echo "Click to sort by column"
+                         mouse-face header-line-highlight
+                         keymap ,tabulated-list-sort-button-map))
+         result)
+    ;; Safety guard: если fmt нет, отдаём просто отступ
+    (unless fmt
+      (cl-return-from my/sql-result--build-header
+        (make-string (max 0 (- pos hscroll)) ?\s)))
+    ;; Left padding, reduced by hscroll
+    (setq result (make-string (max 0 (- pos hscroll)) ?\s))
+    ;; Column headers
+    (dotimes (n (length fmt))
+      (let* ((col (aref fmt n))
+             (name (nth 0 col))
+             (label (format "%s" name))
+             (width (nth 1 col))
+             ;; Emacs 30+ формат: (NAME WIDTH SORTABLE &rest PROPS)
+             (props (nthcdr 3 col))
+             (pad-right (or (plist-get props :pad-right) 1))
+             (label-end (+ pos width))
+             (col-end (+ pos width pad-right)))    ; = label-end + pad-right
+        ;; Если колонка целиком скроллом уехала влево — пропускаем
+        (when (> col-end hscroll)
+          (let* ((label-start (min (length label) (max 0 (- hscroll pos))))
+                 (vis-label-len (max 0 (- label-end (max pos hscroll))))
+                 (vis-pad-len (max 0 (- col-end (max label-end hscroll))))
+                 (sort-col (and tabulated-list-sort-key
+                                (equal (car col) (car tabulated-list-sort-key))))
+                 (label-part (substring label label-start
+                                        (min (length label)
+                                             (+ label-start vis-label-len)))))
+            ;; Добавляем индикатор сортировки (▲/▼)
+            (when sort-col
+              (setq label-part (concat label-part
+                                       (if (cdr tabulated-list-sort-key) " ▼" " ▲"))))
+            ;; Добиваем/обрезаем до vis-label-len символов
+            (setq label-part (if (> vis-label-len 0)
+                                 (truncate-string-to-width label-part vis-label-len 0 ?\s)
+                               ""))
+            ;; Текст-свойства для сортировки по клику
+            (when (and (> (length label-part) 0)
+                       (not (string-blank-p label-part)))
+              (setq label-part
+                    (if sort-col
+                        (apply 'propertize label-part
+                               'tabulated-list-column-name name
+                               'face 'bold
+                               button-props)
+                      (apply 'propertize label-part
+                             'tabulated-list-column-name name
+                             button-props))))
+            (setq result (concat result label-part))
+            ;; Padding после колонки (только пробелы, синхронно с телом)
+            (when (> vis-pad-len 0)
+              (setq result (concat result (make-string vis-pad-len ?\s))))))
+        (setq pos col-end)))
+    result))
+
 (defun my/sql-result--column-at-point ()
   "Возвращает индекс колонки под курсором.
 Использует текстовую метку `tabulated-list-column-name',
@@ -103,40 +168,48 @@ RESULT — список списков (org-table), возможно с `hline' 
   (pcase-let ((`(,headers ,rows) (my/sql-result--parse-result result)))
     (let* ((ncols (max 1 (if headers (length headers)
                            (if rows (apply #'max 1 (mapcar #'length rows)) 1))))
-           ;; Выравниваем все строки до одинакового числа колонок
            (normalized-rows
             (mapcar (lambda (row)
                       (let ((r (cl-subseq row 0 (min (length row) ncols))))
                         (append r (make-list (- ncols (length r)) ""))))
                     rows))
-           ;; Вычисляем ширину каждой колонки (авто-подбор с ограничением)
+           (sep-rows
+            (mapcar (lambda (row)
+                      (cl-loop for i from 0 below (length row)
+                               collect (if (< i (1- (length row)))
+                                           (concat (format "%s" (nth i row)) "│")
+                                         (format "%s" (nth i row)))))
+                    normalized-rows))
+           (sep-headers
+            (cl-loop for i from 0 below ncols
+                     collect (if (< i (1- ncols))
+                                 (concat (format "%s" (or (and headers (nth i headers)) "")) "│")
+                               (format "%s" (or (and headers (nth i headers)) "")))))
            (col-widths
             (cl-loop for i below ncols
                      collect
                      (min my/sql-result-max-col-width
                           (max 8
-                               (if headers (length (format "%s" (nth i headers))) 0)
-                               (if normalized-rows
-                                   (apply #'max (mapcar (lambda (r) (length (format "%s" (nth i r)))) normalized-rows))
-                                 0)))))
-           ;; Вектор формата колонок для tabulated-list-mode
+                               (length (nth i sep-headers))
+                               (if sep-rows
+                                   (apply #'max (mapcar (lambda (r) (length (nth i r))) sep-rows))
+                                   0)))))
            (fmt-vector
             (apply #'vector
                    (cl-loop for i below ncols
                             collect
-                            (list (format "%s" (or (and headers (nth i headers)) ""))
+                            (list (nth i sep-headers)
                                   (nth i col-widths)
-                                  2))))
-           ;; Список записей (id . [значения колонок])
+                                  nil
+                                  :pad-right 1))))
            (entries
-            (cl-loop for row in normalized-rows
+            (cl-loop for row in sep-rows
                      for idx from 1
                      collect
                      (list idx
                            (apply #'vector
                                   (cl-loop for i below ncols
-                                           collect (format "%s" (nth i row))))))))
-      ;; Настраиваем и показываем буфер
+                                           collect (nth i row)))))))
       (let ((buf (get-buffer-create "*SQL Results*")))
         (with-current-buffer buf
           (my/sql-result-mode)
@@ -144,8 +217,9 @@ RESULT — список списков (org-table), возможно с `hline' 
                 tabulated-list-entries entries
                 tabulated-list-sort-key nil)
           (tabulated-list-init-header)
+          (setq-local header-line-format
+                      '(:eval (my/sql-result--build-header)))
           (tabulated-list-print t))
-        ;; Открываем окно в нижней половине экрана
         (let ((win (display-buffer buf
                      '((display-buffer-reuse-window
                         display-buffer-below-selected)
