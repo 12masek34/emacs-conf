@@ -1,201 +1,353 @@
-;;; SQL Results Viewer — красивая таблица для результатов SQL-запросов
+;;; database.el --- SQL Results Viewer with vtable -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2024-2025
+
+;; Author: Dmitry Martys
+;; Keywords: sql, database, org, babel
+;; Package-Requires: ((emacs "29.1"))
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; SQL Results Viewer — vtable-based display for SQL query results.
+;; Designed for use with org-babel SQL src-blocks.
+;; Requires Emacs 29+ with built-in vtable support.
+;;
+;; Основные возможности:
+;; - Отображение результатов SQL-запросов в таблице
+;; - Горизонтальный скролл заголовка вместе с данными
+;; - Детальный просмотр содержимого ячейки без урезания
+;; - Отображение времени выполнения запроса
+;; - Сортировка по колонкам (S)
+;; - Изменение ширины колонок ({ / })
+;;
+;; Использование:
+;;   M-x my/org-babel-execute-and-popup — выполнить src-block и показать таблицу
+
+;;; Code:
 
 (require 'cl-lib)
+(require 'vtable)
 
-(defvar my/sql-result-max-col-width 50
-  "Максимальная ширина колонки (в символах) в таблице результатов.")
+;; =============================================================================
+;; Пользовательские настройки
+;; =============================================================================
 
-(map! :map my/sql-result-mode-map
-      :n "i" #'my/sql-result-show-cell
-      :n "RET"   #'my/sql-result-inspect-cell
-      :n "q"   #'quit-window)
+(defgroup my/sql nil
+  "SQL results viewer."
+  :group 'tools)
 
-(define-derived-mode my/sql-result-mode tabulated-list-mode "SQL-Result"
-  "Режим для просмотра результатов SQL-запросов в виде таблицы.
+(defcustom my/sql-result-max-col-width 50
+  "Максимальная ширина колонки в символах."
+  :type 'integer
+  :group 'my/sql)
 
-Горячие клавиши:
-  `q' или `C-g' — закрыть окно результатов
-  `RET'         — показать содержимое ячейки в minibuffer
-  `i'           — открыть полное содержимое ячейки в отдельном буфере"
-  (setq-local tabulated-list-padding 2))
+(defcustom my/sql-result-show-timing t
+  "Показывать время выполнения запроса в заголовке."
+  :type 'boolean
+  :group 'my/sql)
 
-(defun my/sql-result--column-at-point ()
-  "Возвращает индекс колонки под курсором.
-Использует текстовую метку `tabulated-list-column-name',
-которую проставляет `tabulated-list-print-col' — работает
-надёжнее, чем ручной расчёт позиций."
-  (let ((name (get-text-property (point) 'tabulated-list-column-name)))
-    (if name
-        (tabulated-list--column-number name)
-      0)))
+;; =============================================================================
+;; Внутренние переменные
+;; =============================================================================
+
+(defvar-local my/sql--table nil
+  "vtable object текущей таблицы результатов.")
+
+(defvar-local my/sql--exec-time nil
+  "Время выполнения последнего запроса (в секундах).")
+
+;; =============================================================================
+;; Работа с ячейками — доступ к полным (неурезанным) данным
+;; =============================================================================
+
+(defun my/sql--current-cell-data ()
+  "Возвращает (row-number column-index raw-value) для ячейки под курсором.
+Использует vtable-current-object и vtable-current-column для доступа
+к оригинальным данным (неурезанным, в отличие от отображаемого текста)."
+  (when-let* ((table my/sql--table)
+              (col (vtable-current-column))
+              (obj (vtable-current-object)))
+    ;; obj — это список значений строки (оригинальные, неурезанные данные)
+    ;; Вычисляем номер строки (1-based) из позиции в буфере
+    ;; Строка 1 = заголовок, строки 2+ = данные
+    (let ((row-num (- (line-number-at-pos (point)) 2)))
+      (list row-num col (elt obj col)))))
 
 (defun my/sql-result-show-cell ()
   "Показать содержимое текущей ячейки в echo area."
   (interactive)
-  (let* ((entry (tabulated-list-get-entry))
-         (col   (my/sql-result--column-at-point))
-         (cell  (and entry col (elt entry col))))
-    (if cell
-        (message "Cell [Row %s, Col %d]: %s"
-                 (tabulated-list-get-id) (1+ col)
-                 (truncate-string-to-width cell 200 0 nil t))
-      (message "Empty cell"))))
+  (pcase (my/sql--current-cell-data)
+    (`(,row-num ,col ,val)
+     (let ((val-str (if (stringp val) val (format "%s" val))))
+       (message "Cell [Row: %d, Col: %d]: %s"
+                row-num (1+ col)
+                (truncate-string-to-width val-str 200 0 nil t))))
+    (_ (message "Empty cell"))))
 
+;; =============================================================================
+;; Режим детализации ячейки
+;; =============================================================================
 
-(map! :map my/sql-cell-detail-mode-map
-      :n "i" #'my/sql-result-show-cell
-      :n "RET"   #'my/sql-result-inspect-cell
-      :n "C-g"   #'my/sql-result--close-cell-detail
-      :n "q"   #'my/sql-result--close-cell-detail)
+(defvar-keymap my/sql-cell-detail-map
+  "q"   #'my/sql--close-cell-detail
+  "C-g" #'my/sql--close-cell-detail)
 
-(define-derived-mode my/sql-cell-detail-mode special-mode "SQL-Cell"
-  "Режим для просмотра полного содержимого ячейки.")
-
-(defun my/sql-result--close-cell-detail ()
-  "Закрыть буфер детализации ячейки и вернуться к результатам."
+(defun my/sql--close-cell-detail ()
+  "Закрыть буфер детализации и вернуться к результатам."
   (interactive)
   (let ((results-win (get-buffer-window "*SQL Results*")))
-    ;; Убиваем буфер и удаляем окно
-    (kill-buffer (current-buffer))
+    ;; Закрываем окно и буфер детализации
+    (quit-window t)
+    ;; Возвращаемся в окно результатов
     (when (window-live-p results-win)
-      (select-window results-win))
-    ;; Если окна с результатами уже нет — покажем заново
-    (unless (window-live-p results-win)
-      (when (get-buffer "*SQL Results*")
-        (pop-to-buffer "*SQL Results*")))))
+      (select-window results-win))))
+
+(define-derived-mode my/sql-cell-detail-mode special-mode "SQL-Cell"
+  "Режим для просмотра полного содержимого ячейки.
+
+Горячие клавиши:
+  `q' или `C-g' — закрыть и вернуться к результатам
+  `SPC' — скролл вниз
+  `DEL' — скролл вверх"
+  (setq-local truncate-lines nil))
 
 (defun my/sql-result-inspect-cell ()
-  "Показать полное содержимое текущей ячейки в popup-буфере."
+  "Открыть полное содержимое ячейки в popup-буфере.
+Показывает оригинальные (неурезанные) данные."
   (interactive)
-  (let* ((entry (tabulated-list-get-entry))
-         (col   (my/sql-result--column-at-point))
-         (cell  (and entry col (elt entry col))))
-    (if (and cell (not (string-empty-p cell)))
-        (let ((buf (get-buffer-create "*SQL Cell Detail*")))
-          (with-current-buffer buf
-            (my/sql-cell-detail-mode)
-            (let ((buffer-read-only nil))
-              (erase-buffer)
-              (insert cell)
-              (goto-char (point-min)))
-            (setq-local header-line-format
-                        (format "  Cell: Row %s, Col %d  (SPC/DEL — скролл, q — закрыть)"
-                                (tabulated-list-get-id) (1+ col))))
-          (display-buffer buf '((display-buffer-reuse-window
-                                 display-buffer-below-selected)
-                                (window-height . 0.3))))
-      (message "Empty cell"))))
+  (pcase (my/sql--current-cell-data)
+    (`(,row-num ,col ,val)
+     (let* ((val-str (if (stringp val) val (format "%s" val)))
+            (buf (get-buffer-create "*SQL Cell Detail*")))
+       (with-current-buffer buf
+         (let ((inhibit-read-only t))
+           (erase-buffer)
+           (insert val-str)
+           (goto-char (point-min))
+           (my/sql-cell-detail-mode)
+           (setq-local header-line-format
+                       (format "  Cell: Row %d, Col %d  (q — close)"
+                               row-num (1+ col)))
+           (setq-local buffer-read-only t)))
+       (display-buffer buf '((display-buffer-reuse-window
+                              display-buffer-below-selected)
+                             (window-height . 0.3)))))
+    (_ (message "Empty cell"))))
 
-(defun my/sql-result--parse-result (result)
-  "Преобразует RESULT из org-babel в (headers rows).
-RESULT — список списков (org-table), возможно с `hline' между заголовком и данными."
-  (if (not (listp result))
-      (list nil (list (list (format "%s" result))))
-    (let ((data (cl-remove-if (lambda (x) (eq x 'hline)) result)))
-      (if (null data)
-          (list nil nil)
-        (if (and (car data) (listp (car data)))
-            (list (car data) (cdr data))
-          (list nil (list data)))))))
+;; =============================================================================
+;; Режим SQL Results
+;; =============================================================================
 
-(defun my/sql-result--display (result)
-  "Отображает RESULT в tabulated-list-mode буфере.
-Каждая ячейка (кроме последней колонки) добивается пробелами до content-width
-и к ней добавляется \" │\" — так разделитель стоит на одной позиции во всех строках."
-  (pcase-let ((`(,headers ,rows) (my/sql-result--parse-result result)))
-    (let* ((ncols (max 1 (if headers (length headers)
-                           (if rows (apply #'max 1 (mapcar #'length rows)) 1))))
-           ;; Нормализация: все строки одной длины
-           (normalized-rows
-            (mapcar (lambda (row)
-                      (let ((r (cl-subseq row 0 (min (length row) ncols))))
-                        (append r (make-list (- ncols (length r)) ""))))
-                    rows))
-           ;; Чистые данные (без разделителя) — для расчёта ширины
-           (clean-rows
-            (mapcar (lambda (row)
-                      (cl-loop for i from 0 below (length row)
-                               collect (format "%s" (nth i row))))
-                    normalized-rows))
-           (clean-headers
-            (cl-loop for i from 0 below ncols
-                     collect (format "%s" (or (and headers (nth i headers)) ""))))
-           ;; Ширина колонки по контенту (без "│")
-           (content-widths
-            (cl-loop for i below ncols
-                     collect
-                     (min my/sql-result-max-col-width
-                          (max 8
-                               (length (nth i clean-headers))
-                               (if clean-rows
-                                   (apply #'max (mapcar (lambda (r) (length (nth i r))) clean-rows))
-                                   0)))))
-           ;; Финальная ширина колонки + данные с "│" на фикс. позиции
-           (col-widths (cl-loop for i below ncols
-                                collect (+ (nth i content-widths)
-                                           (if (< i (1- ncols)) 2 0))))
-           (padded-headers
-            (cl-loop for i below ncols
-                     for h = (nth i clean-headers)
-                     for cw = (nth i content-widths)
-                     collect (if (< i (1- ncols))
-                                 (concat (truncate-string-to-width h cw 0 ?\s)
-                                         " │")
-                               (truncate-string-to-width h cw 0 ?\s))))
-           (padded-rows
-            (mapcar (lambda (row)
-                      (cl-loop for i below (length row)
-                               for cell = (format "%s" (nth i row))
-                               for cw = (nth i content-widths)
-                               collect (if (< i (1- (length row)))
-                                           (concat
-                                            (truncate-string-to-width cell cw 0 ?\s)
-                                            " │")
-                                         (truncate-string-to-width cell cw 0 ?\s))))
-                    clean-rows))
-           (fmt-vector
-            (apply #'vector
-                   (cl-loop for i below ncols
-                            collect
-                            (list (nth i padded-headers)
-                                  (nth i col-widths)
-                                  nil
-                                  :pad-right 0))))
-           (entries
-            (cl-loop for row in padded-rows
-                     for idx from 1
-                     collect
-                     (list idx
-                           (apply #'vector
-                                  (cl-loop for i below ncols
-                                           collect (nth i row)))))))
-      (let ((buf (get-buffer-create "*SQL Results*")))
-        (with-current-buffer buf
-          (my/sql-result-mode)
-          (setq tabulated-list-format fmt-vector
-                tabulated-list-entries entries
-                tabulated-list-sort-key nil)
-          (tabulated-list-init-header)
-          (tabulated-list-print t))
-        (let ((win (display-buffer buf
-                     '((display-buffer-reuse-window
-                        display-buffer-below-selected)
-                       (window-height . (lambda (win)
-                                         (max 5 (/ (frame-height) 2))))))))
-          (when win
-            (with-selected-window win
-              (goto-char (point-min)))))))))
+(define-derived-mode my/sql-result-mode special-mode "SQL-Result"
+  "Режим для просмотра результатов SQL-запросов.
 
-(defun my/sql-popup (result)
-  "Показать результат SQL-запроса RESULT в красивой таблице."
-  (my/sql-result--display result))
+Горячие клавиши:
+  `q'   — закрыть окно результатов
+  `RET' — показать полное содержимое ячейки в отдельном буфере
+  `i'   — показать содержимое ячейки в minibuffer
+  `S'   — сортировать по колонке
+  `{'   — сузить колонку
+  `}'   — расширить колонку
+  `g'   — перезагрузить таблицу"
+  (setq-local truncate-lines t
+              buffer-read-only t))
 
+;;; Клавиатурные сокращения
+
+(defvar-keymap my/sql-result-map
+  :parent vtable-map
+  "i"    #'my/sql-result-show-cell
+  "RET"  #'my/sql-result-inspect-cell
+  "q"    #'quit-window)
+
+;; =============================================================================
+;; Парсинг результата SQL-запроса
+;; =============================================================================
+
+(defun my/sql--parse-result (result)
+  "Преобразовать RESULT из org-babel в (headers . rows).
+
+RESULT может быть:
+- nil / пустым
+- списком списков (org-table), возможно с `hline'
+- строкой
+- списком значений одной строки"
+  (cond
+   ((null result)
+    (list nil nil))
+
+   ((and (listp result) (eq (car result) 'hline))
+    ;; Формат (hline row1 row2 ...) — без заголовка
+    (list nil (cl-remove-if (lambda (x) (eq x 'hline)) result)))
+
+   ((and (listp result) (listp (car result)))
+    ;; (header row1 row2 ...) или (row1 row2 ...)
+    ;; Ищем hline
+    (let* ((has-hline (memq 'hline result))
+           (data (cl-remove-if (lambda (x) (eq x 'hline)) result)))
+      (if has-hline
+          (if data
+              (list (car data) (cdr data))
+            (list nil nil))
+        ;; Без hline — первая строка может быть заголовком
+        ;; но мы не можем быть уверены. Считаем все данные.
+        (list (car data) (cdr data)))))
+
+   ((stringp result)
+    ;; Одна строка результата
+    (list nil (list (list result))))
+
+   (t
+    ;; Единичное значение
+    (list nil (list (list (format "%s" result)))))))
+
+;; =============================================================================
+;; Column formatter — урезание длинных значений
+;; =============================================================================
+
+(defun my/sql--cell-formatter (value _index _table)
+  "Отформатировать VALUE для отображения в ячейке.
+Урезает длинные строки до `my/sql-result-max-col-width' символов.
+Оригинальное значение НЕ изменяется — оно хранится в vtable-object и доступно
+для просмотра через `my/sql-result-inspect-cell'."
+  (let* ((raw (if (stringp value) value (format "%s" value)))
+         (max-chars my/sql-result-max-col-width))
+    (if (> (length raw) max-chars)
+        (truncate-string-to-width raw max-chars 0 nil t)
+      raw)))
+
+;; =============================================================================
+;; Отображение таблицы
+;; =============================================================================
+
+(defun my/sql--display (result &optional exec-time)
+  "Отобразить RESULT (результат org-babel SQL) в vtable.
+
+RESULT — список списков (org-table), возможно с `hline'.
+EXEC-TIME — время выполнения запроса в секундах (опционально).
+           Если non-nil, отображается в заголовке буфера."
+  (pcase-let* ((`(,headers ,rows) (my/sql--parse-result result))
+               (ncols (max 1 (cond
+                              (headers (length headers))
+                              (rows (apply #'max 1 (mapcar #'length rows)))
+                              (t 1))))
+               ;; Нормализация всех строк к одной длине
+               (normalized-rows
+                (mapcar (lambda (row)
+                          (let* ((row-list (if (listp row) row (list row)))
+                                 (r (cl-subseq row-list 0 (min (length row-list) ncols))))
+                            (append r (make-list (- ncols (length r)) ""))))
+                        rows))
+               ;; Имена колонок
+               (col-names
+                (cl-loop for i from 0 below ncols
+                         collect (if (and headers (< i (length headers)))
+                                     (format "%s" (nth i headers))
+                                   (format "Col %d" (1+ i)))))
+               ;; Спецификации колонок vtable
+               (max-col-width my/sql-result-max-col-width)
+               (col-specs
+                (cl-loop for name in col-names
+                         collect
+                         (make-vtable-column
+                          :name (truncate-string-to-width name max-col-width 0 nil t)
+                          :width (format "%dex" (min max-col-width
+                                                     (max 8 (length name))))
+                          :max-width (format "%dex" max-col-width)
+                          :min-width "8ex"
+                          :align 'left)))
+               ;; Форматирование времени выполнения
+               (timing-str (when (and exec-time my/sql-result-show-timing)
+                             (format "  [exec: %.2f ms]" (* exec-time 1000)))))
+    ;; Создаём буфер и таблицу
+    (let* ((buf (get-buffer-create "*SQL Results*")))
+      (with-current-buffer buf
+        (my/sql-result-mode)
+        (let ((inhibit-read-only t))
+          (erase-buffer)
+          (setq-local my/sql--table
+                      (make-vtable
+                       :columns col-specs
+                       :objects normalized-rows
+                       :use-header-line nil  ;; заголовок — в буфере, скроллится
+                       :formatter #'my/sql--cell-formatter
+                       :keymap my/sql-result-map
+                       :separator-width 1
+                       :divider " │"
+                       :ellipsis t
+                       :sort-by nil))))
+      ;; Кешируем заголовок для горизонтального скролла
+      (with-current-buffer buf
+        (setq-local my/sql--exec-time exec-time)
+        (setq-local header-line-format
+                    (propertize
+                     (format "SQL Results%s" (or timing-str ""))
+                     'face 'mode-line-buffer-id)))
+      ;; Показываем окно
+      (let ((win (display-buffer buf
+                   '((display-buffer-reuse-window
+                      display-buffer-below-selected)
+                     (window-height . (lambda (win)
+                                       (with-selected-window win
+                                         (max 5
+                                              (min (/ (frame-height) 2)
+                                                   (1+ (length normalized-rows)))))))))))
+        (when win
+          (with-selected-window win
+            (goto-char (point-min))
+            (forward-line)  ;; пропускаем заголовок
+            (set-window-start win (point)))
+          ;; Force header line update right away
+          (force-mode-line-update))))))
+
+;; =============================================================================
+;; Публичные функции
+;; =============================================================================
+
+(defun my/sql-popup (result &optional exec-time)
+  "Показать результат SQL-запроса RESULT в таблице.
+RESULT — в формате org-babel (список списков).
+EXEC-TIME — время выполнения в секундах (опционально)."
+  (my/sql--display result exec-time))
+
+;;;###autoload
 (defun my/org-babel-execute-and-popup ()
-  "Выполнить текущий src-block org-babel и показать результат в popup-таблице."
+  "Выполнить текущий src-block org-babel и показать результат в таблице.
+Замеряет и отображает время выполнения запроса.
+Работает с любыми языками org-babel (sql, python, elisp, ...)."
   (interactive)
-  (let ((result (org-babel-execute-src-block)))
-    (my/sql-popup result)))
+  (let ((start-time (float-time)))
+    ;; Сохраняем параметры выполнения для оборачивания ошибки
+    (condition-case err
+        (let ((result (org-babel-execute-src-block)))
+          (let ((exec-time (- (float-time) start-time)))
+            (if (and (listp result) (listp (car result)))
+                ;; Табличный результат — показываем в vtable
+                (my/sql-popup result exec-time)
+              ;; Нетабличный результат — показываем как есть
+              (let ((msg (if (stringp result) result (format "%s" result))))
+                (message "Query result (%.2f ms): %s"
+                         (* exec-time 1000)
+                         (truncate-string-to-width msg 200 0 nil t))))))
+      (error
+       (message "Query failed after %.2f ms: %s"
+                (* (- (float-time) start-time) 1000)
+                (error-message-string err))))))
 
-;; переделать на vtable
-;; заголовки не скроляться с колонками
-;; при просмотре колонки не все данные
+(declare-function org-babel-execute-src-block "ob-core")
+
+(provide 'database)
+;;; database.el ends here
