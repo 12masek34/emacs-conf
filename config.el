@@ -506,6 +506,20 @@ Be concise, technical, and skip praise or filler.")
         (json-read-error
          (error "Failed to parse JSON response"))))))
 
+(defun my/show-time ()
+  (interactive)
+  (let ((count 0)
+        timer)
+    (setq timer
+          (run-at-time
+           0 0.1
+           (lambda ()
+             (message "%s" (format-time-string "%H:%M:%S.%3N"))
+             (setq count (1+ count))
+             (when (>= count 100)
+               (cancel-timer timer)
+               (message "%s" (format-time-string "%H:%M:%S.%3N"))))))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -665,15 +679,6 @@ Be concise, technical, and skip praise or filler.")
   (setq python-indent-guess-indent-offset nil)
   (setq python-indent-def-block-scale 1)
   (setq python-shell-interpreter "python3"))
-
-;;time
-(use-package! time
-  :defer t
-  :custom
-  (display-time-default-load-average nil)
-  (display-time-24hr-format t)
-  :config
-  (display-time-mode t))
 
 ;; lsp-pyright
 (use-package! lsp-pyright
