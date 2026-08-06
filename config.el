@@ -610,6 +610,78 @@
          (goto-char (point-min))
          (insert (format "%s: %s\n\n" branch (string-trim response)))))))))
 
+(defun my/gptel-review-staged-changes ()
+  (interactive)
+  (let* ((diff (string-trim (shell-command-to-string "git diff --cached")))
+         (session-name "*gptel-review*"))
+    (if (string-empty-p diff)
+        (message "Нет staged changes для отправки.")
+      (gptel session-name)
+      (with-current-buffer session-name
+        (read-only-mode -1)
+        (setq-local gptel-system-prompt
+                    "You are a senior software engineer performing a code review.
+Report only critical issues: bugs, logic errors, security risks,
+performance problems, and bad design decisions.
+Be concise, technical, and skip praise or filler.")
+        (erase-buffer)
+        (insert
+         "Perform a code review of the following staged git diff.\n"
+         "Return only important findings.\nAlways write your response in Russian.\n\n"
+         "=== STAGED GIT DIFF ===\n\n"
+         diff)
+        (goto-char (point-max))
+        (gptel-send))
+      (pop-to-buffer session-name))))
+
+(defun my/openrouter-get-balance ()
+  (interactive)
+  (let ((api-key (getenv "OPENROUTER_API_KEY")))
+    (unless api-key
+      (error "OPENROUTER_API_KEY environment variable not set"))
+
+    (message "Fetching balance...")
+    (with-temp-buffer
+      (call-process "curl" nil t nil
+                    "-s" "-X" "GET"
+                    "https://openrouter.ai/api/v1/credits"
+                    "-H" (concat "Authorization: Bearer " api-key)
+                    "-H" "Content-Type: application/json"
+                    "--max-time" "5")
+
+      (goto-char (point-min))
+      (condition-case nil
+          (let ((json-object-type 'alist)
+                (json-array-type 'list)
+                (data (json-read)))
+
+            (let* ((data-alist (cdr (assq 'data data)))
+                   (total (cdr (assq 'total_credits data-alist)))
+                   (usage (cdr (assq 'total_usage data-alist)))
+                   (remaining (- total usage))
+                   (formatted (format "$%.2f" remaining)))
+
+              (when (called-interactively-p 'any)
+                (message "OpenRouter balance: %s" formatted))
+
+              formatted))
+        (json-read-error
+         (error "Failed to parse JSON response"))))))
+
+(defun my/show-time ()
+  (interactive)
+  (let ((count 0)
+        timer)
+    (setq timer
+          (run-at-time
+           0 0.1
+           (lambda ()
+             (message "%s" (format-time-string "%H:%M:%S.%3N"))
+             (setq count (1+ count))
+             (when (>= count 100)
+               (cancel-timer timer)
+               (message "%s" (format-time-string "%H:%M:%S.%3N"))))))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
@@ -765,15 +837,6 @@
   (setq python-indent-guess-indent-offset nil)
   (setq python-indent-def-block-scale 1)
   (setq python-shell-interpreter "python3"))
-
-;;time
-(use-package! time
-  :defer t
-  :custom
-  (display-time-default-load-average nil)
-  (display-time-24hr-format t)
-  :config
-  (display-time-mode t))
 
 ;; lsp-pyright
 (use-package! lsp-pyright
