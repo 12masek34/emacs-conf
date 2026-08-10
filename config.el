@@ -520,6 +520,65 @@ Be concise, technical, and skip praise or filler.")
                (cancel-timer timer)
                (message "%s" (format-time-string "%H:%M:%S.%3N"))))))))
 
+(defun my/resolve-domains-to-ips ()
+  (interactive)
+  (let ((domains '("google.com"
+                   "ya.ru"
+                   ))
+        gateway interface ips)
+
+    ;; Получаем обычный default gateway и интерфейс.
+    (with-temp-buffer
+      (call-process "ip" nil t nil "route" "show" "default")
+      (goto-char (point-min))
+      (when (re-search-forward
+             "^default via \\([^ ]+\\) dev \\([^ ]+\\)"
+             nil t)
+        (setq gateway (match-string 1))
+        (setq interface (match-string 2))))
+
+    (unless (and gateway interface)
+      (user-error "Не удалось определить default gateway/interface"))
+
+    (message "Gateway: %s, interface: %s" gateway interface)
+
+    ;; Резолвим домены.
+    (dolist (domain domains)
+      (message "Resolving %s..." domain)
+      (with-temp-buffer
+        (call-process "getent" nil t nil "ahosts" domain)
+        (goto-char (point-min))
+        (while (re-search-forward
+                "^\\([0-9a-fA-F:.]+\\)[[:space:]]"
+                nil t)
+          (push (match-string-no-properties 1) ips))))
+
+    ;; Убираем дубли.
+    (setq ips (sort (delete-dups ips) #'string<))
+
+    ;; Генерируем конфигурацию WireGuard.
+    (with-current-buffer (get-buffer-create "*domain-ips*")
+      (erase-buffer)
+
+      (insert "### VPN bypass routes\n\n")
+
+      (dolist (ip ips)
+        (insert
+         (format "PostUp = ip route add %s/32 via %s dev %s\n"
+                 ip gateway interface)))
+
+      (insert "\n")
+
+      (dolist (ip ips)
+        (insert
+         (format "PostDown = ip route del %s/32 via %s dev %s\n"
+                 ip gateway interface)))
+
+      (goto-char (point-min))
+      (display-buffer (current-buffer)))
+
+    (message "Generated %d routes" (length ips))))
+
 ;;=======================================================
 ;;#######################################################
 ;;my custom function end
