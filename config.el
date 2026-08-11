@@ -380,7 +380,7 @@
              sudo-password))
     (message "VPN stop command sent.")))
 
-(defun my/vpn_wg_start ()
+(defun my/vpn_parser_start ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
     (if (not sudo-password)
@@ -392,7 +392,7 @@
        (format "echo %s | sudo -S wg-quick up wg0" sudo-password))
       (message "VPN wg0 запущен."))))
 
-(defun my/vpn_wg_stop ()
+(defun my/vpn_parser_stop ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
     (if (not sudo-password)
@@ -403,6 +403,30 @@
        "bash" "-c"
        (format "echo %s | sudo -S wg-quick down wg0" sudo-password))
       (message "VPN wg0 остановлен."))))
+
+(defun my/vpn_monita_start ()
+  (interactive)
+  (let ((sudo-password (getenv "SUDOPASS")))
+    (if (not sudo-password)
+        (message "Переменная окружения SUDOPASS не установлена!")
+      (start-process
+       "wg-up-process"
+       "*wg-output*"
+       "bash" "-c"
+       (format "echo %s | sudo -S wg-quick up wg1" sudo-password))
+      (message "VPN wg1 запущен."))))
+
+(defun my/vpn_monita_stop ()
+  (interactive)
+  (let ((sudo-password (getenv "SUDOPASS")))
+    (if (not sudo-password)
+        (message "Переменная окружения SUDOPASS не установлена!")
+      (start-process
+       "wg-down-process"
+       "*wg-output*"
+       "bash" "-c"
+       (format "echo %s | sudo -S wg-quick down wg1" sudo-password))
+      (message "VPN wg1 остановлен."))))
 
 (defun my/split-window-vertically ()
   (interactive)
