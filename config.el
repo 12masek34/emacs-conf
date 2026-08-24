@@ -708,7 +708,8 @@ Be concise, technical, and skip praise or filler.")
 (map! :leader
         (:prefix "e"
                 :desc "eca" "e" #'eca
-                :desc "eca stop" "s" #'eca-stop
+                :desc "eca stop" "s" #'eca-chat-stop-prompt
+                :desc "eca stop" "S" #'eca-stop
                 :desc "eca restart" "r" #'eca-restart
                 :desc "eca workspace" "w" #'eca-workspaces
                 :desc "eca chat new" "n" #'eca-chat-new
