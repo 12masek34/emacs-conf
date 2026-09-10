@@ -20,7 +20,6 @@
 (package! python-black)
 (package! gptel)
 (package! telega)
-(package! eca)
 (package! shell-maker)
 (package! acp)
 (package! agent-shell)

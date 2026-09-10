@@ -277,10 +277,6 @@
         :n "<tab>" nil
         :v "<tab>" nil))
 
-(after! eca
-  (map! :map eca-chat-mode-map
-        :n "<tab>" #'eca-chat-toggle-expandable-block))
-
 (after! vertico
   (define-key vertico-map (kbd "C-v") #'yank))
 
@@ -473,30 +469,6 @@
          (goto-char (point-min))
          (insert (format "%s: %s\n\n" branch (string-trim response)))))))))
 
-(defun my/gptel-review-staged-changes ()
-  (interactive)
-  (let* ((diff (string-trim (shell-command-to-string "git diff --cached")))
-         (session-name "*gptel-review*"))
-    (if (string-empty-p diff)
-        (message "Нет staged changes для отправки.")
-      (gptel session-name)
-      (with-current-buffer session-name
-        (read-only-mode -1)
-        (setq-local gptel-system-prompt
-                    "You are a senior software engineer performing a code review.
-Report only critical issues: bugs, logic errors, security risks,
-performance problems, and bad design decisions.
-Be concise, technical, and skip praise or filler.")
-        (erase-buffer)
-        (insert
-         "Perform a code review of the following staged git diff.\n"
-         "Return only important findings.\nAlways write your response in Russian.\n\n"
-         "=== STAGED GIT DIFF ===\n\n"
-         diff)
-        (goto-char (point-max))
-        (gptel-send))
-      (pop-to-buffer session-name))))
-
 (defun my/openrouter-get-balance ()
   (interactive)
   (let ((api-key (getenv "OPENROUTER_API_KEY")))
@@ -648,23 +620,11 @@ Be concise, technical, and skip praise or filler.")
                 :desc "eww" "g" #'eww-new
                 ))
 (map! :leader
-        (:prefix "e"
-                :desc "eca" "e" #'eca
-                :desc "eca stop" "s" #'eca-chat-stop-prompt
-                :desc "eca stop" "S" #'eca-stop
-                :desc "eca restart" "r" #'eca-restart
-                :desc "eca workspace" "w" #'eca-workspaces
-                :desc "eca chat new" "n" #'eca-chat-new
-                :desc "eca chat clear" "c" #'eca-chat-clear
-                :desc "eca chat select agent" "a" #'eca-chat-select-agent
-                :desc "eca chat select model" "m" #'eca-chat-select-model
-                :desc "openrouter balance" "b" #'my/openrouter-get-balance
-                ))
-(map! :leader
         (:prefix "y"
                 :desc "gptel" "y" #'gptel
+                :desc "agent shell" "a" #'agent-shell
                 :desc "gptel generate commit message" "c" #'my/generate-commit-message-from-gpt
-                :desc "gptel review" "r" #'my/gptel-review-staged-changes
+                :desc "openrouter balance" "b" #'my/openrouter-get-balance
                 ))
 (map! :leader
         (:prefix "\""
