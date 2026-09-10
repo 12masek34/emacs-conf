@@ -246,10 +246,11 @@
                      deepseek/deepseek-v3.2
                      deepseek/deepseek-v4-pro
                      deepseek/deepseek-v4-flash
+                     ~deepseek/deepseek-v4-flash-latest
                      z-ai/glm-4.7-flash
                      )))
   :custom
-  (gptel-model 'deepseek/deepseek-v4-flash))
+  (gptel-model '~deepseek/deepseek-v4-flash-latest))
 
 ;; restclient
 (after! restclient
@@ -543,13 +544,6 @@ Be concise, technical, and skip praise or filler.")
              (when (>= count 100)
                (cancel-timer timer)
                (message "%s" (format-time-string "%H:%M:%S.%3N"))))))))
-
-(defun my/resolve-domains-to-ips ()
-  (interactive)
-  (let ((domains '("google.com"
-                   "ya.ru"
-                   ))
-        gateway interface ips)
 
     ;; Получаем обычный default gateway и интерфейс.
     (with-temp-buffer
@@ -857,6 +851,20 @@ Be concise, technical, and skip praise or filler.")
 (use-package! python-black
   :demand t
   :after python)
+
+;; agent in emacs
+(use-package! agent-shell
+  :commands (agent-shell agent-shell-opencode-start-agent)
+  :init
+  (setq agent-shell-preferred-agent-config 'opencode)
+
+  :config
+  (setq agent-shell-opencode-authentication
+        (agent-shell-opencode-make-authentication :none t))
+
+  (setq agent-shell-opencode-default-model-id
+        "openrouter/~deepseek/deepseek-v4-flash-latest"))
+
 ;;=======================================================
 ;;=======================================================
 ;;#######################################################
