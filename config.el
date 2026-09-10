@@ -241,7 +241,6 @@
                      minimax/minimax-m2.5
                      minimax/minimax-m2.7
                      google/gemini-3.1-flash-lite-preview
-                     openai/gpt-4o-mini
                      qwen/qwen3-coder-next
                      deepseek/deepseek-v3.2
                      deepseek/deepseek-v4-pro
@@ -456,7 +455,7 @@
                 :endpoint "/api/v1/chat/completions"
                 :stream nil
                 :key (lambda () (getenv "OPENROUTER_API_KEY"))
-                :models '(openai/gpt-4o-mini)
+                :models '(openrouter/~deepseek/deepseek-v4-flash-latest)
                 :request-params
                 '(:reasoning (:enabled :json-false)))
 
