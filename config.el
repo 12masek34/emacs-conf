@@ -243,10 +243,7 @@
                      google/gemini-3.1-flash-lite-preview
                      openai/gpt-4o-mini
                      qwen/qwen3-coder-next
-                     deepseek/deepseek-v3.2
-                     deepseek/deepseek-v4-pro
-                     deepseek/deepseek-v4-flash
-                     ~deepseek/deepseek-v4-flash-latest
+                     ~deepseek/deepseek-flash-latest
                      z-ai/glm-4.7-flash
                      )))
   :custom
@@ -774,19 +771,6 @@
 (use-package! python-black
   :demand t
   :after python)
-
-;; agent in emacs
-(use-package! agent-shell
-  :commands (agent-shell agent-shell-opencode-start-agent)
-  :init
-  (setq agent-shell-preferred-agent-config 'opencode)
-
-  :config
-  (setq agent-shell-opencode-authentication
-        (agent-shell-opencode-make-authentication :none t))
-
-  (setq agent-shell-opencode-default-model-id
-        "openrouter/~deepseek/deepseek-v4-flash-latest"))
 
 ;;=======================================================
 ;;=======================================================
