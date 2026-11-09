@@ -274,10 +274,6 @@
         :n "<tab>" nil
         :v "<tab>" nil))
 
-(after! eca
-  (map! :map eca-chat-mode-map
-        :n "<tab>" #'eca-chat-toggle-expandable-block))
-
 (after! vertico
   (define-key vertico-map (kbd "C-v") #'yank))
 
@@ -357,24 +353,24 @@
 (defun my/start_vpn ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
-    (message "Starting VPN via awg-quick@wg2.service...")
+    (message "Starting VPN via awg-quick@wg3.service...")
     (start-process
      "awg-vpn-process"
      "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S systemctl start awg-quick@wg2.service"
+     (format "echo %s | sudo -S systemctl start awg-quick@wg3.service"
              sudo-password))
     (message "VPN start command sent.")))
 
 (defun my/stop_vpn ()
   (interactive)
   (let ((sudo-password (getenv "SUDOPASS")))
-    (message "Stopping VPN awg-quick@wg2.service...")
+    (message "Stopping VPN awg-quick@wg3.service...")
     (start-process
      "awg-vpn-stop-process"
      "*awg-vpn-output*"
      "bash" "-c"
-     (format "echo %s | sudo -S systemctl stop awg-quick@wg2.service"
+     (format "echo %s | sudo -S systemctl stop awg-quick@wg3.service"
              sudo-password))
     (message "VPN stop command sent.")))
 
@@ -771,6 +767,16 @@
 (use-package! python-black
   :demand t
   :after python)
+
+(use-package! eca
+  :config
+  (setq eca-chat-window-side nil)
+  (map! :map eca-chat-mode-map
+        :n "<tab>" #'eca-chat-toggle-expandable-block)
+  :init
+  (advice-add 'eca-create-session :filter-args
+              (lambda (args)
+                (list (append (car args) (list "/home/user/src"))))))
 
 ;;=======================================================
 ;;=======================================================
